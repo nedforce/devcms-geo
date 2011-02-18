@@ -1,0 +1,6 @@
+[submodule "vendor/plugins/ym4r_gm"]
+	path = vendor/plugins/ym4r_gm
+	url = http://github.com/ewildgoose/ym4r_gm.git/
+[submodule "vendor/plugins/geokit-rails"]
+	path = vendor/plugins/geokit-rails
+	url = http://github.com/andre/geokit-rails.git/
