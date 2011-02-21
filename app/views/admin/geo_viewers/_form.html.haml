@@ -1,0 +1,9 @@
+= form.html_editor :description, :label => t('shared.description')
+
+%h2= GeoViewer.human_attribute_name(:filter_settings)
+= wrap_with_label(select_tag('geo_viewer[filter_settings][search_scope]', options_for_select(@search_scopes, record.filter_settings[:search_scope])),
+    {:text => I18n.t('geo_viewers.filter_settings.search_scope'), :for => 'geo_viewer[filter_settings][search_scope]'})
+
+%h2= GeoViewer.human_attribute_name(:map_settings)
+= wrap_with_label(text_field_tag('geo_viewer[map_settings][center]', record.map_settings[:center], :class => 'admin_form_text_field'),
+    {:text => I18n.t('geo_viewers.map_settings.center'), :for => 'geo_viewer[map_settings][center]'})

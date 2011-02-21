@@ -1,0 +1,17 @@
+---
+nl:
+  shared:
+    location: Locatie
+    geo_data: Geo-data
+  geo_viewers:
+    add_to: GoogleMaps viewer toevoegen aan
+    edit: Aanpassen GoogleMaps viewer
+    go_to_location: Toon op kaart
+    filters: Filteren en zoeken
+    filter_settings:
+      search_scope: Filteren op type/locatie
+      parent_section: Bovenliggende sectie
+      all: "Alle content in alle sites"
+    map_settings:
+      center: Startlocatie
+      zoom: Startzoomniveau

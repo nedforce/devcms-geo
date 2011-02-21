@@ -1,0 +1,5 @@
+- unless node.content.description.empty?
+  .description
+    = strip_tags(truncate(node.content.description, :length => 200))
+    
+= read_more_link(node.content)

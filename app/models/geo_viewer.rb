@@ -37,6 +37,50 @@ class GeoViewer < ActiveRecord::Base
   validates_presence_of :title
   validates_length_of   :title, :in => 2..255, :allow_blank => true
   
-  serialize :filter_settings, :map_settings
+  serialize :filter_settings
+  serialize :map_settings
   
+  def tree_icon_class
+    'map_icon'
+  end
+  
+  def filter_settings
+    read_attribute(:filter_settings) || {}
+  end
+  
+  def map_settings
+    read_attribute(:map_settings) || {}
+  end
+  
+  def nodes(search_scope = nil)
+    search_scope ||= self.filter_settings[:search_scope]
+    search_scope ||= all
+    
+    nodes = if search_scope =~ /node_(\d+)/
+      Node.find($1).self_and_descendants
+    elsif search_scope =~ /content_type_(\w+)/
+      Node.scoped(:conditions => { :content_type => $1.classify })
+    elsif search_scope == 'all'
+      Node.scoped()
+    end
+    
+    return nodes.geo_coded
+  end
+  
+  # def center_coordinates
+  #     res = Geokit::Geocoders::GoogleGeocoder.geocode(
+  #     if self.center.present?
+  #       self.center
+  #     elsif self.map_settings[:center].present?
+  #       self.map_settings[:center]
+  #     elsif SETTLER_LOADED
+  #       Settler[:geo_viewer_default_center]
+  #     else
+  #       "Nederland"
+  #     end, :bias => Node.geocoding_bias)
+  #     
+  #     if res.success
+  #       [res.lat, res.lng]
+  #     end
+  #   end
 end

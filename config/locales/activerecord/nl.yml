@@ -1,0 +1,10 @@
+nl:
+  activerecord:
+    models:
+      geo_viewer: GoogleMaps viewer
+    attributes:
+      geo_viewer:
+        title: Title
+        description: Beschrijving
+        filter_settings: Filterinstellingen
+        map_settings: Kaartinstelling

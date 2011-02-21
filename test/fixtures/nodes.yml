@@ -1,0 +1,55 @@
+<% def fixtures_to_ancestry(*names); names.collect { |name| Fixtures.identify(name) }.join("/"); end %>
+!!omap
+- root_section_node:
+    content: root_section (Section)
+    layout: deventer
+    layout_variant: default
+    layout_configuration: "<%= {'template_color'=>'default'}.to_yaml %>"
+    show_in_menu: true
+    publication_start_date: <%= 1.day.ago.to_s(:db) %>
+    position: 1
+
+- section_with_frontpage_node:
+    content: section_with_frontpage (Section)
+    ancestry: <%= fixtures_to_ancestry(:root_section_node) %>
+    show_in_menu: true
+    publication_start_date: <%= 1.day.ago.to_s(:db) %>
+    position: 2
+        
+- bis_section_node:
+    content: bis_section (Section)
+    ancestry: <%= fixtures_to_ancestry(:root_section_node, :section_with_frontpage_node) %>
+    url_alias: bestuur/bestuursinformatie
+    show_in_menu: true
+    publication_start_date: <%= 1.day.ago.to_s(:db) %>
+    position: 3
+
+- bis_page_node:
+    content: bis_page (Page)
+    ancestry: <%= fixtures_to_ancestry(:root_section_node, :section_with_frontpage_node, :bis_section_node) %>
+    show_in_menu: true
+    publication_start_date: <%= 1.day.ago.to_s(:db) %>
+    position: 1     
+    
+- economie_section_node:
+    content: economie_section (Section)
+    ancestry: <%= fixtures_to_ancestry(:root_section_node) %>
+    url_alias: economie
+    show_in_menu: true
+    publication_start_date: <%= 1.day.ago.to_s(:db) %>
+    position: 4 
+    
+- news_node:
+    content: news_page (Page)
+    ancestry: <%= fixtures_to_ancestry(:root_section_node) %>
+    show_in_menu: true
+    publication_start_date: <%= 1.day.ago.to_s(:db) %>
+    position: 5
+
+- geo_viewer_node:
+    content: geo_viewer (GeoViewer)
+    ancestry: <%= fixtures_to_ancestry(:root_section_node) %>
+    show_in_menu: true
+    publication_start_date: <%= 1.day.ago.to_s(:db) %>
+    position: 6
+

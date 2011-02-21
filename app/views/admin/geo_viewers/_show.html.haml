@@ -1,0 +1,11 @@
+.regularPage
+  %h2= h record.title
+
+  .content
+    .htmlField
+      = process_video_tags(record.description)
+      
+    - [:filter_settings, :map_settings].each do |attr|
+      %h3= GeoViewer.human_attribute_name(attr)
+      - record.send(attr).each do |k,v|
+        = wrap_with_label(v, :text => GeoViewer.human_attribute_name(k))

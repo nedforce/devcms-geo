@@ -1,0 +1,12 @@
+admin:
+  user: admin
+  node: root_section_node
+  name: admin
+editor:
+  user: editor
+  node: news_node
+  name: editor
+final_editor:
+  user: final_editor
+  node: economie_section_node
+  name: final_editor    

@@ -1,0 +1,25 @@
+- content_for :javascript do
+  = GMap.header(:without_js => true)
+  = javascript_include_tag('ym4r-gm', :plugin => 'devcms-geo')
+  = javascript_include_tag('devcms-geo', :plugin => 'devcms-geo')
+  = @map.to_html
+  
+
+.geoViewer.regularPage
+  %h1= h @geo_viewer.title
+
+  - if @geo_viewer.description.present?
+    = content_tag(:div, w(@geo_viewer.description), :class => 'htmlField')
+    
+  .buttons.clearfix
+    = print_button
+  .filters
+    %h2= I18n.t('geo_viewers.filters')
+    - form_tag content_node_path(@geo_viewer.node), :method => :get, :class => 'clearfix', :id => 'geo_viewer_filter_form', :onsubmit => 'showAddress($F(\'location\')); return false;' do
+      = text_field_tag 'location', params[:location]
+      = submit_tag I18n.t('geo_viewers.go_to_location')
+  
+  = content_tag(:div, "", :id => "geo_viewer_#{@geo_viewer.id}", :class => "gmap")
+
+  .buttons.clearfix
+    = print_button

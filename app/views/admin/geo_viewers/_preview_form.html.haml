@@ -1,0 +1,6 @@
+= form.hidden_field :description
+- form.object.filter_settings.each do |k,v|
+  = hidden_field_tag "geo_viewer[filter_settings][#{k}]", v
+  
+- form.object.map_settings.each do |k,v|
+  = hidden_field_tag "geo_viewer[map_settings][#{k}]", v
