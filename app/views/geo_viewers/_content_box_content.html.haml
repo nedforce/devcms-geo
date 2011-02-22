@@ -1,5 +1,7 @@
-- unless node.content.description.empty?
-  .description
-    = strip_tags(truncate(node.content.description, :length => 200))
+- geo_viewer        = node.content
+- nodes             = geo_viewer.nodes # haal markers op
+- center = nodes.empty? ? geo_viewer.map_settings[:center] : nil #Centreer de map op de gekozen standaard waarden indien geen markers
+.description
+  = static_map_of_addresses(nodes, {:width => 230, :height => 160, :center => center})
     
 = read_more_link(node.content)
