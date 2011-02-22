@@ -8,4 +8,6 @@
     - [:filter_settings, :map_settings].each do |attr|
       %h3= GeoViewer.human_attribute_name(attr)
       - record.send(attr).each do |k,v|
-        = wrap_with_label(v, :text => GeoViewer.human_attribute_name(k))
+        - unless k.to_s.end_with?('available')
+          - text = v.respond_to?(:to_sentence) ? v.to_sentence : v.to_s
+          = wrap_with_label(text, :text => GeoViewer.human_attribute_name(k))

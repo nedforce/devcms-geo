@@ -1,13 +1,9 @@
 :javascript
   function toggle_content_specific_settings(content_type) {
-    content_type = content_type.match(/^content_type_(.*)$/ig).last()
-    $$('table .content_specific_setting).invoke('hide')
-    $$('table .content_specific_setting.' + content_type).invoke('show')
+    content_type = content_type.match(/^content_type_(.*)$/i).last()
+    $$('table.geo_viewer_settings .content_specific_setting').invoke('hide')
+    $$('table.geo_viewer_settings .content_specific_setting.' + content_type).invoke('show')
   }
-  
-  document.observe('dom:loaded', function() {
-    toggle_content_specific_settings($F(\'geo_viewer[filter_settings][search_scope]\'));
-  });
 
 = form.html_editor :description, :label => t('shared.description')
 
@@ -28,14 +24,29 @@
       %td= wrap_with_label(admin_date_field_tag('geo_viewer[filter_settings][until_date]', record.filter_settings[:until_date], :allow_empty => true),
             {:text => I18n.t('geo_viewers.filter_settings.until_date'), :for => 'geo_viewer[filter_settings][until_date]'})
       %td= check_box_tag "geo_viewer[filter_settings][until_date_available]", 1, record.filter_settings[:until_date_available]
-    %thead.content_specific_setting.permits
-      %th Permits
+      
+    %thead.content_specific_setting.permit
+      %th= Permit.human_name
       %th= I18n.t('geo_viewers.available_in_frontend')
-    %tbody.content_specific_setting.permits
+    %tbody.content_specific_setting.permit
       %tr
-        %td bla
-        %td bla 
-
+        %td= wrap_with_label(select_tag('geo_viewer[filter_settings][permit_product_type]', options_for_select(Permit::PRODUCT_TYPES, record.filter_settings[:permit_product_type]), :multiple => true),
+              {:text => I18n.t('permits.product_type'), :for => 'geo_viewer[filter_settings][permit_product_type]'})
+        %td= check_box_tag "geo_viewer[filter_settings][permit_product_type_available]", 1,  record.filter_settings[:permit_product_type_available]
+      %tr
+        %td= wrap_with_label(select_tag('geo_viewer[filter_settings][permit_phase]', options_for_select(Permit::PHASES, record.filter_settings[:permit_phase]), :multiple => true),
+              {:text => I18n.t('permits.phase'), :for => 'geo_viewer[filter_settings][permit_phase]'})
+        %td= check_box_tag "geo_viewer[filter_settings][permit_phase_available]", 1,  record.filter_settings[:permit_phase_available]
+    
+    %thead.content_specific_setting.legislation
+      %th= Legislation.human_name
+      %th= I18n.t('geo_viewers.available_in_frontend')
+    %tbody.content_specific_setting.legislation
+      %tr
+        %td= wrap_with_label(select_tag('geo_viewer[filter_settings][legislation_subject]', options_for_select(Legislation.all(:select => 'distinct subject', :conditions => 'subject is not null').collect{|l| l.subject }, record.filter_settings[:legislation_subject]), :multiple => true),
+              {:text => I18n.t('legislations.subject'), :for => 'geo_viewer[filter_settings][legislation_subject]'})
+        %td= check_box_tag "geo_viewer[filter_settings][legislation_subject_available]", 1,  record.filter_settings[:legislation_subject_available]
+    
     %thead
       %th= GeoViewer.human_attribute_name(:map_settings)
       %th= I18n.t('geo_viewers.available_in_frontend')
@@ -44,4 +55,6 @@
         %td= wrap_with_label(text_field_tag('geo_viewer[map_settings][center]', record.map_settings[:center], :class => 'admin_form_text_field'),
               {:text => I18n.t('geo_viewers.map_settings.center'), :for => 'geo_viewer[map_settings][center]'})
         %td= check_box_tag "", true, {}, {:disabled => true}
-= observe_field 'geo_viewer[filter_settings][search_scope]', :function => 'toggle_content_specific_settings($F(\'geo_viewer[filter_settings][search_scope]\'))'
+= observe_field 'geo_viewer_filter_settings_search_scope', :function => 'toggle_content_specific_settings($F(\'geo_viewer_filter_settings_search_scope\'))'
+:javascript
+  toggle_content_specific_settings('#{record.filter_settings[:search_scope]}')
