@@ -18,7 +18,7 @@
     - form_tag content_node_path(@geo_viewer.node), :method => :get, :class => 'clearfix', :id => 'geo_viewer_filter_form', :onsubmit => 'showAddress($F(\'location\')); return false;' do
       = text_field_tag 'location', params[:location]
       = submit_tag I18n.t('geo_viewers.go_to_location')
-  = content_tag(:div, static_map_of_addresses(@nodes, {:center => @center}), :id => "geo_viewer_#{@geo_viewer.id}", :class => "gmap")
+  = content_tag(:div, static_map_of_addresses(@nodes, {:center => @center, :bounds => @bounds}), :id => "geo_viewer_#{@geo_viewer.id}", :class => "gmap")
   %NoScript= @expl
   .buttons.clearfix
     = print_button

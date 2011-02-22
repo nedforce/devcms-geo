@@ -6,6 +6,7 @@ class StaticMap
 
       def initialize(options = {})
         @addresses = []
+        @bounds = options.fetch(:bounds, nil)
         @width, @height = options.fetch(:width, 480), options.fetch(:height, 400)
         @params = Hash.new.tap do |p|
           p[:sensor]  = false
@@ -17,7 +18,7 @@ class StaticMap
       end
 
       def <<(address)
-        @addresses << address
+        @addresses << address if @bounds.blank? || @bounds.contains?(address)
       end
 
       def to_url
