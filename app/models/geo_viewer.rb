@@ -66,21 +66,4 @@ class GeoViewer < ActiveRecord::Base
     
     return nodes.geo_coded
   end
-  
-  # def center_coordinates
-  #     res = Geokit::Geocoders::GoogleGeocoder.geocode(
-  #     if self.center.present?
-  #       self.center
-  #     elsif self.map_settings[:center].present?
-  #       self.map_settings[:center]
-  #     elsif SETTLER_LOADED
-  #       Settler[:geo_viewer_default_center]
-  #     else
-  #       "Nederland"
-  #     end, :bias => Node.geocoding_bias)
-  #     
-  #     if res.success
-  #       [res.lat, res.lng]
-  #     end
-  #   end
 end

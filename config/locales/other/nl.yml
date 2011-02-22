@@ -4,6 +4,7 @@ nl:
     location: Locatie
     geo_data: Geo-data
   geo_viewers:
+    available_in_frontend: Aanpasbaar voor bezoeker
     add_to: GoogleMaps viewer toevoegen aan
     edit: Aanpassen GoogleMaps viewer
     go_to_location: Toon op kaart
@@ -12,6 +13,11 @@ nl:
       search_scope: Filteren op type/locatie
       parent_section: Bovenliggende sectie
       all: "Alle content in alle sites"
+      from_date: Van
+      until_date: Tot
     map_settings:
       center: Startlocatie
       zoom: Startzoomniveau
+  nodes:
+    to_many_queries: "Te veel addressen verwerkt, probeer het morgen weer."
+    geocoding_failed: "Geocoderen mislukt."

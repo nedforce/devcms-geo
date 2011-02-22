@@ -1,9 +1,47 @@
+:javascript
+  function toggle_content_specific_settings(content_type) {
+    content_type = content_type.match(/^content_type_(.*)$/ig).last()
+    $$('table .content_specific_setting).invoke('hide')
+    $$('table .content_specific_setting.' + content_type).invoke('show')
+  }
+  
+  document.observe('dom:loaded', function() {
+    toggle_content_specific_settings($F(\'geo_viewer[filter_settings][search_scope]\'));
+  });
+
 = form.html_editor :description, :label => t('shared.description')
 
-%h2= GeoViewer.human_attribute_name(:filter_settings)
-= wrap_with_label(select_tag('geo_viewer[filter_settings][search_scope]', options_for_select(@search_scopes, record.filter_settings[:search_scope])),
-    {:text => I18n.t('geo_viewers.filter_settings.search_scope'), :for => 'geo_viewer[filter_settings][search_scope]'})
+%table.geo_viewer_settings
+  %thead
+    %th= GeoViewer.human_attribute_name(:filter_settings)
+    %th= I18n.t('geo_viewers.available_in_frontend')
+  %tbody
+    %tr
+      %td= wrap_with_label(select_tag('geo_viewer[filter_settings][search_scope]', options_for_select(@search_scopes, record.filter_settings[:search_scope])),
+            {:text => I18n.t('geo_viewers.filter_settings.search_scope'), :for => 'geo_viewer[filter_settings][search_scope]'})
+      %td= check_box_tag "geo_viewer[filter_settings][search_scope_available]", 1,  record.filter_settings[:search_scope_available]
+    %tr
+      %td= wrap_with_label(admin_date_field_tag('geo_viewer[filter_settings][from_date]', record.filter_settings[:from_date], :allow_empty => true),
+            {:text => I18n.t('geo_viewers.filter_settings.from_date'), :for => 'geo_viewer[filter_settings][from_date]'})
+      %td= check_box_tag "geo_viewer[filter_settings][from_date_available]", 1, record.filter_settings[:from_date_available]
+    %tr
+      %td= wrap_with_label(admin_date_field_tag('geo_viewer[filter_settings][until_date]', record.filter_settings[:until_date], :allow_empty => true),
+            {:text => I18n.t('geo_viewers.filter_settings.until_date'), :for => 'geo_viewer[filter_settings][until_date]'})
+      %td= check_box_tag "geo_viewer[filter_settings][until_date_available]", 1, record.filter_settings[:until_date_available]
+    %thead.content_specific_setting.permits
+      %th Permits
+      %th= I18n.t('geo_viewers.available_in_frontend')
+    %tbody.content_specific_setting.permits
+      %tr
+        %td bla
+        %td bla 
 
-%h2= GeoViewer.human_attribute_name(:map_settings)
-= wrap_with_label(text_field_tag('geo_viewer[map_settings][center]', record.map_settings[:center], :class => 'admin_form_text_field'),
-    {:text => I18n.t('geo_viewers.map_settings.center'), :for => 'geo_viewer[map_settings][center]'})
+    %thead
+      %th= GeoViewer.human_attribute_name(:map_settings)
+      %th= I18n.t('geo_viewers.available_in_frontend')
+    %tbody
+      %tr
+        %td= wrap_with_label(text_field_tag('geo_viewer[map_settings][center]', record.map_settings[:center], :class => 'admin_form_text_field'),
+              {:text => I18n.t('geo_viewers.map_settings.center'), :for => 'geo_viewer[map_settings][center]'})
+        %td= check_box_tag "", true, {}, {:disabled => true}
+= observe_field 'geo_viewer[filter_settings][search_scope]', :function => 'toggle_content_specific_settings($F(\'geo_viewer[filter_settings][search_scope]\'))'

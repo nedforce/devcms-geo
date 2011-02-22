@@ -25,20 +25,25 @@ class Node < ActiveRecord::Base
   # Set and validation error if the location cannot be geocoded
   def location=(address)
     if address.present? && (self.location.blank? || self.location != address)
-      @geocode = Geokit::Geocoders::GoogleGeocoder.geocode(address, :bias => Node.geocoding_bias)
+      begin
+        @geocode = Geokit::Geocoders::GoogleGeocoder.geocode(address, :bias => Node.geocoding_bias)
+      rescue Geokit::TooManyQueriesError
+        self.errors.add(:location, I18n.t("nodes.to_many_queries"))
+      end
 
       if @geocode.success
         self.lat = @geocode.lat
         self.lng = @geocode.lng
-        self.location = @geocode.full_address
+        self.write_attribute(:location, @geocode.full_address)
       end
     else
-      self.lat, self.lng, self.location = nil, nil, nil
+      self.lat, self.lng = nil, nil
+      self.write_attribute(:location, nil)
     end
   end
   
   private
   def valid_location
-    self.errors.add_to(:location, I18n.t("nodes.invalid_location")) if @geocode.present? && !@geocode.success
+    self.errors.add(:location, I18n.t("nodes.invalid_location")) if @geocode.present? && !@geocode.success
   end
 end
