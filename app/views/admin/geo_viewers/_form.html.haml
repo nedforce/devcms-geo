@@ -1,8 +1,11 @@
 :javascript
   function toggle_content_specific_settings(content_type) {
-    content_type = content_type.match(/^content_type_(.*)$/i).last()
     $$('table.geo_viewer_settings .content_specific_setting').invoke('hide')
-    $$('table.geo_viewer_settings .content_specific_setting.' + content_type).invoke('show')
+    content_type = content_type.match(/^content_type_(.*)$/i)
+    if(content_type != null) { 
+      content_type = content_type.last()
+      $$('table.geo_viewer_settings .content_specific_setting.' + content_type).invoke('show')
+    }
   }
 
 = form.html_editor :description, :label => t('shared.description')
