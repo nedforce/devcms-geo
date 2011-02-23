@@ -24,17 +24,19 @@ class Node < ActiveRecord::Base
   # Geocode location into lat and lng, also set location field to full address for future reference
   # Set and validation error if the location cannot be geocoded
   def location=(address)
-    if address.present? && (self.location.blank? || self.location != address)
-      begin
-        @geocode = Geokit::Geocoders::GoogleGeocoder.geocode(address, :bias => Node.geocoding_bias)
-      rescue Geokit::TooManyQueriesError
-        self.errors.add(:location, I18n.t("nodes.to_many_queries"))
-      end
+    if address.present? 
+      if self.location != address
+        begin
+          @geocode = Geokit::Geocoders::GoogleGeocoder.geocode(address, :bias => Node.geocoding_bias)
+        rescue Geokit::TooManyQueriesError
+          self.errors.add(:location, I18n.t("nodes.to_many_queries"))
+        end
 
-      if @geocode.success
-        self.lat = @geocode.lat
-        self.lng = @geocode.lng
-        self.write_attribute(:location, @geocode.full_address)
+        if @geocode.success
+          self.lat = @geocode.lat
+          self.lng = @geocode.lng
+          self.write_attribute(:location, @geocode.full_address)
+        end
       end
     else
       self.lat, self.lng = nil, nil

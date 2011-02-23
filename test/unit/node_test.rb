@@ -24,6 +24,13 @@ class NodeTest < ActiveSupport::TestCase
     end
   end
   
+  def test_should_retain_existing_value_without_change
+    @node.location = "Welle, Deventer"
+    location = @node.location
+    @node.location = location
+    assert_not_nil @node.location
+  end
+  
   def test_should_be_biased
     @node.location = "Polstraat"
     assert @node.location =~ /Deventer/, :message => "Location expected to be in Deventer, but was #{@node.location} instead"
