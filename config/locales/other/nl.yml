@@ -8,6 +8,7 @@ nl:
     add_to: GoogleMaps viewer toevoegen aan
     edit: Aanpassen GoogleMaps viewer
     go_to_location: Toon op kaart
+    filter: Zoeken
     filters: Filteren en zoeken
     filter_settings:
       search_scope: Zoeken binnen
