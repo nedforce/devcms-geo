@@ -10,11 +10,13 @@ nl:
     go_to_location: Toon op kaart
     filters: Filteren en zoeken
     filter_settings:
-      search_scope: Filteren op type/locatie
+      search_scope: Zoeken binnen
       parent_section: Bovenliggende sectie
       all: "Alle content in alle sites"
       from_date: Van
       until_date: Tot
+      legislations: Verordeningen
+    all: Alles
     map_settings:
       center: Startlocatie
       zoom: Startzoomniveau

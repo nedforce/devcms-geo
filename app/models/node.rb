@@ -8,7 +8,12 @@ class Node < ActiveRecord::Base
   validate :valid_location
   
   named_scope :geo_coded, {:conditions => "nodes.lat IS NOT NULL AND nodes.lng IS NOT NULL"}
-  
+  named_scope :published_after, lambda {|date| { 
+    :conditions => ["(publication_start_date >= DATE(:date) OR publication_start_date IS NULL) AND (publication_end_date >= DATE(:date) OR publication_end_date IS NULL)", {:date => date}] }
+  }
+  named_scope :published_before, lambda {|date|{ 
+    :conditions => ["(publication_end_date <= DATE(:date) OR publication_end_date IS NULL) AND (publication_start_date <= DATE(:date) OR publication_start_date IS NULL)", {:date => date}] }
+  }
     
   # Get the geocoding bias from settings, or default to NL
   def self.geocoding_bias

@@ -10,6 +10,7 @@
 
 = form.html_editor :description, :label => t('shared.description')
 
+%td
 %table.geo_viewer_settings
   %thead
     %th= GeoViewer.human_attribute_name(:filter_settings)
@@ -20,11 +21,11 @@
             {:text => I18n.t('geo_viewers.filter_settings.search_scope'), :for => 'geo_viewer[filter_settings][search_scope]'})
       %td= check_box_tag "geo_viewer[filter_settings][search_scope_available]", 1,  record.filter_settings[:search_scope_available]
     %tr
-      %td= wrap_with_label(admin_date_field_tag('geo_viewer[filter_settings][from_date]', record.filter_settings[:from_date], :allow_empty => true),
+      %td= wrap_with_label(admin_date_field_tag('geo_viewer[filter_settings][from_date]', (Date.parse(record.filter_settings[:from_date]) rescue nil), :allow_empty => true),
             {:text => I18n.t('geo_viewers.filter_settings.from_date'), :for => 'geo_viewer[filter_settings][from_date]'})
       %td= check_box_tag "geo_viewer[filter_settings][from_date_available]", 1, record.filter_settings[:from_date_available]
     %tr
-      %td= wrap_with_label(admin_date_field_tag('geo_viewer[filter_settings][until_date]', record.filter_settings[:until_date], :allow_empty => true),
+      %td= wrap_with_label(admin_date_field_tag('geo_viewer[filter_settings][until_date]', (Date.parse(record.filter_settings[:until_date]) rescue nil), :allow_empty => true),
             {:text => I18n.t('geo_viewers.filter_settings.until_date'), :for => 'geo_viewer[filter_settings][until_date]'})
       %td= check_box_tag "geo_viewer[filter_settings][until_date_available]", 1, record.filter_settings[:until_date_available]
       
@@ -33,11 +34,11 @@
       %th= I18n.t('geo_viewers.available_in_frontend')
     %tbody.content_specific_setting.permit
       %tr
-        %td= wrap_with_label(select_tag('geo_viewer[filter_settings][permit_product_type]', options_for_select(Permit::PRODUCT_TYPES, record.filter_settings[:permit_product_type]), :multiple => true),
+        %td= wrap_with_label(select_tag('geo_viewer[filter_settings][permit_product_type]',options_for_select(Permit::PRODUCT_TYPES.collect{ |p| [p, Permit::PRODUCT_TYPES.index(p)]}, record.filter_settings[:permit_product_type].collect{|p| p.to_i}),:multiple => true),
               {:text => I18n.t('permits.product_type'), :for => 'geo_viewer[filter_settings][permit_product_type]'})
         %td= check_box_tag "geo_viewer[filter_settings][permit_product_type_available]", 1,  record.filter_settings[:permit_product_type_available]
       %tr
-        %td= wrap_with_label(select_tag('geo_viewer[filter_settings][permit_phase]', options_for_select(Permit::PHASES, record.filter_settings[:permit_phase]), :multiple => true),
+        %td= wrap_with_label(select_tag('geo_viewer[filter_settings][permit_phase]', options_for_select(Permit::PHASES.collect{|p| [p, Permit::PHASES.index(p)]}, record.filter_settings[:permit_phase].collect{|p| p.to_i}), :multiple => true),
               {:text => I18n.t('permits.phase'), :for => 'geo_viewer[filter_settings][permit_phase]'})
         %td= check_box_tag "geo_viewer[filter_settings][permit_phase_available]", 1,  record.filter_settings[:permit_phase_available]
     
@@ -46,7 +47,7 @@
       %th= I18n.t('geo_viewers.available_in_frontend')
     %tbody.content_specific_setting.legislation
       %tr
-        %td= wrap_with_label(select_tag('geo_viewer[filter_settings][legislation_subject]', options_for_select(Legislation.all(:select => 'distinct subject', :conditions => 'subject is not null').collect{|l| l.subject }, record.filter_settings[:legislation_subject]), :multiple => true),
+        %td= wrap_with_label(select_tag('geo_viewer[filter_settings][legislation_subject]', options_for_select(Legislation.all(:select => 'distinct subject', :conditions => 'subject is not null').collect{|l| [l.id, l.subject] }, record.filter_settings[:legislation_subject]), :multiple => true),
               {:text => I18n.t('legislations.subject'), :for => 'geo_viewer[filter_settings][legislation_subject]'})
         %td= check_box_tag "geo_viewer[filter_settings][legislation_subject_available]", 1,  record.filter_settings[:legislation_subject_available]
     

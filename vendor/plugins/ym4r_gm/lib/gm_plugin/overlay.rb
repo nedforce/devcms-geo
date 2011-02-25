@@ -17,9 +17,13 @@ module Ym4r
         @info_window = options.delete(:info_window)
         @info_window_tabs = options.delete(:info_window_tabs)
         if options.has_key?(:max_url)
-          @info_window_options = {:max_url => options.delete(:max_url) } 
+          @info_window_options = {:max_url => options.delete(:max_url)} 
         else
           @info_window_options = {}
+        end
+        
+        if options.has_key?(:maxWidth)
+          @info_window_options[:maxWidth] = options.delete(:maxWidth)
         end
         @options = options
       end

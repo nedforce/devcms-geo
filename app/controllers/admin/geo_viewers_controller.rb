@@ -28,7 +28,9 @@ class Admin::GeoViewersController < Admin::AdminController
   # * GET /admin/geo_viewers/new
   def new
     @geo_viewer = GeoViewer.new(params[:geo_viewer])
-
+    @geo_viewer.filter_settings =  @geo_viewer.filter_settings.class == Hash ? @geo_viewer.filter_settings : {}
+    @geo_viewer.filter_settings[:permit_product_type] ||= []
+    @geo_viewer.filter_settings[:permit_phase] ||= []
     respond_to do |format|
       format.html { render :template => 'admin/shared/new', :locals => { :record => @geo_viewer }}
     end
@@ -37,7 +39,7 @@ class Admin::GeoViewersController < Admin::AdminController
   # * GET /admin/geo_viewers/:id/edit
   def edit
     @geo_viewer.attributes = params[:geo_viewer]
-
+    
     respond_to do |format|
       format.html { render :template => 'admin/shared/edit', :locals => { :record => @geo_viewer }}
     end
@@ -48,7 +50,8 @@ class Admin::GeoViewersController < Admin::AdminController
   def create
     @geo_viewer        = GeoViewer.new(params[:geo_viewer])    
     @geo_viewer.parent = @parent_node
-
+  
+    
     respond_to do |format|
       if @commit_type == 'preview' && @geo_viewer.valid?
         format.html { render :template => 'admin/shared/create_preview', :locals => { :record => @geo_viewer }, :layout => 'admin/admin_preview' }

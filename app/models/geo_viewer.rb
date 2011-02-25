@@ -40,6 +40,8 @@ class GeoViewer < ActiveRecord::Base
   serialize :filter_settings
   serialize :map_settings
   
+  
+  
   def tree_icon_class
     'map_icon'
   end
@@ -52,16 +54,36 @@ class GeoViewer < ActiveRecord::Base
     read_attribute(:map_settings) || {}
   end
   
-  def nodes(search_scope = nil)
-    search_scope ||= self.filter_settings[:search_scope]
-    search_scope ||= all
+  def nodes(filters = nil)
+    filters[:search_scope] ||= self.filter_settings[:search_scope]
+    filters[:search_scope] ||= all
     
-    nodes = if search_scope =~ /node_(\d+)/
+    nodes = if filters[:search_scope] =~ /node_(\d+)/
       Node.find($1).self_and_descendants
-    elsif search_scope =~ /content_type_(\w+)/
+    elsif filters[:search_scope] =~ /content_type_(\w+)/
       Node.scoped(:conditions => { :content_type => $1.classify })
-    elsif search_scope == 'all'
+    elsif filters[:search_scope] == 'all'
       Node.scoped()
+    end
+    
+    if !filters[:from_date].blank?
+      nodes = nodes.published_after((Time.parse(filters[:from_date]) rescue nil))
+    end
+    if !filters[:until_date].blank?
+      nodes = nodes.published_before((Time.parse(filters[:until_date]) rescue nil))
+    end
+    
+    if filters[:search_scope] == 'content_type_permit'
+      #Permit filters
+      nodes = nodes.scoped(:joins => 'LEFT JOIN permits on permits.id = nodes.content_id AND nodes.content_type = \'Permit\'')
+      nodes = nodes.scoped(:conditions => {:permits => { :phase_id => filters[:permit_phase]}}) unless !filters[:permit_phase] || filters[:permit_phase].blank?
+      nodes = nodes.scoped(:conditions => {:permits => { :product_type_id => filters[:permit_product_type]}}) unless !filters[:permit_product_type] || filters[:permit_product_type].blank?
+    end
+    
+    if filters[:search_scope] == 'content_type_legislation'
+      #Permit filters
+      nodes = nodes.scoped(:joins => 'LEFT JOIN legislations on legislations.id = nodes.content_id AND nodes.content_type = \'Legislation\'')
+      nodes = nodes.scoped(:conditions => {:legislations => { :subject => filters[:legislation_subject]}}) unless filters[:legislation_subject].blank?
     end
     
     return nodes.geo_coded

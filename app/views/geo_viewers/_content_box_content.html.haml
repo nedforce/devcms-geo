@@ -1,6 +1,6 @@
 - geo_viewer        = node.content
-- nodes             = geo_viewer.nodes # haal markers op
-- center = nodes.empty? ? geo_viewer.map_settings[:center] : nil #Centreer de map op de gekozen standaard waarden indien geen markers
+- nodes             = geo_viewer.nodes # Fetch the different marks 
+- center = nodes.empty? ? geo_viewer.map_settings[:center] : nil # Center the map on the default address when no marks are available
 .description
   = static_map_of_addresses(nodes, {:width => 230, :height => 160, :center => center})
     
