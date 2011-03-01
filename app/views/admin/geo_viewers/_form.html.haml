@@ -34,11 +34,11 @@
       %th= I18n.t('geo_viewers.available_in_frontend')
     %tbody.content_specific_setting.permit
       %tr
-        %td= wrap_with_label(select_tag('geo_viewer[filter_settings][permit_product_type]',options_for_select(Permit::PRODUCT_TYPES.collect{ |p| [p, Permit::PRODUCT_TYPES.index(p)]}, record.filter_settings[:permit_product_type].collect{|p| p.to_i}),:multiple => true),
+        %td= wrap_with_label(select_tag('geo_viewer[filter_settings][permit_product_type]',options_for_select(Permit::PRODUCT_TYPES.collect{ |p| [p, Permit::PRODUCT_TYPES.index(p)]}, (record.filter_settings[:permit_product_type] || []).collect{|p| p.to_i}),:multiple => true),
               {:text => I18n.t('permits.product_type'), :for => 'geo_viewer[filter_settings][permit_product_type]'})
         %td= check_box_tag "geo_viewer[filter_settings][permit_product_type_available]", 1,  record.filter_settings[:permit_product_type_available]
       %tr
-        %td= wrap_with_label(select_tag('geo_viewer[filter_settings][permit_phase]', options_for_select(Permit::PHASES.collect{|p| [p, Permit::PHASES.index(p)]}, record.filter_settings[:permit_phase].collect{|p| p.to_i}), :multiple => true),
+        %td= wrap_with_label(select_tag('geo_viewer[filter_settings][permit_phase]', options_for_select(Permit::PHASES.collect{|p| [p, Permit::PHASES.index(p)]}, (record.filter_settings[:permit_phase] || []).collect{|p| p.to_i}), :multiple => true),
               {:text => I18n.t('permits.phase'), :for => 'geo_viewer[filter_settings][permit_phase]'})
         %td= check_box_tag "geo_viewer[filter_settings][permit_phase_available]", 1,  record.filter_settings[:permit_phase_available]
     
