@@ -28,6 +28,7 @@ class GeoViewersController < ApplicationController
     
     @map = GMap.new("geo_viewer_#{@geo_viewer.id}")
     @map.control_init :small_map => true, :map_type => false
+    @map.interface_init :continuous_zoom => true
     if !params[:location].blank? || @nodes.empty?
       res = Geokit::Geocoders::GoogleGeocoder.geocode(@filters[:location], :bias => Node.geocoding_bias) 
       @bounds = res.suggested_bounds

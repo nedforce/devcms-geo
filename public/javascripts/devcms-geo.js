@@ -5,6 +5,25 @@ function showAddress(address) {
 }
 
 function panAndZoomTo(address) {
+  ll = address.Placemark[0].Point.coordinates
+  ll = new GLatLng(ll[1], ll[0])
   bounds = address.Placemark[0].ExtendedData.LatLonBox
-  map.centerAndZoomOnBounds(new GLatLngBounds(new GLatLng(bounds.south, bounds.west), new GLatLng(bounds.north, bounds.east)))
+  bounds = new GLatLngBounds(new GLatLng(bounds.south, bounds.west), new GLatLng(bounds.north, bounds.east))
+  zoom_target = map.getBoundsZoomLevel(bounds)
+  current_zoom = map.getZoom()
+  centered = false
+  
+  if(current_zoom < zoom_target){
+    while(current_zoom < zoom_target){
+      map.zoomIn(ll, true, true)
+      current_zoom += 1
+    }
+  } else if (current_zoom == zoom_target) {
+    map.panTo(ll) 
+  } else {
+    while(current_zoom > zoom_target){
+      map.zoomOut(ll, true)
+      current_zoom -= 1
+    }
+  }
 }

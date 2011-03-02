@@ -59,7 +59,7 @@
       - # Submit Tag
       = submit_tag I18n.t('geo_viewers.filter'), :class => 'submit' 
   .filters
-    - form_tag content_node_path(@geo_viewer.node), :method => :get, :class => 'clearfix', :id => 'geo_viewer_filter_form', :onsubmit => 'showAddress($F(\'location\')); return false;' do
+    - form_tag content_node_path(@geo_viewer.node), :method => :get, :class => 'clearfix', :id => 'geo_viewer_location_form', :onsubmit => 'showAddress($F(\'location\')); return false;' do
       - # Filter Map Location
       .filter.last
         = label_tag 'location', 'Locatie Kaart:'
