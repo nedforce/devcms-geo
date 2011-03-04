@@ -1,6 +1,8 @@
-%div{:style => 'overflow:auto'}
+%div{ :style => 'overflow:auto' }
   - node_list.each do |node|
     %p
-      = "<b class=\"#{node[:color]}\">#{node[:label]}</b>"
+      %b{ :class => node[:color] }
+        = node[:label]
       = link_to_content_node(node[:node].content.title,node[:node].content)
-%div{:style => 'clear:both'}
+
+%div{ :style => 'clear:both' }
