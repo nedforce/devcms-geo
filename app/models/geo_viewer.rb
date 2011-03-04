@@ -40,8 +40,6 @@ class GeoViewer < ActiveRecord::Base
   serialize :filter_settings
   serialize :map_settings
   
-  
-  
   def tree_icon_class
     'map_icon'
   end
@@ -54,9 +52,9 @@ class GeoViewer < ActiveRecord::Base
     read_attribute(:map_settings) || {}
   end
   
-  def nodes(filters = nil)
+  def nodes(filters = {})
     filters[:search_scope] ||= self.filter_settings[:search_scope]
-    filters[:search_scope] ||= all
+    filters[:search_scope] ||= 'all'
     
     nodes = if filters[:search_scope] =~ /node_(\d+)/
       Node.find($1).self_and_descendants
@@ -86,6 +84,6 @@ class GeoViewer < ActiveRecord::Base
       nodes = nodes.scoped(:conditions => {:legislations => { :subject => filters[:legislation_subject]}}) unless filters[:legislation_subject].blank?
     end
     
-    return nodes.geo_coded
+    return nodes.geo_coded.find_accessible(:all)
   end
 end
