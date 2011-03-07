@@ -3,6 +3,7 @@ class StaticMap
       COLOURS      = %w(red green brown blue orange gray purple yellow)
       LABELS       = ('A'..'Z').to_a
       URL_TEMPLATE = "http://maps.google.com/maps/api/staticmap?%s"
+      MAX_MARKERS  = 30
 
       def initialize(options = {})
         @addresses = []
@@ -44,7 +45,7 @@ class StaticMap
 
       def build_marker_params
         params = []
-        @addresses.each_with_index do |address, index|
+        @addresses.sort {|x,y| x.updated_at <=> y.updated_at }[0..MAX_MARKERS].each_with_index do |address, index|
           return "markers=#{to_ll @addresses.first}" if @addresses.size == 1
           color = COLOURS[index % COLOURS.size]
           label = LABELS[index % LABELS.size]
