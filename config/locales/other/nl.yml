@@ -19,6 +19,7 @@ nl:
       legislations: Verordeningen
     all: Alles
     map_settings:
+      location: Uw adres of postcode
       center: Startlocatie
       zoom: Startzoomniveau
   nodes:

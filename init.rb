@@ -14,4 +14,4 @@ end
 
 # Registrer module
 DevCMSCore.root
-#DevCMSCore::register_module(:DevCMSGeo)
+DevCMSCore::register_module(:DevCMSGeo)
