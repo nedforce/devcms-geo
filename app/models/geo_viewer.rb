@@ -44,6 +44,10 @@ class GeoViewer < ActiveRecord::Base
     'map_icon'
   end
   
+  def icon_filename
+    'map.png'
+  end
+  
   def filter_settings
     read_attribute(:filter_settings) || {}
   end

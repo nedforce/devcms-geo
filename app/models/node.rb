@@ -37,7 +37,7 @@ class Node < ActiveRecord::Base
           self.errors.add(:location, I18n.t("nodes.to_many_queries"))
         end
 
-        if @geocode.success
+        if @geocode && @geocode.success
           self.lat = @geocode.lat
           self.lng = @geocode.lng
           self.write_attribute(:location, @geocode.full_address)
