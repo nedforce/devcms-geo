@@ -6,6 +6,11 @@ class NodeTest < ActiveSupport::TestCase
     @node = Node.root
   end
   
+  def test_should_geo_code_on_create
+    node = Section.create(:title => "test", :parent => Node.root, :location => "Polstraat 1, Deventer").node
+    assert node.location =~ /Deventer/
+  end
+  
   def test_should_geo_code_for_location_setter
     assert_nothing_raised do
       @node.location = "Welle, Deventer"
