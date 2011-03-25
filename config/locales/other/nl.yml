@@ -1,8 +1,8 @@
 ---
 nl:
   shared:
-    location: Locatie
     geo_data: Geo-data
+    location: Locatie
   geo_viewers:
     available_in_frontend: Aanpasbaar voor bezoeker
     add_to: GoogleMaps viewer toevoegen aan
@@ -13,15 +13,15 @@ nl:
     filter_settings:
       search_scope: Zoeken binnen
       parent_section: Bovenliggende sectie
-      all: "Alle content in alle sites"
+      all: Alle content in alle sites
       from_date: Van
       until_date: Tot
       legislations: Verordeningen
     all: Alles
     map_settings:
-      location: Uw adres of postcode
       center: Startlocatie
+      location: Uw adres of postcode
       zoom: Startzoomniveau
   nodes:
-    to_many_queries: "Te veel addressen verwerkt, probeer het morgen weer."
-    geocoding_failed: "Geocoderen mislukt."
+    geocoding_failed: Geocoderen mislukt.
+    too_many_queries: "Te veel addressen verwerkt, probeer het morgen weer."

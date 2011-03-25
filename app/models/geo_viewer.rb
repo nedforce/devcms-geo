@@ -68,26 +68,26 @@ class GeoViewer < ActiveRecord::Base
       Node.scoped()
     end
     
-    if !filters[:from_date].blank?
+    if filters[:from_date].present?
       nodes = nodes.published_after((Time.parse(filters[:from_date]) rescue nil))
     end
-    if !filters[:until_date].blank?
+    if filters[:until_date].present?
       nodes = nodes.published_before((Time.parse(filters[:until_date]) rescue nil))
     end
-    
+
     if filters[:search_scope] == 'content_type_permit'
       #Permit filters
       nodes = nodes.scoped(:joins => 'LEFT JOIN permits on permits.id = nodes.content_id AND nodes.content_type = \'Permit\'')
-      nodes = nodes.scoped(:conditions => {:permits => { :phase_id => filters[:permit_phase]}}) unless !filters[:permit_phase] || filters[:permit_phase].blank?
-      nodes = nodes.scoped(:conditions => {:permits => { :product_type_id => filters[:permit_product_type]}}) unless !filters[:permit_product_type] || filters[:permit_product_type].blank?
+      nodes = nodes.scoped(:conditions => { :permits => { :phase_id => filters[:permit_phase]}}) unless !filters[:permit_phase] || filters[:permit_phase].blank?
+      nodes = nodes.scoped(:conditions => { :permits => { :product_type_id => filters[:permit_product_type]}}) unless !filters[:permit_product_type] || filters[:permit_product_type].blank?
     end
-    
+
     if filters[:search_scope] == 'content_type_legislation'
       #Permit filters
       nodes = nodes.scoped(:joins => 'LEFT JOIN legislations on legislations.id = nodes.content_id AND nodes.content_type = \'Legislation\'')
-      nodes = nodes.scoped(:conditions => {:legislations => { :subject => filters[:legislation_subject]}}) unless filters[:legislation_subject].blank?
+      nodes = nodes.scoped(:conditions => { :legislations => { :subject => filters[:legislation_subject] }}) if filters[:legislation_subject].present?
     end
-    
+
     return nodes.geo_coded.find_accessible(:all)
   end
 end

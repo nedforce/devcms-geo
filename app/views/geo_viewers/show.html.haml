@@ -1,9 +1,9 @@
 - content_for :javascript do
   = GMap.header(:without_js => true)
-  = javascript_include_tag('ym4r-gm', :plugin => 'devcms-geo')
-  = javascript_include_tag('devcms-geo', :plugin => 'devcms-geo')
+  = javascript_include_tag 'ym4r-gm',    :plugin => 'devcms-geo'
+  = javascript_include_tag 'devcms-geo', :plugin => 'devcms-geo'
   = @map.to_html
-  = stylesheet_link_tag 'calendar_date_select/plain.css', :plugin => 'calendar_date_select'
+  = stylesheet_link_tag    'calendar_date_select/plain.css',               :plugin => 'calendar_date_select'
   = javascript_include_tag 'calendar_date_select/calendar_date_select.js', :plugin => 'calendar_date_select'
   = javascript_include_tag 'calendar_date_select/locale/nl.js',            :plugin => 'calendar_date_select' 
   = javascript_include_tag 'calendar_date_select/format_dutch.js',         :plugin => 'calendar_date_select' 
@@ -16,7 +16,7 @@
     
   .buttons.clearfix
     = print_button
-  - if @geo_viewer.filter_settings.keys.any? {|key| key.to_s.ends_with?("available")}
+  - if @geo_viewer.filter_settings.keys.any? { |key| key.to_s.ends_with?('available') }
     .filters
       %h2= I18n.t('geo_viewers.filters')
       - form_tag content_node_path(@geo_viewer.node), :method => :get, :class => 'clearfix', :id => 'geo_viewer_filter_form' do
