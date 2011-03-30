@@ -47,12 +47,14 @@ class GeoViewersController < ApplicationController
 
     nodes_expl = [] # Array nodes for static view
     index      = 0 # Counter for labels and colors (For static view aswell)
-    @nodes.each do |node|
-      if @bounds.blank? || @bounds.contains?(node)
-        nodes_expl << { :color => StaticMap::COLOURS[index % StaticMap::COLOURS.size], :label => StaticMap::LABELS[index % StaticMap::LABELS.size], :node => node }
-        index += 1
+    if !@nodes.nil?
+      @nodes.each do |node|
+        if @bounds.blank? || @bounds.contains?(node)
+          nodes_expl << { :color => StaticMap::COLOURS[index % StaticMap::COLOURS.size], :label => StaticMap::LABELS[index % StaticMap::LABELS.size], :node => node }
+          index += 1
+        end
+        @map.overlay_init GMarker.new([node.lat, node.lng], :title => node.content.title, :maxWidth => 400 , :info_window => render_to_string(:partial => '/shared/google_maps_popup', :locals => { :node => node }))
       end
-      @map.overlay_init GMarker.new([node.lat, node.lng], :title => node.content.title, :maxWidth => 400 , :info_window => render_to_string(:partial => '/shared/google_maps_popup', :locals => { :node => node }))
     end
 
     @expl = render_to_string(:partial => 'node_list', :object => nodes_expl)
