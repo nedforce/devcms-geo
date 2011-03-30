@@ -86,6 +86,12 @@ class GeoViewer < ActiveRecord::Base
       #Permit filters
       nodes = nodes.scoped(:joins => 'LEFT JOIN legislations on legislations.id = nodes.content_id AND nodes.content_type = \'Legislation\'')
       nodes = nodes.scoped(:conditions => { :legislations => { :subject => filters[:legislation_subject] }}) if filters[:legislation_subject].present?
+
+    end
+    if !nodes.nil? 
+      return nodes.geo_coded.find_accessible(:all) 
+    else
+      return nil
     end
 
     return nodes.geo_coded.find_accessible(:all)

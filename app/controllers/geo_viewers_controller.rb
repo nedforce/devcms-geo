@@ -17,6 +17,15 @@ class GeoViewersController < ApplicationController
     @filters[:search_scope]   = params[:search_scope]
     @filters[:search_scope] ||= @geo_viewer.filter_settings[:search_scope]
 
+    if @filters[:search_scope] == "separator"
+      @filters[:search_scope] = ""
+    end
+    @filters[:permit_product_type] = !params[:permit_product_type].blank? ? params[:permit_product_type] : @geo_viewer.filter_settings[:permit_product_type]
+    @filters[:permit_phase] = !params[:permit_phase].blank? ? params[:permit_phase] : @geo_viewer.filter_settings[:permit_phase]
+    
+    @filters[:legislation_subject_available] = !params[:legislation_subject_available].blank? ? params[:legislation_subject_available] : @geo_viewer.filter_settings[:legislation_subject_available]
+
+
     @filters[:permit_product_type]           = params[:permit_product_type].present?           ? params[:permit_product_type]           : @geo_viewer.filter_settings[:permit_product_type]
     @filters[:permit_phase]                  = params[:permit_phase].present?                  ? params[:permit_phase]                  : @geo_viewer.filter_settings[:permit_phase]
     @filters[:legislation_subject_available] = params[:legislation_subject_available].present? ? params[:legislation_subject_available] : @geo_viewer.filter_settings[:legislation_subject_available]
@@ -27,7 +36,7 @@ class GeoViewersController < ApplicationController
     @map = GMap.new("geo_viewer_#{@geo_viewer.id}")
     @map.control_init :small_map => true, :map_type => false
     @map.interface_init :continuous_zoom => true
-    if params[:location].present? || @nodes.empty?
+    if params[:location].present? || @nodes.blank?
       res = Geokit::Geocoders::GoogleGeocoder.geocode(@filters[:location], :bias => Node.geocoding_bias) 
       @bounds = res.suggested_bounds
       @map.center_zoom_on_bounds_init(@bounds.to_a)
