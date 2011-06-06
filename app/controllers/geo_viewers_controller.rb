@@ -1,12 +1,25 @@
 # This +RESTful+ controller is used to orchestrate and control the flow of 
 # the application relating to GeoViewer objects.
 class GeoViewersController < ApplicationController
-  before_filter :find_geo_viewer, :only => :show
-
+  before_filter :find_geo_viewer, :only => [:show, :fullscreen]
+  
   # * GET /geo_viewers/:id
   # * GET /geo_viewers/:id.xml
   def show
-    # Apply filters
+    generate_map(true)
+    respond_to do |format|
+      format.html # show.html.erb
+    end
+  end
+  
+  def fullscreen
+    generate_map(false)
+    render :layout => false
+  end
+  
+
+protected
+  def generate_map(static)
     @filters = {}
     @filters[:from_date]   = params[:from_date]
     @filters[:from_date] ||= @geo_viewer.filter_settings[:from_date]
@@ -30,8 +43,12 @@ class GeoViewersController < ApplicationController
     @filters[:permit_phase]                  = params[:permit_phase].present?                  ? params[:permit_phase]                  : @geo_viewer.filter_settings[:permit_phase]
     @filters[:legislation_subject_available] = params[:legislation_subject_available].present? ? params[:legislation_subject_available] : @geo_viewer.filter_settings[:legislation_subject_available]
     @filters[:location]                      = params[:location].present?                      ? params[:location]                      : @geo_viewer.map_settings[:center]
-
-    @nodes = @geo_viewer.nodes(@filters)
+    
+    # if(@filters.nil?)
+    #    @nodes = @geo_viewer.nodes()
+    #  else
+      @nodes = @geo_viewer.nodes(@filters)
+    # end
 
     @map = GMap.new("geo_viewer_#{@geo_viewer.id}")
     @map.control_init :small_map => true, :map_type => false
@@ -45,11 +62,13 @@ class GeoViewersController < ApplicationController
       @map.center_zoom_on_points_init(*@nodes.collect { |node| [node.lat, node.lng] })
     end
 
-    nodes_expl = [] # Array nodes for static view
+    if static
+      nodes_expl = [] # Array nodes for static view
+    end
     index      = 0 # Counter for labels and colors (For static view aswell)
     if !@nodes.nil?
       @nodes.each do |node|
-        if @bounds.blank? || @bounds.contains?(node)
+        if static && (@bounds.blank? || @bounds.contains?(node))
           nodes_expl << { :color => StaticMap::COLOURS[index % StaticMap::COLOURS.size], :label => StaticMap::LABELS[index % StaticMap::LABELS.size], :node => node }
           index += 1
         end
@@ -57,15 +76,11 @@ class GeoViewersController < ApplicationController
       end
     end
 
-    @expl = render_to_string(:partial => 'node_list', :object => nodes_expl)
-
-    respond_to do |format|
-      format.html # show.html.erb
+    if (static)
+      @expl = render_to_string(:partial => 'node_list', :object => nodes_expl)
     end
   end
-
-protected
-
+  
   # Finds the GeoViewer object corresponding to the passed in +id+ parameter.
   def find_geo_viewer
     @geo_viewer = @node.content

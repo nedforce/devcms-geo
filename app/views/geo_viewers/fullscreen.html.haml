@@ -1,0 +1,8 @@
+= GMap.header(:without_js => true)
+= javascript_include_tag 'ym4r-gm',    :plugin => 'devcms-geo'
+= javascript_include_tag 'devcms-geo', :plugin => 'devcms-geo'
+= @map.to_html
+= stylesheet_link_tag    'application.css'
+= stylesheet_link_tag    'devcms_geo_application.css'
+= stylesheet_link_tag    'devcms_geo_fullscreen.css'
+= content_tag(:div, "", {:id => "geo_viewer_#{@geo_viewer.id}", :class => "fullscreen_map"})

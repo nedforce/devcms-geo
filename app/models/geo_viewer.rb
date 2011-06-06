@@ -57,8 +57,13 @@ class GeoViewer < ActiveRecord::Base
   end
   
   def nodes(filters = {})
-    filters[:search_scope] ||= self.filter_settings[:search_scope]
-    filters[:search_scope] ||= 'all'
+    if !filters.nil?
+      filters[:search_scope] ||= self.filter_settings[:search_scope]
+      filters[:search_scope] ||= 'all'
+    else
+      filters = []
+      filters[:search_scope] ||= 'all'
+    end
     
     nodes = if filters[:search_scope] =~ /node_(\d+)/
       Node.find($1).self_and_descendants

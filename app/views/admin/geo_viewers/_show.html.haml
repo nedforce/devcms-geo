@@ -2,6 +2,8 @@
   %h2= h record.title
 
   .content
+    -# in translate stoppen
+    = link_to "Volledig scherm", {:id => @geo_viewer.id, :action => 'fullscreen'}
     .htmlField
       = process_video_tags(record.description)
       
