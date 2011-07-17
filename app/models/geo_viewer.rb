@@ -28,9 +28,9 @@
 class GeoViewer < ActiveRecord::Base
   
   acts_as_content_node({
-    :allowed_roles_for_update  => %w( admin final_editor ),
-    :allowed_roles_for_create  => %w( admin ),
-    :allowed_roles_for_destroy => %w( admin ),
+    :allowed_roles_for_update          => %w( admin final_editor ),
+    :allowed_roles_for_create          => %w( admin ),
+    :allowed_roles_for_destroy         => %w( admin ),
     :available_content_representations => ['content_box']
   })
   
@@ -83,7 +83,7 @@ class GeoViewer < ActiveRecord::Base
     if filters[:search_scope] == 'content_type_permit'
       #Permit filters
       nodes = nodes.scoped(:joins => 'LEFT JOIN permits on permits.id = nodes.content_id AND nodes.content_type = \'Permit\'')
-      nodes = nodes.scoped(:conditions => { :permits => { :phase_id => filters[:permit_phase]}}) unless !filters[:permit_phase] || filters[:permit_phase].blank?
+      nodes = nodes.scoped(:conditions => { :permits => { :phase_id        => filters[:permit_phase]}})        unless !filters[:permit_phase]        || filters[:permit_phase].blank?
       nodes = nodes.scoped(:conditions => { :permits => { :product_type_id => filters[:permit_product_type]}}) unless !filters[:permit_product_type] || filters[:permit_product_type].blank?
     end
 
@@ -91,8 +91,8 @@ class GeoViewer < ActiveRecord::Base
       #Permit filters
       nodes = nodes.scoped(:joins => 'LEFT JOIN legislations on legislations.id = nodes.content_id AND nodes.content_type = \'Legislation\'')
       nodes = nodes.scoped(:conditions => { :legislations => { :subject => filters[:legislation_subject] }}) if filters[:legislation_subject].present?
-
     end
+
     if !nodes.nil? 
       return nodes.geo_coded.find_accessible(:all) 
     else

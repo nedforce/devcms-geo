@@ -44,7 +44,7 @@ class Node < ActiveRecord::Base
         end
       end
     else
-      self.lat, self.lng = nil, nil
+      self.lat = self.lng = nil
       self.write_attribute(:location, nil)
     end
   end
