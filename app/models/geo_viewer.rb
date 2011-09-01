@@ -83,8 +83,8 @@ class GeoViewer < ActiveRecord::Base
     if filters[:search_scope] == 'content_type_permit'
       #Permit filters
       nodes = nodes.scoped(:joins => 'LEFT JOIN permits on permits.id = nodes.content_id AND nodes.content_type = \'Permit\'')
-      nodes = nodes.scoped(:conditions => { :permits => { :phase_id        => filters[:permit_phase]}})        unless !filters[:permit_phase]        || filters[:permit_phase].blank?
-      nodes = nodes.scoped(:conditions => { :permits => { :product_type_id => filters[:permit_product_type]}}) unless !filters[:permit_product_type] || filters[:permit_product_type].blank?
+      nodes = nodes.scoped(:conditions => { :permits => { :phase_id        => filters[:permit_phase]       }}) if filters[:permit_phase].present?
+      nodes = nodes.scoped(:conditions => { :permits => { :product_type_id => filters[:permit_product_type]}}) if filters[:permit_product_type].present?
     end
 
     if filters[:search_scope] == 'content_type_legislation'
