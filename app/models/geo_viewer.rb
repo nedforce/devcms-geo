@@ -70,7 +70,7 @@ class GeoViewer < ActiveRecord::Base
     elsif filters[:search_scope] =~ /content_type_(\w+)/
       Node.scoped(:conditions => { :content_type => $1.classify })
     elsif filters[:search_scope] == 'all'
-      Node.scoped()
+      Node.scoped({})
     end
     
     if filters[:from_date].present?
