@@ -5,8 +5,6 @@ class AddGeoDataToNode < ActiveRecord::Migration
     add_column :nodes, :location, :string, :length => 1024
     add_index :nodes, [:lat, :lng]
     
-    rename_column :events, :location, :location_description
-    
     Node.reset_column_information
     
     Permit.all do |permit|
@@ -18,7 +16,5 @@ class AddGeoDataToNode < ActiveRecord::Migration
     remove_column :nodes, :lat
     remove_column :nodes, :lng
     remove_column :nodes, :location
-    
-    rename_column :events, :location_description, :location
   end
 end
