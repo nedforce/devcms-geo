@@ -7,8 +7,10 @@ class AddGeoDataToNode < ActiveRecord::Migration
     
     Node.reset_column_information
     
-    Permit.all do |permit|
-      permit.node.update_attribute :location, permit.addresses.first.to_s
+    if defined?(Permit)
+      Permit.all do |permit|
+        permit.node.update_attribute :location, permit.addresses.first.to_s
+      end
     end
   end
 

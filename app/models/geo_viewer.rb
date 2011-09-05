@@ -93,7 +93,7 @@ class GeoViewer < ActiveRecord::Base
       nodes = nodes.scoped(:conditions => { :legislations => { :subject => filters[:legislation_subject] }}) if filters[:legislation_subject].present?
     end
 
-    if !nodes.nil? 
+    if !nodes.nil?
       return nodes.geo_coded.find_accessible(:all) 
     else
       return nil
