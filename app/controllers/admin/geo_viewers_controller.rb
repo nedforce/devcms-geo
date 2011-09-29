@@ -92,7 +92,7 @@ protected
 
   # Finds the +GeoViewer+ object corresponding to the passed in +id+ parameter.
   def find_geo_viewer
-    @geo_viewer = GeoViewer.find(params[:id])
+    @geo_viewer = GeoViewer.find(params[:id]).current_version
   end
 
   def set_default_search_scopes

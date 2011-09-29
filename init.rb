@@ -9,7 +9,7 @@ end
 require File.join(plugin_root, 'app', 'models', 'node.rb')
 
 if Rails.env.development?
-  ActiveSupport::Dependencies.load_once_paths.reject!{|x| x =~ /^#{Regexp.escape(File.dirname(__FILE__))}/}
+  ActiveSupport::Dependencies.autoload_once_paths.reject!{|x| x =~ /^#{Regexp.escape(File.dirname(__FILE__))}/}
 end
 
 # Register module

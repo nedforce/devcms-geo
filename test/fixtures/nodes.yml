@@ -8,6 +8,7 @@
     show_in_menu: true
     publication_start_date: <%= 1.day.ago.to_s(:db) %>
     position: 1
+    publishable: true
 
 - section_with_frontpage_node:
     content: section_with_frontpage (Section)
@@ -15,6 +16,7 @@
     show_in_menu: true
     publication_start_date: <%= 1.day.ago.to_s(:db) %>
     position: 2
+    publishable: true
         
 - bis_section_node:
     content: bis_section (Section)
@@ -23,13 +25,15 @@
     show_in_menu: true
     publication_start_date: <%= 1.day.ago.to_s(:db) %>
     position: 3
+    publishable: true
 
 - bis_page_node:
     content: bis_page (Page)
     ancestry: <%= fixtures_to_ancestry(:root_section_node, :section_with_frontpage_node, :bis_section_node) %>
     show_in_menu: true
     publication_start_date: <%= 1.day.ago.to_s(:db) %>
-    position: 1     
+    position: 1 
+    publishable: true    
     
 - economie_section_node:
     content: economie_section (Section)
@@ -38,6 +42,7 @@
     show_in_menu: true
     publication_start_date: <%= 1.day.ago.to_s(:db) %>
     position: 4 
+    publishable: true
     
 - news_node:
     content: news_page (Page)
@@ -45,6 +50,7 @@
     show_in_menu: true
     publication_start_date: <%= 1.day.ago.to_s(:db) %>
     position: 5
+    publishable: true
 
 - geo_viewer_node:
     content: geo_viewer (GeoViewer)
@@ -52,4 +58,5 @@
     show_in_menu: true
     publication_start_date: <%= 1.day.ago.to_s(:db) %>
     position: 6
+    publishable: true
 

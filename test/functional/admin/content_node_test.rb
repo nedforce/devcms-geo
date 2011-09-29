@@ -11,7 +11,7 @@ class Admin::ContentNodeTest < ActionController::TestCase
   def test_should_update_page_with_location
     login_as :admin
 
-    put :update, :id => @page.id, :page => { :location => "Welle, Deventer" }
+    put :update, :id => @page.id, :page => { :location => "Welle, Deventer", :expires_on => 1.day.from_now.to_date.to_s }
 
     assert_response :success
     assert assigns(:page).node.valid?
@@ -23,16 +23,10 @@ class Admin::ContentNodeTest < ActionController::TestCase
     
     @page.update_attributes(:location => 'Polstraat')
     
-    put :update, :id => @page.id, :page => { :location => @page.node.location }
+    put :update, :id => @page.id, :page => { :location => @page.node.location, :expires_on => 1.day.from_now.to_date.to_s }
     assert_response :success
     assert_not_nil assigns(:page).node.location
     assert assigns(:page).node.valid?
-  end
-
-protected
-
-  def create_page(attributes = {}, options = {})
-    post :create, { :parent_node_id => nodes(:root_section_node).id, :page => { :title => 'new title', :preamble => 'Preamble'}.merge(attributes) }.merge(options)
   end
   
 end
