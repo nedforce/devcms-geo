@@ -20,15 +20,15 @@ function panAndZoomTo(address) {
   current_zoom = map.getZoom()
   centered = false
 
-  if (current_zoom < zoom_target){
-    while (current_zoom < zoom_target){
+  if (current_zoom < zoom_target) {
+    while (current_zoom < zoom_target) {
       map.zoomIn(ll, true, true)
       current_zoom += 1
     }
   } else if (current_zoom == zoom_target) {
     map.panTo(ll) 
   } else {
-    while (current_zoom > zoom_target){
+    while (current_zoom > zoom_target) {
       map.zoomOut(ll, true)
       current_zoom -= 1
     }
