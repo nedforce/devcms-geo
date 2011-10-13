@@ -13,20 +13,18 @@
 
   - if @geo_viewer.description.present?
     = content_tag(:div, w(@geo_viewer.description), :class => 'htmlField')
-    
-  .buttons.clearfix
-    = print_button
+
   - if @geo_viewer.filter_settings.keys.any? { |key| key.to_s.ends_with?('available') }
     .filters
       %h2= I18n.t('geo_viewers.filters')
       - form_tag content_node_path(@geo_viewer.node), :method => :get, :class => 'clearfix', :id => 'geo_viewer_filter_form' do
-      
+
         - # Filter Searchscope
         - if @geo_viewer.filter_settings[:search_scope_available]
           .filter
             = label_tag 'search_scope', I18n.t('geo_viewers.filter_settings.search_scope')+":"
             = select_tag('search_scope', options_for_select(@search_scopes, @filters[:search_scope]))
-      
+
         - # Filter From date
         - if @geo_viewer.filter_settings[:from_date_available]
           .filter
@@ -39,13 +37,13 @@
             = label_tag 'until_date',  I18n.t('geo_viewers.filter_settings.until_date')+":"
             = calendar_date_select_tag 'until_date', @filters[:until_date], :popup => :force, :image => 'icons/calendar.png'
             (dd-mm-jjjj)
-      
+
         - # Filter PermitProductType
         - if @geo_viewer.filter_settings[:permit_product_type_available] && DevCMSCore.is_registered?(:DevCMSGov) && @geo_viewer.filter_settings[:search_scope] == 'content_type_permit'
           .filter
             = label_tag 'permits_product_type', I18n.t('permits.product_type')+":"
             = select_tag('permit_product_type', options_for_select(([[I18n.t('geo_viewers.all'),'']] + @geo_viewer.filter_settings[:permit_product_type].collect{|p| [Permit::PRODUCT_TYPES[p.to_i],p]}), params[:permit_product_type]))
-        
+
         - # Filter PermitPhase
         - if @geo_viewer.filter_settings[:permit_phase_available] && DevCMSCore.is_registered?(:DevCMSGov) && @geo_viewer.filter_settings[:search_scope] == 'content_type_permit'
           .filter 
@@ -56,7 +54,7 @@
           .filter
             = label_tag 'legislation_subject_available', I18n.t('legislations.subject')+":"
             = select_tag('legislation_subject_available', options_for_select([[I18n.t('geo_viewers.all'),'']] + Legislation.all(:select => 'distinct subject', :conditions => 'subject is not null').collect{|l| l.subject }, @geo_viewer.filter_settings[:legislation_subject]))
-      
+
         - # Submit Tag
         = submit_tag I18n.t('geo_viewers.filter'), :class => 'submit' 
   .filters
@@ -66,7 +64,9 @@
         = label_tag 'location', I18n.t('geo_viewers.map_settings.location')
         = text_field_tag 'location', params[:location]
       = submit_tag I18n.t('geo_viewers.go_to_location'), :class => 'submit location' 
-  = content_tag(:div, static_map_of_addresses(@nodes, {:center => @center, :bounds => @bounds}), :id => "geo_viewer_#{@geo_viewer.id}", :class => "gmap")
+  = content_tag(:div, static_map_of_addresses(@nodes, { :center => @center, :bounds => @bounds }), :id => "geo_viewer_#{@geo_viewer.id}", :class => 'gmap')
   %NoScript= @expl
   .buttons.clearfix
     = print_button
+    .social_buttons
+      = social_media_buttons(@geo_viewer)
