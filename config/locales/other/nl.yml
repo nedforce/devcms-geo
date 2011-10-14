@@ -12,7 +12,7 @@ nl:
     filters: Filteren en zoeken
     filter_settings:
       search_scope: Zoeken binnen
-      parent_section: Bovenliggende sectie
+      parent_section: Deze sectie
       all: Alle content in alle sites
       from_date: Van
       until_date: Tot

@@ -285,7 +285,7 @@ module Ym4r
         
         if fullscreen
           #setting up the style in case of full screen
-          html << "<style>html, body {width: 100%; height: 100%} body {margin-top: 0px; margin-right: 0px; margin-left: 0px; margin-bottom: 0px} ##{@container} {margin:  0px;} </style>"
+          html << "<style>html, body {width: 100%; height: 100%} body {margin-top: 0; margin-right: 0; margin-left: 0; margin-bottom: 0} ##{@container} {margin: 0;} </style>"
         end
         
         html

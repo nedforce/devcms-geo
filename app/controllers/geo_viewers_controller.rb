@@ -2,7 +2,7 @@
 # the application relating to GeoViewer objects.
 class GeoViewersController < ApplicationController
   before_filter :find_geo_viewer, :only => [:show, :fullscreen]
-  
+
   # * GET /geo_viewers/:id
   # * GET /geo_viewers/:id.xml
   def show
@@ -11,14 +11,14 @@ class GeoViewersController < ApplicationController
       format.html # show.html.erb
     end
   end
-  
+
   def fullscreen
     generate_map(false)
     render :layout => false
   end
-  
 
-protected
+  protected
+
   def generate_map(static)
     @filters = {}
     @filters[:from_date]   = params[:from_date]
@@ -35,15 +35,13 @@ protected
     end
     @filters[:permit_product_type] = !params[:permit_product_type].blank? ? params[:permit_product_type] : @geo_viewer.filter_settings[:permit_product_type]
     @filters[:permit_phase] = !params[:permit_phase].blank? ? params[:permit_phase] : @geo_viewer.filter_settings[:permit_phase]
-    
-    @filters[:legislation_subject_available] = !params[:legislation_subject_available].blank? ? params[:legislation_subject_available] : @geo_viewer.filter_settings[:legislation_subject_available]
 
-
+    @filters[:legislation_subject_available] = params[:legislation_subject_available].present? ? params[:legislation_subject_available] : @geo_viewer.filter_settings[:legislation_subject_available]
     @filters[:permit_product_type]           = params[:permit_product_type].present?           ? params[:permit_product_type]           : @geo_viewer.filter_settings[:permit_product_type]
     @filters[:permit_phase]                  = params[:permit_phase].present?                  ? params[:permit_phase]                  : @geo_viewer.filter_settings[:permit_phase]
     @filters[:legislation_subject_available] = params[:legislation_subject_available].present? ? params[:legislation_subject_available] : @geo_viewer.filter_settings[:legislation_subject_available]
     @filters[:location]                      = params[:location].present?                      ? params[:location]                      : @geo_viewer.map_settings[:center]
-    
+
     # if(@filters.nil?)
     #    @nodes = @geo_viewer.nodes()
     #  else
@@ -53,7 +51,7 @@ protected
     @map = GMap.new("geo_viewer_#{@geo_viewer.id}")
     @map.control_init :small_map => true, :map_type => false
     @map.interface_init :continuous_zoom => true
-    
+
     if params[:location].present? || @nodes.blank?
       res = Geokit::Geocoders::GoogleGeocoder.geocode(@filters[:location], :bias => Node.geocoding_bias) 
       @bounds = res.suggested_bounds
@@ -81,7 +79,7 @@ protected
       @expl = render_to_string(:partial => 'node_list', :object => nodes_expl)
     end
   end
-  
+
   # Finds the GeoViewer object corresponding to the passed in +id+ parameter.
   def find_geo_viewer
     @geo_viewer = @node.content
