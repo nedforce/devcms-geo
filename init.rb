@@ -6,7 +6,9 @@ Dir["#{plugin_root}/config/initializers/**/*.rb"].sort.each do |initializer|
   require(initializer)
 end
 
-require File.join(plugin_root, 'app', 'models', 'node.rb')
+if ActiveRecord::Base.connection.table_exists?(:nodes)
+  require File.join(plugin_root, 'app', 'models', 'node.rb')
+end
 
 if Rails.env.development?
   ActiveSupport::Dependencies.autoload_once_paths.reject!{|x| x =~ /^#{Regexp.escape(File.dirname(__FILE__))}/}
