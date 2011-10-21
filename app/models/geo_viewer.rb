@@ -91,7 +91,7 @@ class GeoViewer < ActiveRecord::Base
     end
 
     if nodes.present?
-      return nodes.geo_coded.find_accessible(:all) 
+      return nodes.geo_coded.accessible.all
     else
       return nil
     end

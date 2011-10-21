@@ -6,10 +6,6 @@ Dir["#{plugin_root}/config/initializers/**/*.rb"].sort.each do |initializer|
   require(initializer)
 end
 
-unless File.basename($0) == "rake" && ['db:schema:load', 'db:migrate', 'db:reset', 'gems:install'].map{|task| ARGV.include?(task) }.any?
-  require File.join(plugin_root, 'app', 'models', 'node.rb') if ActiveRecord::Base.connection.table_exists?(:nodes) 
-end
-
 if Rails.env.development?
   ActiveSupport::Dependencies.autoload_once_paths.reject!{|x| x =~ /^#{Regexp.escape(File.dirname(__FILE__))}/}
 end

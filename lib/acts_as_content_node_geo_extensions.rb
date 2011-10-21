@@ -8,7 +8,8 @@ module Acts #:nodoc:
       module ClassMethods
         def acts_as_content_node(*args)
           super
-          delegate :location, :location=, :to => :node
+          
+          delegate_accessor :location, :to => :node
         end
       end
     end

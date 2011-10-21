@@ -17,14 +17,4 @@ class GeoViewersControllerTest < ActionController::TestCase
     assert_equal old_hits + 1, geo_viewer.node.reload.hits
   end
   
-  def test_should_render_404_if_not_found
-    get :show, :id => -1
-    assert_response :not_found
-  end
-  
-  def test_should_render_404_if_node_cannot_be_found
-    get :show
-    assert_response :not_found    
-  end
-  
 end
