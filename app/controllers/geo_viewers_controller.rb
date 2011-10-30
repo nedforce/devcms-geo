@@ -7,6 +7,7 @@ class GeoViewersController < ApplicationController
   # * GET /geo_viewers/:id.xml
   def show
     generate_map(true)
+
     respond_to do |format|
       format.html # show.html.erb
     end
@@ -14,6 +15,7 @@ class GeoViewersController < ApplicationController
 
   def fullscreen
     generate_map(false)
+
     render :layout => false
   end
 
@@ -30,11 +32,12 @@ class GeoViewersController < ApplicationController
     @filters[:search_scope]   = params[:search_scope]
     @filters[:search_scope] ||= @geo_viewer.filter_settings[:search_scope]
 
-    if @filters[:search_scope] == "separator"
-      @filters[:search_scope] = ""
+    if @filters[:search_scope] == 'separator'
+      @filters[:search_scope] = ''
     end
-    @filters[:permit_product_type] = !params[:permit_product_type].blank? ? params[:permit_product_type] : @geo_viewer.filter_settings[:permit_product_type]
-    @filters[:permit_phase] = !params[:permit_phase].blank? ? params[:permit_phase] : @geo_viewer.filter_settings[:permit_phase]
+    # 2011.10.30 RvdH: Why are these two lines repeated a few lines down as well?
+    @filters[:permit_product_type] = params[:permit_product_type].present? ? params[:permit_product_type] : @geo_viewer.filter_settings[:permit_product_type]
+    @filters[:permit_phase]        = params[:permit_phase].present?        ? params[:permit_phase]        : @geo_viewer.filter_settings[:permit_phase]
 
     @filters[:legislation_subject_available] = params[:legislation_subject_available].present? ? params[:legislation_subject_available] : @geo_viewer.filter_settings[:legislation_subject_available]
     @filters[:permit_product_type]           = params[:permit_product_type].present?           ? params[:permit_product_type]           : @geo_viewer.filter_settings[:permit_product_type]
@@ -42,7 +45,7 @@ class GeoViewersController < ApplicationController
     @filters[:legislation_subject_available] = params[:legislation_subject_available].present? ? params[:legislation_subject_available] : @geo_viewer.filter_settings[:legislation_subject_available]
     @filters[:location]                      = params[:location].present?                      ? params[:location]                      : @geo_viewer.map_settings[:center]
 
-    # if(@filters.nil?)
+    # if @filters.nil?
     #    @nodes = @geo_viewer.nodes()
     #  else
       @nodes = @geo_viewer.nodes(@filters)
@@ -58,20 +61,20 @@ class GeoViewersController < ApplicationController
       @map.center_zoom_on_bounds_init(@bounds.to_a)
       @center = res.full_address
     else
-      @map.center_zoom_on_points_init(*@nodes.collect { |node| [node.lat, node.lng] })
+      @map.center_zoom_on_points_init(*@nodes.collect { |node| [ node.lat, node.lng ]})
     end
 
     if static
       nodes_expl = [] # Array nodes for static view
     end
-    index      = 0 # Counter for labels and colors (For static view aswell)
+    index = 0 # Counter for labels and colors (For static view aswell)
     if !@nodes.nil?
       @nodes.each do |node|
         if static && (@bounds.blank? || @bounds.contains?(node))
           nodes_expl << { :color => StaticMap::COLOURS[index % StaticMap::COLOURS.size], :label => StaticMap::LABELS[index % StaticMap::LABELS.size], :node => node }
           index += 1
         end
-        @map.overlay_init GMarker.new([node.lat, node.lng], :title => node.content.title, :maxWidth => 400 , :info_window => render_to_string(:partial => '/shared/google_maps_popup', :locals => { :node => node }))
+        @map.overlay_init GMarker.new([node.lat, node.lng], :title => node.content.title, :maxWidth => 400, :info_window => render_to_string(:partial => '/shared/google_maps_popup', :locals => { :node => node }))
       end
     end
 

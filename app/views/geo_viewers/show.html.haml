@@ -5,8 +5,8 @@
   = @map.to_html
   = stylesheet_link_tag    'calendar_date_select/plain.css',               :plugin => 'calendar_date_select'
   = javascript_include_tag 'calendar_date_select/calendar_date_select.js', :plugin => 'calendar_date_select'
-  = javascript_include_tag 'calendar_date_select/locale/nl.js',            :plugin => 'calendar_date_select' 
-  = javascript_include_tag 'calendar_date_select/format_dutch.js',         :plugin => 'calendar_date_select' 
+  = javascript_include_tag 'calendar_date_select/locale/nl.js',            :plugin => 'calendar_date_select'
+  = javascript_include_tag 'calendar_date_select/format_dutch.js',         :plugin => 'calendar_date_select'
 
 .geoViewer.regularPage
   %h1= h @geo_viewer.title
@@ -44,30 +44,33 @@
           - if @geo_viewer.filter_settings[:permit_product_type_available] && @geo_viewer.filter_settings[:search_scope] == 'content_type_permit'
             .filter
               = label_tag  'permits_product_type', I18n.t('permits.product_type') + ':'
-              = select_tag('permit_product_type', options_for_select(([[I18n.t('geo_viewers.all'),'']] + @geo_viewer.filter_settings[:permit_product_type].collect{|p| [Permit::PRODUCT_TYPES[p.to_i],p]}), params[:permit_product_type]))
+              = select_tag('permit_product_type', options_for_select(([[I18n.t('geo_viewers.all'), '']] + @geo_viewer.filter_settings[:permit_product_type].collect{|p| [Permit::PRODUCT_TYPES[p.to_i],p]}), params[:permit_product_type]))
 
           - # Filter PermitPhase
           - if @geo_viewer.filter_settings[:permit_phase_available] && @geo_viewer.filter_settings[:search_scope] == 'content_type_permit'
             .filter 
               = label_tag  'permit_phase', I18n.t('permits.phase') + ':'
-              = select_tag('permit_phase', options_for_select(([[I18n.t('geo_viewers.all'),'']] + @geo_viewer.filter_settings[:permit_phase].collect{|p| [Permit::PHASES[p.to_i],p]}), params[:permit_phase]))
+              = select_tag('permit_phase', options_for_select(([[I18n.t('geo_viewers.all'), '']] + @geo_viewer.filter_settings[:permit_phase].collect{|p| [Permit::PHASES[p.to_i],p]}), params[:permit_phase]))
           - # Filter LegislationSubject
           - if @geo_viewer.filter_settings[:legislation_subject_available] && @geo_viewer.filter_settings[:search_scope] == 'content_type_legislation'
             .filter
               = label_tag  'legislation_subject_available', I18n.t('legislations.subject') + ':'
-              = select_tag('legislation_subject_available', options_for_select([[I18n.t('geo_viewers.all'),'']] + Legislation.all(:select => 'DISTINCT subject', :conditions => 'subject IS NOT null').collect{ |l| l.subject }, @geo_viewer.filter_settings[:legislation_subject]))
+              = select_tag('legislation_subject_available', options_for_select([[I18n.t('geo_viewers.all'), '']] + Legislation.all(:select => 'DISTINCT subject', :conditions => 'subject IS NOT null').collect{ |l| l.subject }, @geo_viewer.filter_settings[:legislation_subject]))
 
         - # Submit Tag
-        = submit_tag I18n.t('geo_viewers.filter'), :class => 'submit' 
+        = submit_tag I18n.t('geo_viewers.filter'), :class => 'submit'
   .filters
     - form_tag content_node_path(@geo_viewer.node), :method => :get, :class => 'clearfix', :id => 'geo_viewer_location_form', :onsubmit => 'showAddress($F(\'location\')); return false;' do
       - # Filter Map Location
       .filter.last
         = label_tag      'location', I18n.t('geo_viewers.map_settings.location')
         = text_field_tag 'location', params[:location]
-      = submit_tag I18n.t('geo_viewers.go_to_location'), :class => 'submit location' 
-  = content_tag(:div, static_map_of_addresses(@nodes, { :center => @center, :bounds => @bounds }), :id => "geo_viewer_#{@geo_viewer.id}", :class => 'gmap')
+      = submit_tag I18n.t('geo_viewers.go_to_location'), :class => 'submit location'
+  .gmap{ :id => "geo_viewer_#{@geo_viewer.id}" }
+    = static_map_of_addresses(@nodes, { :center => @center, :bounds => @bounds })
+
   %noscript= @expl
+
   .buttons.clearfix
     = print_button
     .social_buttons
