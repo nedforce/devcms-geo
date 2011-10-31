@@ -67,7 +67,7 @@ class GeoViewersController < ApplicationController
     if static
       nodes_expl = [] # Array nodes for static view
     end
-    index = 0 # Counter for labels and colors (For static view aswell)
+    index = 0 # Counter for labels and colors (For static view as well)
     if !@nodes.nil?
       @nodes.each do |node|
         if static && (@bounds.blank? || @bounds.contains?(node))
