@@ -58,14 +58,16 @@
               = select_tag('legislation_subject_available', options_for_select([[I18n.t('geo_viewers.all'), '']] + Legislation.all(:select => 'DISTINCT subject', :conditions => 'subject IS NOT null').collect{ |l| l.subject }, @geo_viewer.filter_settings[:legislation_subject]))
 
         - # Submit Tag
-        = submit_tag I18n.t('geo_viewers.filter'), :class => 'submit'
+        %div
+          = submit_tag I18n.t('geo_viewers.filter'), :class => 'submit'
   .filters
     - form_tag content_node_path(@geo_viewer.node), :method => :get, :class => 'clearfix', :id => 'geo_viewer_location_form', :onsubmit => 'showAddress($F(\'location\')); return false;' do
       - # Filter Map Location
       .filter.last
         = label_tag      'location', I18n.t('geo_viewers.map_settings.location')
         = text_field_tag 'location', params[:location]
-      = submit_tag I18n.t('geo_viewers.go_to_location'), :class => 'submit location'
+      %div
+        = submit_tag I18n.t('geo_viewers.go_to_location'), :class => 'submit location'
   .gmap{ :id => "geo_viewer_#{@geo_viewer.id}" }
     = static_map_of_addresses(@nodes, { :center => @center, :bounds => @bounds })
 
