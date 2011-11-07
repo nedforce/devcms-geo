@@ -1,4 +1,4 @@
-%h1= link_to_node h(node.content.title), node
+%h2= link_to_node h(node.content.title), node
 - attr = [:description, :preamble, :summary].select { |attr| node.content.respond_to?(attr) }.first
 - if attr
   %p= truncate_html(node.content.send(attr), 400)

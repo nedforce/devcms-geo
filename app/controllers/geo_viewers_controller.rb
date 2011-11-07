@@ -45,11 +45,7 @@ class GeoViewersController < ApplicationController
     @filters[:legislation_subject_available] = params[:legislation_subject_available].present? ? params[:legislation_subject_available] : @geo_viewer.filter_settings[:legislation_subject_available]
     @filters[:location]                      = params[:location].present?                      ? params[:location]                      : @geo_viewer.map_settings[:center]
 
-    # if @filters.nil?
-    #    @nodes = @geo_viewer.nodes()
-    #  else
-      @nodes = @geo_viewer.nodes(@filters)
-    # end
+    @nodes = @geo_viewer.nodes(@filters)
 
     @map = GMap.new("geo_viewer_#{@geo_viewer.id}")
     @map.control_init :small_map => true, :map_type => false
@@ -68,7 +64,7 @@ class GeoViewersController < ApplicationController
       nodes_expl = [] # Array nodes for static view
     end
     index = 0 # Counter for labels and colors (For static view as well)
-    if !@nodes.nil?
+    if @nodes.present?
       @nodes.each do |node|
         if static && (@bounds.blank? || @bounds.contains?(node))
           nodes_expl << { :color => StaticMap::COLOURS[index % StaticMap::COLOURS.size], :label => StaticMap::LABELS[index % StaticMap::LABELS.size], :node => node }
