@@ -57,11 +57,7 @@ class GeoViewer < ActiveRecord::Base
   end
 
   def nodes(filters = {}, options = {})
-    if filters.present?
-      filters[:search_scope] ||= self.filter_settings[:search_scope]
-    else
-      filters = {}
-    end
+    filters = self.filter_settings.merge(filters)
     filters[:search_scope] ||= 'all'
 
     nodes = if filters[:search_scope] =~ /node_(\d+)/
