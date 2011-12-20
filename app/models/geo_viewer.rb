@@ -56,7 +56,7 @@ class GeoViewer < ActiveRecord::Base
     read_attribute(:map_settings) || {}
   end
 
-  def nodes(filters = {})
+  def nodes(filters = {}, options = {})
     if filters.present?
       filters[:search_scope] ||= self.filter_settings[:search_scope]
     else
@@ -91,7 +91,7 @@ class GeoViewer < ActiveRecord::Base
     end
 
     if nodes.present?
-      return nodes.geo_coded.accessible.all
+      return nodes.geo_coded.accessible.all(options)
     else
       return nil
     end
