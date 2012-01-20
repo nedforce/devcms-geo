@@ -48,7 +48,7 @@ class GeoViewersController < ApplicationController
     @nodes = @geo_viewer.nodes(@filters)
 
     @map = GMap.new("geo_viewer_#{@geo_viewer.id}")
-    @map.control_init :small_map => true, :map_type => false
+    @map.control_init :small_map => true, :map_type => true
     @map.interface_init :continuous_zoom => true
 
     if params[:location].present? || @nodes.blank?
