@@ -43,7 +43,7 @@
           - # Filter PermitProductType
           - if @geo_viewer.filter_settings[:permit_product_type_available] && @geo_viewer.filter_settings[:search_scope] == 'content_type_permit'
             .filter
-              = label_tag  'permits_product_type', I18n.t('permits.product_type') + ':'
+              = label_tag  'permit_product_type', I18n.t('permits.product_type') + ':'
               = select_tag('permit_product_type', options_for_select(([[I18n.t('geo_viewers.all'), '']] + @geo_viewer.filter_settings[:permit_product_type].collect{|p| [Permit::PRODUCT_TYPES[p.to_i],p]}), params[:permit_product_type]))
 
           - # Filter PermitPhase
