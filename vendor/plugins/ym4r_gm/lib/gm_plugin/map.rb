@@ -249,7 +249,10 @@ module Ym4r
         load_pr = options[:proto_load] #to prevent some problems when the onload event callback from Prototype is used
         
         html = ""
-        html << "<script type=\"text/javascript\">\n" if !no_script_tag
+        if !no_script_tag
+          html << "<script type=\"text/javascript\">\n"
+          html << "//<![CDATA[\n"
+        end
         #put the functions in a separate javascript file to be included in the page
         html << @global_init * "\n"
         html << "var #{@variable};\n" if !no_declare and !no_global
@@ -281,7 +284,10 @@ module Ym4r
         html << @init_end * "\n"
         html << "\n}\n"
         html << "});\n" if !no_load
-        html << "</script>" if !no_script_tag
+        if !no_script_tag
+          html << "//]]>\n"
+          html << "</script>"
+        end
         
         if fullscreen
           #setting up the style in case of full screen
