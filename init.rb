@@ -11,5 +11,4 @@ if Rails.env.development?
 end
 
 # Register module
-DevCMSCore.root
 DevCMSCore::register_module(:DevCMSGeo)
