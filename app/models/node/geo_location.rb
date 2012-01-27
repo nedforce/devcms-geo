@@ -7,7 +7,7 @@ module Node::GeoLocation
 
     base.before_validation :geocode_if_location_changed
 
-    base.validates_presence_of :lng, :lat, :if => :location_present?
+    base.validates_presence_of :lng, :lat, :if => :location_present_and_valid?
     base.validate :valid_location
 
     base.named_scope :geo_coded, { :conditions => 'nodes.lat IS NOT NULL AND nodes.lng IS NOT NULL' }
@@ -66,6 +66,14 @@ private
    end
 
   def valid_location
-    self.errors.add(:location, I18n.t('nodes.invalid_location')) if @geocode.present? && !@geocode.success
+    self.errors.add_to_base(I18n.t('nodes.invalid_location')) if location_invalid?
+  end
+  
+  def location_invalid?
+    @geocode.present? && !@geocode.success
+  end
+  
+  def location_present_and_valid?
+    location_present? && !location_invalid?
   end
 end

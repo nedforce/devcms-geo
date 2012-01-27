@@ -25,4 +25,4 @@ nl:
   nodes:
     geocoding_failed: Geocoderen mislukt.
     too_many_queries: "Te veel addressen verwerkt, probeer het morgen weer."
-    invalid_location: is ongeldig.
+    invalid_location: Locatie is ongeldig.
