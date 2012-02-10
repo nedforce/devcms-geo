@@ -5,6 +5,7 @@ class CreateGeoViewers < ActiveRecord::Migration
       t.text    :description
       t.text    :filter_settings
       t.text    :map_settings
+      
       t.timestamps
     end
   end
