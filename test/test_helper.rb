@@ -20,6 +20,12 @@ module I18n
 end 
 I18n.exception_handler = :just_raise
 
+# Turn off Carrierwave processing
+CarrierWave.configure do |config|
+  config.storage = :file
+  config.enable_processing = false
+end
+
 # Truncate all tables first
 ActiveRecord::Base.connection.tables.each{ |table| ActiveRecord::Base.connection.execute("TRUNCATE #{table} CASCADE") }
 

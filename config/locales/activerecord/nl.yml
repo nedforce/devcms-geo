@@ -2,9 +2,15 @@ nl:
   activerecord:
     models:
       geo_viewer: GoogleMaps viewer
+      pin: Pin
     attributes:
       geo_viewer:
-        title: Title
+        title: Titel
         description: Beschrijving
         filter_settings: Filterinstellingen
         map_settings: Kaartinstelling
+        link_titles: Titels linken
+      pin:
+        title: Titel
+        file: Bestand
+        

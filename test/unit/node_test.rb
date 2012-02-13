@@ -43,4 +43,5 @@ class NodeTest < ActiveSupport::TestCase
     
     assert @node.location =~ /Deventer/, "Location expected to be in Deventer, but was #{@node.location} instead"
   end
+
 end

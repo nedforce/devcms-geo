@@ -5,7 +5,6 @@ class GeoViewersControllerTest < ActionController::TestCase
 
   def test_should_show_geo_viewer
     get :show, :id => geo_viewers(:geo_viewer).id
-    
     assert_response :success
     assert assigns(:geo_viewer)
   end

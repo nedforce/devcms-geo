@@ -18,7 +18,9 @@ class Admin::GeoViewersController < Admin::AdminController
 
   # * GET /geo_viewers/:id
   # * GET /geo_viewers/:id.xml
-  def show       
+  def show
+    @actions << { :url => { :action => :index, :controller => :pins }, :text => 'Pins', :method => :get }
+        
     respond_to do |format|
       format.html { render :partial => 'show', :locals => { :record => @geo_viewer }, :layout => 'admin/admin_show' }
       format.xml  { render :xml => @geo_viewer }

@@ -5,6 +5,8 @@ module Node::GeoLocation
   def self.included(base)
     base.acts_as_mappable :default_units => :kms
 
+    base.belongs_to :pin
+    
     base.before_validation :geocode_if_location_changed
 
     base.validates_presence_of :lng, :lat, :if => :location_present_and_valid?
@@ -23,6 +25,10 @@ module Node::GeoLocation
     base.extend(ClassMethods)
   end
   
+  def pin
+    @pin ||= pin_node.try(:content)
+  end
+    
   def location_present?
     self.location.present?
   end
@@ -76,4 +82,5 @@ private
   def location_present_and_valid?
     location_present? && !location_invalid?
   end
+
 end

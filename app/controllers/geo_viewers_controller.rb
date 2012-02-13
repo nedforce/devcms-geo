@@ -35,9 +35,6 @@ class GeoViewersController < ApplicationController
     if @filters[:search_scope] == 'separator'
       @filters[:search_scope] = ''
     end
-    # 2011.10.30 RvdH: Why are these two lines repeated a few lines down as well?
-    @filters[:permit_product_type] = params[:permit_product_type].present? ? params[:permit_product_type] : @geo_viewer.filter_settings[:permit_product_type]
-    @filters[:permit_phase]        = params[:permit_phase].present?        ? params[:permit_phase]        : @geo_viewer.filter_settings[:permit_phase]
 
     @filters[:legislation_subject_available] = params[:legislation_subject_available].present? ? params[:legislation_subject_available] : @geo_viewer.filter_settings[:legislation_subject_available]
     @filters[:permit_product_type]           = params[:permit_product_type].present?           ? params[:permit_product_type]           : @geo_viewer.filter_settings[:permit_product_type]
@@ -50,6 +47,13 @@ class GeoViewersController < ApplicationController
     @map = GMap.new("geo_viewer_#{@geo_viewer.id}")
     @map.control_init :small_map => true, :map_type => true
     @map.interface_init :continuous_zoom => true
+    
+    pin_variables = {}
+    Pin.all.each do |pin|
+      width = pin.geometry.first; height = pin.geometry.last
+      @map.icon_global_init( GIcon.new(:image => pin.file.url, :icon_size => GSize.new(width, height), :icon_anchor => GPoint.new(width/2, height), :info_window_anchor => GPoint.new(width/2,2)), "pin_#{pin.id}" )
+      pin_variables["pin_#{pin.id}"] = Variable.new("pin_#{pin.id}")
+    end
 
     if params[:location].present? || @nodes.blank?
       res = Geokit::Geocoders::GoogleGeocoder.geocode(@filters[:location], :bias => Node.geocoding_bias) 
@@ -70,7 +74,11 @@ class GeoViewersController < ApplicationController
           nodes_expl << { :color => StaticMap::COLOURS[index % StaticMap::COLOURS.size], :label => StaticMap::LABELS[index % StaticMap::LABELS.size], :node => node }
           index += 1
         end
-        @map.overlay_init GMarker.new([node.lat, node.lng], :title => node.content.title, :maxWidth => 400, :info_window => render_to_string(:partial => '/shared/google_maps_popup', :locals => { :node => node }))
+        
+        marker_opts = { :title => node.content.title, :maxWidth => 400, :info_window => render_to_string(:partial => '/shared/google_maps_popup', :locals => { :node => node, :geo_viewer => @geo_viewer }) }
+        marker_opts[:icon] = pin_variables["pin_#{node.pin.id}"] if node.pin.present?
+        
+        @map.overlay_init GMarker.new([node.lat, node.lng], marker_opts)
       end
     end
 

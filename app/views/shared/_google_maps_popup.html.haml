@@ -1,4 +1,9 @@
-%h2= link_to_node h(node.content.title), node
-- attr = [:description, :preamble, :summary].select { |attr| node.content.respond_to?(attr) }.first
-- if attr
-  %p= truncate_html(node.content.send(attr), 400)
+%div
+  %h2= geo_viewer.link_titles ? link_to_node(h(node.content.title), node) : node.content.title
+
+  - image = node.children.accessible.with_content_type('Image').include_content.first.try(:content)
+  = image_tag(thumbnail_image_path(image, :format => :jpg), :alt => h(image.alt), :class => 'thumb', :height => 100) if image
+
+  - attr = [:description, :preamble, :summary].select { |attr| node.content.respond_to?(attr) }.first
+  - if attr
+    %div= truncate_html(node.content.send(attr), 400)

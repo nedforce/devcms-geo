@@ -60,6 +60,9 @@
         %td= wrap_with_label(text_field_tag('geo_viewer[map_settings][center]', record.map_settings[:center], :class => 'admin_form_text_field'),
               {:text => I18n.t('geo_viewers.map_settings.center'), :for => 'geo_viewer[map_settings][center]'})
         %td= check_box_tag "", true, {}, {:disabled => true}
+      %tr
+        %td= form.check_box :link_titles, :label => GeoViewer.human_attribute_name(:link_titles)
+        %td &nbsp;    
 = observe_field 'geo_viewer_filter_settings_search_scope', :function => 'toggle_content_specific_settings($F(\'geo_viewer_filter_settings_search_scope\'))'
 :javascript
   toggle_content_specific_settings('#{record.filter_settings[:search_scope]}')

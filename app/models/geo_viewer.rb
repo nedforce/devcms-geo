@@ -26,12 +26,14 @@
 # * Timeframe - Filter on last update timestamp
 # * Permit & Legislation specific filters
 class GeoViewer < ActiveRecord::Base
-
+  
+  has_many :pins, :dependent => :destroy
+  
   acts_as_content_node({
-    :allowed_roles_for_update          => %w( admin final_editor ),
-    :allowed_roles_for_create          => %w( admin ),
-    :allowed_roles_for_destroy         => %w( admin ),
-    :available_content_representations => ['content_box']
+    :allowed_roles_for_update           => %w( admin final_editor ),
+    :allowed_roles_for_create           => %w( admin ),
+    :allowed_roles_for_destroy          => %w( admin ),
+    :available_content_representations  => ['content_box']
   })
 
   validates_presence_of :title
@@ -39,6 +41,10 @@ class GeoViewer < ActiveRecord::Base
 
   serialize :filter_settings
   serialize :map_settings
+  
+  def after_initialize 
+    self.link_titles = true if link_titles.nil? && new_record?
+  end  
 
   def tree_icon_class
     'map_icon'
@@ -61,7 +67,7 @@ class GeoViewer < ActiveRecord::Base
     filters[:search_scope] ||= 'all'
 
     nodes = if filters[:search_scope] =~ /node_(\d+)/
-      Node.find($1).self_and_descendants
+      (node.id == $1.to_i ? parent : Node.find($1)).self_and_descendants
     elsif filters[:search_scope] =~ /content_type_(\w+)/
       Node.scoped(:conditions => { :content_type => $1.classify })
     else
