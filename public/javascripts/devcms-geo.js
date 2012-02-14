@@ -1,4 +1,25 @@
-//var mapCenterMarker;
+var originalMarkerImages = {};
+
+document.observe('dom:loaded', function () {
+  $$('.marker-link').each(function(link){ 
+    link.observe('click', function(event){
+      if(window.map){
+        Event.stop(event);
+        marker = markers[link.id];
+        
+        // Reset other markers
+        for(var key in markers){ 
+          otherMarker = markers[key]; 
+          if(originalMarkerImages[key] && otherMarker != marker) otherMarker.setImage(originalMarkerImages[key]);
+        }
+        
+        if(!originalMarkerImages[link.id]) originalMarkerImages[link.id] = marker.Zk.src;
+        marker.setImage("/pins/highlighted_pin?pin=" + encodeURIComponent(marker.Zk.src));
+        GEvent.trigger(marker, 'click')
+      }
+    });
+  });
+});
 
 function showAddress(address) {
   geocoder = new GClientGeocoder();

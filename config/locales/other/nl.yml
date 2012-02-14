@@ -8,6 +8,8 @@ nl:
     add_to: GoogleMaps viewer toevoegen aan
     edit: Aanpassen GoogleMaps viewer
     go_to_location: Toon op kaart
+    locations: Locaties
+    locations_description: "Klik op een locatie om deze te tonen op de kaart (javascript vereist):"
     filter: Zoeken
     filters: Filteren en zoeken
     filter_settings:

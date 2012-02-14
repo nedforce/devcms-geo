@@ -12,6 +12,8 @@
 # * Requires the presence of +title+, +file+.
 class Pin < ActiveRecord::Base
   
+  HIGHLIGHT_OVERLAY = ::Magick::Image::read(Rails.root+ 'public/images/icons/star_overlay.png').first
+  
   has_many :nodes, :dependent => :nullify
 
   mount_uploader :file, PinUploader

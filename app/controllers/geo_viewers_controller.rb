@@ -1,11 +1,13 @@
 # This +RESTful+ controller is used to orchestrate and control the flow of 
 # the application relating to GeoViewer objects.
+require 'open-uri'
+
 class GeoViewersController < ApplicationController
   before_filter :find_geo_viewer, :only => [:show, :fullscreen]
-
+  
   # * GET /geo_viewers/:id
   # * GET /geo_viewers/:id.xml
-  def show
+  def show    
     generate_map(true)
 
     respond_to do |format|
@@ -69,7 +71,11 @@ class GeoViewersController < ApplicationController
     end
     index = 0 # Counter for labels and colors (For static view as well)
     if @nodes.present?
+      markers = {}
+      
       @nodes.each do |node|
+        markers[node.id] = (marker = "marker_#{node.id}")
+        
         if static && (@bounds.blank? || @bounds.contains?(node))
           nodes_expl << { :color => StaticMap::COLOURS[index % StaticMap::COLOURS.size], :label => StaticMap::LABELS[index % StaticMap::LABELS.size], :node => node }
           index += 1
@@ -78,8 +84,12 @@ class GeoViewersController < ApplicationController
         marker_opts = { :title => node.content.title, :maxWidth => 400, :info_window => render_to_string(:partial => '/shared/google_maps_popup', :locals => { :node => node, :geo_viewer => @geo_viewer }) }
         marker_opts[:icon] = pin_variables["pin_#{node.pin.id}"] if node.pin.present?
         
-        @map.overlay_init GMarker.new([node.lat, node.lng], marker_opts)
+        @map.declare_global_init(GMarker.new([node.lat, node.lng], marker_opts), marker)        
+        @map.overlay_init Variable.new(marker)
       end
+      
+      # Record markers for highlighting
+      @map.record_global_init("var markers = { #{markers.map{|k,v| "'marker-#{k}':#{v}"}.join(', ')  } };\n")
     end
 
     if (static)

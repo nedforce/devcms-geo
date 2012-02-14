@@ -44,6 +44,10 @@ class GeoViewer < ActiveRecord::Base
   
   def after_initialize 
     self.link_titles = true if link_titles.nil? && new_record?
+  end
+  
+  def has_own_content_representation?
+    @has_own_content_representation ||= node.content_representations.any?{|cr| cr.content_id == node.id }
   end  
 
   def tree_icon_class

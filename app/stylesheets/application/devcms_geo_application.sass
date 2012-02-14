@@ -51,6 +51,7 @@ h1
       float: left      
       height: 100px
       padding-right: 10px
+      
   .filters
     border-bottom: 1px solid #0076AF
     margin-bottom: 20px
@@ -61,9 +62,66 @@ h1
       right: 5px
       bottom: 2px
       display: block
+
     .filter
       position: relative
       width: 320px
+    
+      label
+        width: 100px 
+        display: inline-block
+      
+#main_container .geo_viewer_content_box .content 
+
+  .htmlField
+    padding-left: 4px
+
+  li.toggable
+    background: 0 !important
+    
+    a
+      color: black
+      
+    h3.toggable_section_link
+      padding-left: 20px
+      background: transparent url('/images/icons/plus.gif') center left no-repeat
+      
+      &.activated
+        cursor: pointer
+        margin: 0
+        font-weight: normal
+        color: black
+        font-size: 11px
+        display: inline 
+        
+    div.toggable_section
+      padding-left: 20px
+      p
+        margin-right: 10px
+        
+      li
+        background: transparent url('/images/arrow_black.png') no-repeat scroll 2px 7px
+
+        a
+          padding-left: 20px
+
+  .minus_icon
+    background-image: url('/images/icons/minus.gif') !important
+
+  .plus_icon
+    background-image: url('/images/icons/plus.gif') !important
+    
+  .content-section
+    margin-bottom: 15px
+  .filters
+    margin-bottom: 15px
+    padding-bottom: 2px
+    position: relative
+    .submit
+      display: block
+        
+    .filter
+      position: relative
       label
         width: 100px
         display: inline-block

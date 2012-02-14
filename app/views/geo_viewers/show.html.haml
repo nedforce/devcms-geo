@@ -8,65 +8,14 @@
   = javascript_include_tag 'calendar_date_select/format_dutch.js',         :plugin => 'calendar_date_select'
 
 .geoViewer.regularPage
-  %h1= h @geo_viewer.title
-
-  - if @geo_viewer.description.present?
-    .htmlField
-      = w @geo_viewer.description
-
-  - if @geo_viewer.filter_settings.keys.any? { |key| key.to_s.ends_with?('available') }
-    .filters
-      %h2= I18n.t('geo_viewers.filters')
-      - form_tag content_node_path(@geo_viewer.node), :method => :get, :class => 'clearfix', :id => 'geo_viewer_filter_form' do
-
-        - # Filter Searchscope
-        - if @geo_viewer.filter_settings[:search_scope_available]
-          .filter
-            = label_tag  'search_scope', I18n.t('geo_viewers.filter_settings.search_scope') + ':'
-            = select_tag 'search_scope', options_for_select(@search_scopes, @filters[:search_scope])
-
-        - # Filter From date
-        - if @geo_viewer.filter_settings[:from_date_available]
-          .filter
-            = label_tag                'from_date', I18n.t('geo_viewers.filter_settings.from_date') + ':'
-            = calendar_date_select_tag 'from_date', @filters[:from_date], :popup => :force, :image => 'icons/calendar.png'
-            (dd-mm-jjjj)
-        - # Filter Until date
-        - if @geo_viewer.filter_settings[:until_date_available]
-          .filter
-            = label_tag                'until_date', I18n.t('geo_viewers.filter_settings.until_date') + ':'
-            = calendar_date_select_tag 'until_date', @filters[:until_date], :popup => :force, :image => 'icons/calendar.png'
-            (dd-mm-jjjj)
-
-        - if DevCMSCore.is_registered?(:DevCMSGov)
-          - # Filter PermitProductType
-          - if @geo_viewer.filter_settings[:permit_product_type_available] && @geo_viewer.filter_settings[:search_scope] == 'content_type_permit'
-            .filter
-              = label_tag  'permit_product_type', I18n.t('permits.product_type') + ':'
-              = select_tag('permit_product_type', options_for_select(([[I18n.t('geo_viewers.all'), '']] + @geo_viewer.filter_settings[:permit_product_type].collect{|p| [Permit::PRODUCT_TYPES[p.to_i],p]}), params[:permit_product_type]))
-
-          - # Filter PermitPhase
-          - if @geo_viewer.filter_settings[:permit_phase_available] && @geo_viewer.filter_settings[:search_scope] == 'content_type_permit'
-            .filter 
-              = label_tag  'permit_phase', I18n.t('permits.phase') + ':'
-              = select_tag('permit_phase', options_for_select(([[I18n.t('geo_viewers.all'), '']] + @geo_viewer.filter_settings[:permit_phase].collect{|p| [Permit::PHASES[p.to_i],p]}), params[:permit_phase]))
-          - # Filter LegislationSubject
-          - if @geo_viewer.filter_settings[:legislation_subject_available] && @geo_viewer.filter_settings[:search_scope] == 'content_type_legislation'
-            .filter
-              = label_tag  'legislation_subject_available', I18n.t('legislations.subject') + ':'
-              = select_tag('legislation_subject_available', options_for_select([[I18n.t('geo_viewers.all'), '']] + Legislation.all(:select => 'DISTINCT subject', :conditions => 'subject IS NOT null').collect{ |l| l.subject }, @geo_viewer.filter_settings[:legislation_subject]))
-
-        - # Submit tag
-        %div
-          = submit_tag I18n.t('geo_viewers.filter'), :class => 'submit'
-  .filters
-    - form_tag content_node_path(@geo_viewer.node), :method => :get, :class => 'clearfix', :id => 'geo_viewer_location_form', :onsubmit => 'showAddress($F(\'location\')); return false;' do
-      - # Filter Map Location
-      .filter.last
-        = label_tag      'location', I18n.t('geo_viewers.map_settings.location')
-        = text_field_tag 'location', params[:location]
-      %div
-        = submit_tag I18n.t('geo_viewers.go_to_location'), :class => 'submit location'
+  %h1= @geo_viewer.title
+  
+  - unless @geo_viewer.has_own_content_representation?
+    - if @geo_viewer.description.present?
+      .htmlField= w @geo_viewer.description
+    
+    = render 'filters'
+      
 
   .gmap{ :id => "geo_viewer_#{@geo_viewer.id}" }
     = static_map_of_addresses(@nodes, { :center => @center, :bounds => @bounds })
