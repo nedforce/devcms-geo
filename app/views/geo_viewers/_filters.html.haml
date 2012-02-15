@@ -15,7 +15,7 @@
               = select_tag 'search_scope', options_for_select(@search_scopes, @filters[:search_scope])
         - else
           .filter.layers.clearfix
-            = label_tag  'layers', 'Kaartlagen' + ':'
+            = label_tag  'layers', I18n.t('geo_viewers.layers')  + ':'
             .check_boxes
               - @geo_viewer.geo_viewer_placeables.toggable.scoped(:include => :geo_viewer).each do |placeable|
                 .check_box

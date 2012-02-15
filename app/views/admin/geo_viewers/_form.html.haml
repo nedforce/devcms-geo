@@ -18,16 +18,16 @@
     }
   }
 
-= form.check_box(:combined_viewer, :label => 'Gecombineerde map') if @geo_viewer.new_record?
+= form.check_box(:combined_viewer, :label => t('geo_viewers.combined_viewer')) if @geo_viewer.new_record?
 = form.html_editor :description, :label => t('shared.description')
 
 
 - if @geo_viewer.new_record? || @geo_viewer.combined_viewer?
   %table#layers
     %thead
-      %th.layer Kaartlagen
-      %th.toggled Standaard ingeschakeld?
-      %th Aanpasbaar voor bezoeker
+      %th.layer= t('geo_viewers.layers')
+      %th.toggled= t('geo_viewer_placements.is_toggled')
+      %th= t('geo_viewer_placements.is_toggable')
 
     %tbody    
       - @placeables.each_with_index do |placeable, index|

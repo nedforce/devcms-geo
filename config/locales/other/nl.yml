@@ -3,11 +3,16 @@ nl:
   shared:
     geo_data: Geo-data
     location: Locatie
+  geo_viewer_placements:
+    is_toggled: Standaard ingeschakeld?
+    is_toggable: Aanpasbaar voor bezoeker       
   geo_viewers:
+    combined_viewer: Gecombineerde map
     available_in_frontend: Aanpasbaar voor bezoeker
     add_to: GoogleMaps viewer toevoegen aan
     edit: Aanpassen GoogleMaps viewer
     go_to_location: Toon op kaart
+    layers: Kaartlagen
     locations: Locaties
     locations_description: "Klik op een locatie om deze te tonen op de kaart (javascript vereist):"
     filter: Zoeken
