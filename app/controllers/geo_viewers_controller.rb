@@ -25,17 +25,23 @@ class GeoViewersController < ApplicationController
 
   def generate_map(static)
     @filters = {}
+    
     @filters[:from_date]   = params[:from_date]
     @filters[:from_date] ||= @geo_viewer.filter_settings[:from_date]
 
     @filters[:until_date]   = params[:until_date]
     @filters[:until_date] ||= @geo_viewer.filter_settings[:until_date]
 
-    @filters[:search_scope]   = params[:search_scope]
-    @filters[:search_scope] ||= @geo_viewer.filter_settings[:search_scope]
+    if @geo_viewer.combined_viewer?
+      @filters[:layers]   = params[:layers]
+      @filters[:layers] ||= @geo_viewer.filter_settings[:layers]
+    else    
+      @filters[:search_scope]   = params[:search_scope]
+      @filters[:search_scope] ||= @geo_viewer.filter_settings[:search_scope]
 
-    if @filters[:search_scope] == 'separator'
-      @filters[:search_scope] = ''
+      if @filters[:search_scope] == 'separator'
+        @filters[:search_scope] = ''
+      end
     end
 
     @filters[:legislation_subject_available] = params[:legislation_subject_available].present? ? params[:legislation_subject_available] : @geo_viewer.filter_settings[:legislation_subject_available]
@@ -44,7 +50,7 @@ class GeoViewersController < ApplicationController
     @filters[:legislation_subject_available] = params[:legislation_subject_available].present? ? params[:legislation_subject_available] : @geo_viewer.filter_settings[:legislation_subject_available]
     @filters[:location]                      = params[:location].present?                      ? params[:location]                      : @geo_viewer.map_settings[:center]
 
-    @nodes = @geo_viewer.nodes(@filters)
+    @nodes = @geo_viewer.filtered_nodes(@filters)
 
     @map = GMap.new("geo_viewer_#{@geo_viewer.id}")
     @map.control_init :small_map => true, :map_type => true

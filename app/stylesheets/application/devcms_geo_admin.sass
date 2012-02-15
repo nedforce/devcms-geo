@@ -1,9 +1,20 @@
-table.geo_viewer_settings
-  width: 100%
+table
+  &.geo_viewer_settings, &#layers
+    width: 100%
+    margin-bottom: 15px
+    th
+      font-weight: bold
+      background-color: #E6EFFE
+      padding: 3px
+      
+table#layers
   th
-    font-weight: bold
-    background-color: #E6EFFE
-    padding: 3px
+    &.layer
+      width: 41%
+    &.toggled
+      width: 20%
+  td.placeable label
+    padding-left: 5px    
 
 #pins table
   width: 30%

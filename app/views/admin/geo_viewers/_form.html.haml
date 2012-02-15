@@ -7,19 +7,51 @@
       $$('table.geo_viewer_settings .content_specific_setting.' + content_type).invoke('show')
     }
   }
+  
+  function toggle_combined_viewer_settings() {
+    if($('geo_viewer_combined_viewer').checked) {
+      $('layers').show(); 
+      $('search-scope-row').hide();      
+    } else {
+      $('layers').hide(); 
+      $('search-scope-row').show();  
+    }
+  }
 
+= form.check_box(:combined_viewer, :label => 'Gecombineerde map') if @geo_viewer.new_record?
 = form.html_editor :description, :label => t('shared.description')
 
-%td
+
+- if @geo_viewer.new_record? || @geo_viewer.combined_viewer?
+  %table#layers
+    %thead
+      %th.layer Kaartlagen
+      %th.toggled Standaard ingeschakeld?
+      %th Aanpasbaar voor bezoeker
+
+    %tbody    
+      - @placeables.each_with_index do |placeable, index|
+        - fields_for "geo_viewer[geo_viewer_placeables_attributes][#{index}]", placeable do |placeable_fields|
+          = placeable_fields.hidden_field(:id) unless placeable.new_record?
+          = placeable_fields.hidden_field :geo_viewer_id
+          %tr
+            %td.placeable
+              = placeable_fields.check_box :_destroy, {}, '0', '1'
+              = placeable_fields.label :_destroy, placeable.geo_viewer.title
+            %td= placeable_fields.check_box :is_toggled
+            %td= placeable_fields.check_box :is_toggable
+        
 %table.geo_viewer_settings
   %thead
     %th= GeoViewer.human_attribute_name(:filter_settings)
     %th= I18n.t('geo_viewers.available_in_frontend')
   %tbody
-    %tr
-      %td= wrap_with_label(select_tag('geo_viewer[filter_settings][search_scope]', options_for_select(@search_scopes, record.filter_settings[:search_scope])),
-            {:text => I18n.t('geo_viewers.filter_settings.search_scope'), :for => 'geo_viewer[filter_settings][search_scope]'})
-      %td= check_box_tag "geo_viewer[filter_settings][search_scope_available]", 1,  record.filter_settings[:search_scope_available]
+    - if @geo_viewer.new_record? || !@geo_viewer.combined_viewer?
+      %tr#search-scope-row
+        %td= wrap_with_label(select_tag('geo_viewer[filter_settings][search_scope]', options_for_select(@search_scopes, record.filter_settings[:search_scope])),
+              {:text => I18n.t('geo_viewers.filter_settings.search_scope'), :for => 'geo_viewer[filter_settings][search_scope]'})
+        %td= check_box_tag "geo_viewer[filter_settings][search_scope_available]", 1,  record.filter_settings[:search_scope_available]
+        
     %tr
       %td= wrap_with_label(admin_date_field_tag('geo_viewer[filter_settings][from_date]', (Date.parse(record.filter_settings[:from_date]) rescue nil), :allow_empty => true),
             {:text => I18n.t('geo_viewers.filter_settings.from_date'), :for => 'geo_viewer[filter_settings][from_date]'})
@@ -63,6 +95,13 @@
       %tr
         %td= form.check_box :link_titles, :label => GeoViewer.human_attribute_name(:link_titles)
         %td &nbsp;    
+
 = observe_field 'geo_viewer_filter_settings_search_scope', :function => 'toggle_content_specific_settings($F(\'geo_viewer_filter_settings_search_scope\'))'
+= observe_field('geo_viewer_combined_viewer', :function => 'toggle_combined_viewer_settings()') if @geo_viewer.new_record?
+
 :javascript
   toggle_content_specific_settings('#{record.filter_settings[:search_scope]}')
+
+- if @geo_viewer.new_record?
+  :javascript
+    toggle_combined_viewer_settings()

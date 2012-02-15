@@ -1,4 +1,15 @@
 = form.hidden_field :description
+= form.hidden_field(:combined_viewer) if form.object.new_record?
+
+- if form.object.combined_viewer?
+  - form.object.geo_viewer_placeables.each_with_index do |placeable, index|
+    - fields_for "geo_viewer[geo_viewer_placeables_attributes][#{index}]", placeable do |placeable_fields|
+      = placeable_fields.hidden_field(:id) unless placeable.new_record?
+      = placeable_fields.hidden_field :geo_viewer_id
+      = placeable_fields.hidden_field :_destroy
+      = placeable_fields.hidden_field :is_toggled
+      = placeable_fields.hidden_field :is_toggable
+            
 - form.object.filter_settings.each do |k,v|
   = hidden_field_tag "geo_viewer[filter_settings][#{k}]", v
   

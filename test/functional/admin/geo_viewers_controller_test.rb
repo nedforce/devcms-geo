@@ -32,6 +32,18 @@ class Admin::GeoViewersControllerTest < ActionController::TestCase
       assert !assigns(:geo_viewer).new_record?, :message => assigns(:geo_viewer).errors.full_messages.join('; ')
     end
   end
+  
+  def test_should_create_combined_geo_viewer
+    login_as :admin
+
+    assert_difference('GeoViewerPlacement.count') do
+      assert_difference('GeoViewer.count') do
+        create_combined_geo_viewer
+        assert_response :success
+        assert !assigns(:geo_viewer).new_record?, :message => assigns(:geo_viewer).errors.full_messages.join('; ')
+      end
+    end
+  end  
 
   def test_should_get_valid_preview_for_create
     login_as :admin
@@ -131,5 +143,9 @@ protected
   def create_geo_viewer(attributes = {}, options = {})
     post :create, { :parent_node_id => nodes(:root_section_node).id, :geo_viewer => { :title => 'new title' }.merge(attributes) }.merge(options)
   end
+  
+  def create_combined_geo_viewer(attributes = {}, options = {})
+    post :create, { :parent_node_id => nodes(:root_section_node).id, :geo_viewer => { :title => 'new title', :combined_viewer => '1', :geo_viewer_placeables_attributes => {'0' => { :geo_viewer_id => @geo_viewer.id, :is_toggable => true } } }.merge(attributes) }.merge(options)
+  end  
   
 end
