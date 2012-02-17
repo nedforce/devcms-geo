@@ -15,6 +15,7 @@ nl:
     layers: Kaartlagen
     locations: Locaties
     locations_description: "Klik op een locatie om deze te tonen op de kaart (javascript vereist):"
+    related_content: Filteren en zoeken
     filter: Zoeken
     filters: Filteren en zoeken
     filter_settings:

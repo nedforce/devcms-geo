@@ -49,7 +49,8 @@ class GeoViewer < ActiveRecord::Base
     :allowed_roles_for_update           => %w( admin final_editor ),
     :allowed_roles_for_create           => %w( admin ),
     :allowed_roles_for_destroy          => %w( admin ),
-    :available_content_representations  => ['content_box']
+    :available_content_representations  => ['content_box'],
+    :has_own_content_box                => true    
   })
 
   validates_presence_of :title
@@ -63,7 +64,7 @@ class GeoViewer < ActiveRecord::Base
   end
   
   def has_own_content_representation?
-    @has_own_content_representation ||= node.content_representations.any?{|cr| cr.content_id == node.id }
+    @has_own_content_representation ||= node.content_representations.any?{|cr| cr.custom_type == 'related_content' && cr.parent_id == node.id }
   end  
 
   def tree_icon_class
