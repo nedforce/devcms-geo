@@ -1,14 +1,14 @@
 .right_panel_content.regularPage
-  %h1= t('pins.pins')
+  %h1= t 'pins.pins'
 
   #pins= render 'pins'
-  
+
   #add-pin
-    %h2= t('pins.add')
-    .clearfix  
+    %h2= t 'pins.add'
+    .clearfix
       - admin_form_for(:pin, Pin.new, :url => { :action => 'create', :format => 'js' }, :html => { :multipart => true, :target => 'upload_target' }) do |f|
         = f.text_field :title
         = f.file_field :file
         = f.submit t('pins.add')
 
-    %iframe{:name => 'upload_target', :style => "height: 1px; width: 1px; border: 0px;"}
+    %iframe{ :name => 'upload_target', :style => 'height: 1px; width: 1px; border: 0;' }
