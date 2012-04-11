@@ -110,10 +110,10 @@ class GeoViewer < ActiveRecord::Base
     end
 
     if filters[:from_date].present?
-      filtered_node_scope = filtered_node_scope.published_after((Time.parse(filters[:from_date]) rescue filtered_node_scope))
+      filtered_node_scope = filtered_node_scope.published_after(Time.parse(filters[:from_date])) rescue filtered_node_scope
     end
     if filters[:until_date].present?
-      filtered_node_scope = filtered_node_scope.published_before((Time.parse(filters[:until_date]) rescue filtered_node_scope))
+      filtered_node_scope = filtered_node_scope.published_before(Time.parse(filters[:until_date])) rescue filtered_node_scope
     end
     
     if !combined_viewer?
