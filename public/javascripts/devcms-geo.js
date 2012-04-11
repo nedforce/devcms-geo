@@ -1,21 +1,21 @@
 var originalMarkerImages = {};
 
 document.observe('dom:loaded', function () {
-  $$('.marker-link').each(function(link){ 
-    link.observe('click', function(event){
-      if(window.map){
+  $$('.marker-link').each(function (link) {
+    link.observe('click', function (event) {
+      if (window.map) {
         Event.stop(event);
         marker = markers[link.id];
-        
+
         // Reset other markers
-        for(var key in markers){ 
-          otherMarker = markers[key]; 
-          if(originalMarkerImages[key] && otherMarker != marker) otherMarker.setImage(originalMarkerImages[key]);
+        for (var key in markers) { 
+          otherMarker = markers[key];
+          if (originalMarkerImages[key] && otherMarker != marker) { otherMarker.setImage(originalMarkerImages[key]); }
         }
-        
-        if(!originalMarkerImages[link.id]) originalMarkerImages[link.id] = marker.Zk.src;
+
+        if (!originalMarkerImages[link.id]) { originalMarkerImages[link.id] = marker.Zk.src; }
         marker.setImage("/pins/highlighted_pin?pin=" + encodeURIComponent(marker.Zk.src));
-        GEvent.trigger(marker, 'click')
+        GEvent.trigger(marker, 'click');
       }
     });
   });
