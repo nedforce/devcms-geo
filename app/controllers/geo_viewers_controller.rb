@@ -88,7 +88,7 @@ class GeoViewersController < ApplicationController
         end
         
         marker_opts = { :title => node.content.title, :maxWidth => 400, :info_window => render_to_string(:partial => '/shared/google_maps_popup', :locals => { :node => node, :geo_viewer => @geo_viewer }) }
-        marker_opts[:icon] = pin_variables["pin_#{node.pin.id}"] if node.pin.present?
+        marker_opts[:icon] = pin_variables["pin_#{node.own_or_inherited_pin.id}"] if node.own_or_inherited_pin.present?
         
         @map.declare_global_init(GMarker.new([node.lat, node.lng], marker_opts), marker)        
         @map.overlay_init Variable.new(marker)

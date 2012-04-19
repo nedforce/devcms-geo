@@ -25,8 +25,8 @@ module Node::GeoLocation
     base.extend(ClassMethods)
   end
   
-  def pin
-    @pin ||= pin_node.try(:content)
+  def own_or_inherited_pin
+    @own_or_inherited_pin ||= pin.present? ? pin : ancestors.all(:select => :pin_id, :include => :pin, :order => ['nodes.ancestry_depth desc'], :conditions => 'nodes.pin_id is not null').first.try(:pin)
   end
     
   def location_present?
