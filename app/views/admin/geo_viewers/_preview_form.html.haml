@@ -1,4 +1,6 @@
 = form.hidden_field :description
+= form.hidden_field :link_titles
+= form.hidden_field :inherit_images
 = form.hidden_field(:combined_viewer) if form.object.new_record?
 
 - if form.object.combined_viewer?

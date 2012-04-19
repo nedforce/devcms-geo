@@ -94,7 +94,10 @@
         %td= check_box_tag "", true, {}, {:disabled => true}
       %tr
         %td= form.check_box :link_titles, :label => GeoViewer.human_attribute_name(:link_titles)
-        %td &nbsp;    
+        %td &nbsp;
+      %tr
+        %td= form.check_box :inherit_images, :label => GeoViewer.human_attribute_name(:inherit_images)
+        %td &nbsp;         
 
 = observe_field 'geo_viewer_filter_settings_search_scope', :function => 'toggle_content_specific_settings($F(\'geo_viewer_filter_settings_search_scope\'))'
 = observe_field('geo_viewer_combined_viewer', :function => 'toggle_combined_viewer_settings()') if @geo_viewer.new_record?

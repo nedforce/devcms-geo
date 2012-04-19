@@ -63,6 +63,14 @@ class GeoViewer < ActiveRecord::Base
     self.link_titles = true if link_titles.nil? && new_record?
   end
   
+  def image_for(node)
+    if inherit_images?
+      node.path_children_by_depth.accessible.with_content_type('Image').include_content.first.try(:content)
+    else
+      node.children.accessible.with_content_type('Image').include_content.first.try(:content)
+    end
+  end
+  
   def has_own_content_representation?
     @has_own_content_representation ||= node.content_representations.any?{|cr| cr.custom_type == 'related_content' && cr.parent_id == node.id }
   end  

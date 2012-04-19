@@ -10,6 +10,7 @@ nl:
         filter_settings: Filterinstellingen
         map_settings: Kaartinstelling
         link_titles: Titels linken
+        inherit_images: Afbeeldingen overerven
       pin:
         title: Titel
         file: Bestand
