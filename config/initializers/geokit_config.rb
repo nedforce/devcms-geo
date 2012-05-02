@@ -1,4 +1,6 @@
 if defined? Geokit
+  
+  Geokit::Geocoders::logger = Logger.new(STDOUT).tap{|logger| logger.level = Logger::INFO }
 
 	# These defaults are used in Geokit::Mappable.distance_to and in acts_as_mappable
 	Geokit::default_units   = :kms

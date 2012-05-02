@@ -8,16 +8,13 @@ class Admin::PinsController < Admin::AdminController
   
   def create
     @pin = Pin.new(params[:pin])
-
     respond_to do |format|      
       format.js do
-        responds_to_parent do
-          render :update do |page|
-            if @pin.save
-              page.replace_html 'pins', :partial => 'pins'
-            else
-              page.call 'Ext.Msg.alert', I18n.t('pins.create_failed_title'), I18n.t('pins.create_failed'), :errors => @pin.errors.full_messages.to_sentence
-            end
+        responds_to_parent do |page|
+          if @pin.save
+            page.replace_html 'pins', :partial => 'pins'
+          else
+            page.call 'Ext.Msg.alert', I18n.t('pins.create_failed_title'), I18n.t('pins.create_failed'), :errors => @pin.errors.full_messages.to_sentence
           end
         end
       end      
@@ -28,7 +25,7 @@ class Admin::PinsController < Admin::AdminController
   def destroy
     @pin = Pin.find(params[:id])
     
-    respond_to do |format|      
+    respond_to do |format|
       format.js do
         render :update do |page|
           if @pin.destroy

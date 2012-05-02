@@ -1,0 +1,10 @@
+test:
+  adapter: postgresql
+  host: localhost
+  database: devcms_geo_test
+  min_messages: WARNING
+    
+development:
+  adapter: postgresql
+  host: localhost
+  database: devcms_geo_development

@@ -102,7 +102,7 @@
         %td= form.check_box :inherit_pins, :label => GeoViewer.human_attribute_name(:inherit_pins)
         %td &nbsp;                   
 
-= observe_field 'geo_viewer_filter_settings_search_scope', :function => 'toggle_content_specific_settings($F(\'geo_viewer_filter_settings_search_scope\'))'
+= observe_field('geo_viewer_filter_settings_search_scope', :function => 'toggle_content_specific_settings($F(\'geo_viewer_filter_settings_search_scope\'))') if @geo_viewer.new_record? || !@geo_viewer.combined_viewer?
 = observe_field('geo_viewer_combined_viewer', :function => 'toggle_combined_viewer_settings()') if @geo_viewer.new_record?
 
 :javascript

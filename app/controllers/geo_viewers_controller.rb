@@ -2,7 +2,7 @@
 # the application relating to GeoViewer objects.
 require 'open-uri'
 
-class GeoViewersController < ApplicationController
+class GeoViewersController < ApplicationController  
   before_filter :find_geo_viewer, :only => [:show, :fullscreen]
   
   # * GET /geo_viewers/:id
@@ -83,7 +83,7 @@ class GeoViewersController < ApplicationController
         markers[node.id] = (marker = "marker_#{node.id}")
         
         if static && (@bounds.blank? || @bounds.contains?(node))
-          nodes_expl << { :color => StaticMap::COLOURS[index % StaticMap::COLOURS.size], :label => StaticMap::LABELS[index % StaticMap::LABELS.size], :node => node }
+          nodes_expl << { :color => DevcmsGeo::StaticMap::COLOURS[index % DevcmsGeo::StaticMap::COLOURS.size], :label => DevcmsGeo::StaticMap::LABELS[index % DevcmsGeo::StaticMap::LABELS.size], :node => node }
           index += 1
         end
         

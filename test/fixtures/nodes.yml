@@ -1,82 +1,82 @@
-<% def fixtures_to_ancestry(*names); names.collect { |name| Fixtures.identify(name) }.join("/"); end %>
-!!omap
-- root_section_node:
-    content: root_section (Section)
-    layout: deventer
-    layout_variant: default
-    layout_configuration: "<%= {'template_color'=>'default'}.to_yaml %>"
-    show_in_menu: true
-    publication_start_date: <%= 1.day.ago.to_s(:db) %>
-    position: 1
-    publishable: true
-    sub_content_type: Site
-    hidden: false
-    private: false
+<% def fixtures_to_ancestry(*names); names.collect { |name| ActiveRecord::Fixtures.identify(name) }.join("/"); end %>
 
-- section_with_frontpage_node:
-    content: section_with_frontpage (Section)
-    ancestry: <%= fixtures_to_ancestry(:root_section_node) %>
-    show_in_menu: true
-    publication_start_date: <%= 1.day.ago.to_s(:db) %>
-    position: 2
-    publishable: true
-    sub_content_type: Section
-    hidden: false
-    private: false
-        
-- bis_section_node:
-    content: bis_section (Section)
-    ancestry: <%= fixtures_to_ancestry(:root_section_node, :section_with_frontpage_node) %>
-    url_alias: bestuur/bestuursinformatie
-    show_in_menu: true
-    publication_start_date: <%= 1.day.ago.to_s(:db) %>
-    position: 3
-    publishable: true
-    sub_content_type: Section
-    hidden: false
-    private: false
+root_section_node:
+  content: root_section (Section)
+  layout: default
+  layout_variant: default
+  layout_configuration: { template_color: 'default' }
+  show_in_menu: true
+  publication_start_date: <%= 1.day.ago.to_s(:db) %>
+  position: 1
+  publishable: true
+  sub_content_type: Site
+  hidden: false
+  private: false
 
-- bis_page_node:
-    content: bis_page (Page)
-    ancestry: <%= fixtures_to_ancestry(:root_section_node, :section_with_frontpage_node, :bis_section_node) %>
-    show_in_menu: true
-    publication_start_date: <%= 1.day.ago.to_s(:db) %>
-    position: 1 
-    publishable: true    
-    sub_content_type: Page
-    hidden: false
-    private: false
-    
-- economie_section_node:
-    content: economie_section (Section)
-    ancestry: <%= fixtures_to_ancestry(:root_section_node) %>
-    url_alias: economie
-    show_in_menu: true
-    publication_start_date: <%= 1.day.ago.to_s(:db) %>
-    position: 4 
-    publishable: true
-    sub_content_type: Section
-    hidden: false
-    private: false
-    
-- news_node:
-    content: news_page (Page)
-    ancestry: <%= fixtures_to_ancestry(:root_section_node) %>
-    show_in_menu: true
-    publication_start_date: <%= 1.day.ago.to_s(:db) %>
-    position: 5
-    publishable: true
-    sub_content_type: Page
-    hidden: false
-    private: false
+section_with_frontpage_node:
+  content: section_with_frontpage (Section)
+  ancestry: <%= fixtures_to_ancestry(:root_section_node) %>
+  show_in_menu: true
+  publication_start_date: <%= 1.day.ago.to_s(:db) %>
+  position: 2
+  publishable: true
+  sub_content_type: Section
+  hidden: false
+  private: false
+      
+bis_section_node:
+  content: bis_section (Section)
+  ancestry: <%= fixtures_to_ancestry(:root_section_node, :section_with_frontpage_node) %>
+  url_alias: bestuur/bestuursinformatie
+  show_in_menu: true
+  publication_start_date: <%= 1.day.ago.to_s(:db) %>
+  position: 3
+  publishable: true
+  sub_content_type: Section
+  hidden: false
+  private: false
 
-- geo_viewer_node:
-    content: geo_viewer (GeoViewer)
-    ancestry: <%= fixtures_to_ancestry(:root_section_node) %>
-    show_in_menu: true
-    publication_start_date: <%= 1.day.ago.to_s(:db) %>
-    position: 6
-    publishable: true
-    sub_content_type: GeoViewer
-    hidden: false
-    private: false
+bis_page_node:
+  content: bis_page (Page)
+  ancestry: <%= fixtures_to_ancestry(:root_section_node, :section_with_frontpage_node, :bis_section_node) %>
+  show_in_menu: true
+  publication_start_date: <%= 1.day.ago.to_s(:db) %>
+  position: 1 
+  publishable: true    
+  sub_content_type: Page
+  hidden: false
+  private: false
+  
+economie_section_node:
+  content: economie_section (Section)
+  ancestry: <%= fixtures_to_ancestry(:root_section_node) %>
+  url_alias: economie
+  show_in_menu: true
+  publication_start_date: <%= 1.day.ago.to_s(:db) %>
+  position: 4 
+  publishable: true
+  sub_content_type: Section
+  hidden: false
+  private: false
+  
+news_node:
+  content: news_page (Page)
+  ancestry: <%= fixtures_to_ancestry(:root_section_node) %>
+  show_in_menu: true
+  publication_start_date: <%= 1.day.ago.to_s(:db) %>
+  position: 5
+  publishable: true
+  sub_content_type: Page
+  hidden: false
+  private: false
+
+geo_viewer_node:
+  content: geo_viewer (GeoViewer)
+  ancestry: <%= fixtures_to_ancestry(:root_section_node) %>
+  show_in_menu: true
+  publication_start_date: <%= 1.day.ago.to_s(:db) %>
+  position: 6
+  publishable: true
+  sub_content_type: GeoViewer
+  hidden: false
+  private: false

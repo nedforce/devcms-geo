@@ -1,9 +1,19 @@
-ActionController::Routing::Routes.draw do |map|
-  map.resources :geo_viewers, :member => { :fullscreen => :get }, :only => [:show]
-  map.resources :pins, :only => [], :collection => { :highlighted_pin => :get }
-  
-  map.namespace(:admin) do |admin|
-    admin.resources :geo_viewers, :except => [ :index, :destroy]
-    admin.resources :pins, :only => [:index, :create, :destroy]    
+Rails.application.routes.draw do
+  resources :geo_viewers, :only => [:show] do  
+    member do
+      get :fullscreen
+    end  
   end
+
+  resources :pins, :only => [] do
+    collection do
+      get :highlighted_pin
+    end
+  end
+
+  namespace :admin do
+    resources :geo_viewers, :except => [:index, :destroy]
+    resources :pins, :only => [:index, :create, :destroy]
+  end
+
 end

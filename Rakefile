@@ -1,24 +1,71 @@
-require 'rake'
+#!/usr/bin/env rake
+begin
+  require 'bundler/setup'
+rescue LoadError
+  puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
+end
+begin
+  require 'rdoc/task'
+rescue LoadError
+  require 'rdoc/rdoc'
+  require 'rake/rdoctask'
+  RDoc::Task = Rake::RDocTask
+end
+
+RDoc::Task.new(:rdoc) do |rdoc|
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title    = 'DevCMSGeo'
+  rdoc.options << '--line-numbers'
+  rdoc.rdoc_files.include('README.rdoc')
+  rdoc.rdoc_files.include('lib/**/*.rb')
+end
+
+APP_RAKEFILE = File.expand_path("../test/dummy/Rakefile", __FILE__)
+load 'rails/tasks/engine.rake'
+
 require 'rake/testtask'
-require 'rake/rdoctask'
 
-desc 'Default: run unit tests.'
-task :default => :test
-
-desc 'Test the devcms-geo plugin.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
   t.libs << 'test'
   t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
+  t.verbose = false
 end
 
-desc 'Generate documentation for the devcms_geo plugin.'
-Rake::RDocTask.new(:rdoc) do |rdoc|
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'Devcms Geo'
-  rdoc.options << '--line-numbers' << '--inline-source'
-  rdoc.rdoc_files.include('README')
-  rdoc.rdoc_files.include('lib/**/*.rb')
-  rdoc.rdoc_files.include('app/**/*.rb')
+namespace :test do
+  Rake::TestTask.new(:units) do |t|
+    t.libs << 'lib'
+    t.libs << 'test'
+    t.pattern = 'test/unit/*_test.rb'
+    t.verbose = false
+  end
+  
+  Rake::TestTask.new(:functionals) do |t|
+    t.libs << 'lib'
+    t.libs << 'test'
+    t.pattern = 'test/functional/**/*_test.rb'
+    t.verbose = false
+  end
+  
+  namespace :public do
+    Rake::TestTask.new(:functionals) do |t|
+      t.libs << 'lib'
+      t.libs << 'test'
+      t.pattern = 'test/functional/*_test.rb'
+      t.verbose = false
+    end    
+  end  
+  
+  namespace :admin do
+    Rake::TestTask.new(:functionals) do |t|
+      t.libs << 'lib'
+      t.libs << 'test'
+      t.pattern = 'test/functional/admin/*_test.rb'
+      t.verbose = false
+    end    
+  end
 end
+
+task :default => :test
+
+gem_helper = Bundler::GemHelper.install_tasks

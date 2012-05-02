@@ -11,8 +11,8 @@ class GeoViewerPlacement < ActiveRecord::Base
   belongs_to :combined_geo_viewer, :class_name => 'GeoViewer'
   belongs_to :geo_viewer
   
-  named_scope :toggled, :conditions => { :is_toggled => true }  
-  named_scope :toggable, :conditions => { :is_toggable => true }
+  scope :toggled, :conditions => { :is_toggled => true }  
+  scope :toggable, :conditions => { :is_toggable => true }
   
   delegate :title, :to => :geo_viewer
   

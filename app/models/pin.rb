@@ -12,7 +12,7 @@
 # * Requires the presence of +title+, +file+.
 class Pin < ActiveRecord::Base
   
-  HIGHLIGHT_OVERLAY = ::Magick::Image::read(Rails.root+ 'public/images/icons/star_overlay.png').first rescue nil
+  HIGHLIGHT_OVERLAY = ::Magick::Image::read(DevcmsGeo::Engine.root.to_s + '/app/assets/images/icons/star_overlay.png').first rescue nil
   
   has_many :nodes, :dependent => :nullify
 

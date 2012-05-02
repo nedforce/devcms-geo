@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../test_helper'
+require File.expand_path('../../../test_helper.rb', __FILE__)
 
 class Admin::GeoViewersControllerTest < ActionController::TestCase
   self.use_transactional_fixtures = true
@@ -29,7 +29,7 @@ class Admin::GeoViewersControllerTest < ActionController::TestCase
     assert_difference('GeoViewer.count') do
       create_geo_viewer
       assert_response :success
-      assert !assigns(:geo_viewer).new_record?, :message => assigns(:geo_viewer).errors.full_messages.join('; ')
+      assert !assigns(:geo_viewer).new_record?, assigns(:geo_viewer).errors.full_messages.join('; ')
     end
   end
   
@@ -40,7 +40,7 @@ class Admin::GeoViewersControllerTest < ActionController::TestCase
       assert_difference('GeoViewer.count') do
         create_combined_geo_viewer
         assert_response :success
-        assert !assigns(:geo_viewer).new_record?, :message => assigns(:geo_viewer).errors.full_messages.join('; ')
+        assert !assigns(:geo_viewer).new_record?, assigns(:geo_viewer).errors.full_messages.join('; ')
       end
     end
   end  
@@ -64,7 +64,7 @@ class Admin::GeoViewersControllerTest < ActionController::TestCase
       create_geo_viewer({ :title => nil }, { :commit_type => 'preview' })
       assert_response :unprocessable_entity
       assert assigns(:geo_viewer).new_record?
-      assert assigns(:geo_viewer).errors.on(:title)
+      assert assigns(:geo_viewer).errors[:title].any?
       assert_template 'new'
     end
   end
@@ -77,7 +77,7 @@ class Admin::GeoViewersControllerTest < ActionController::TestCase
     end
     assert_response :unprocessable_entity
     assert assigns(:geo_viewer).new_record?
-    assert assigns(:geo_viewer).errors.on(:title)
+    assert assigns(:geo_viewer).errors[:title].any?
   end
 
   def test_should_get_edit
@@ -125,7 +125,7 @@ class Admin::GeoViewersControllerTest < ActionController::TestCase
     old_title = geo_viewer.title
     put :update, :id => geo_viewer.id, :geo_viewer => { :title => nil, :description => 'updated_description' }, :commit_type => 'preview'
     assert_response :unprocessable_entity
-    assert assigns(:geo_viewer).errors.on(:title)
+    assert assigns(:geo_viewer).errors[:title].any?
     assert_equal old_title, geo_viewer.reload.title
     assert_template 'edit'
   end
@@ -135,7 +135,7 @@ class Admin::GeoViewersControllerTest < ActionController::TestCase
 
     put :update, :id => @geo_viewer.id, :geo_viewer => { :title => nil }
     assert_response :unprocessable_entity
-    assert assigns(:geo_viewer).errors.on(:title)
+    assert assigns(:geo_viewer).errors[:title].any?
   end
 
 protected

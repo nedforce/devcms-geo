@@ -1,29 +1,19 @@
-ENV['RAILS_ENV'] = 'test'
-ENV['RAILS_ROOT'] ||= File.dirname(__FILE__) + '/../../../..'
+ENV["RAILS_ENV"] = "test"
 
-require 'test/unit'
-require File.expand_path(File.join(ENV['RAILS_ROOT'], 'config/environment.rb'))
-require 'test_help'
+require File.expand_path('../dummy/config/environment.rb', __FILE__)
+require 'rails/test_help'
+require 'mocha'
+require 'html_test'
 
-include ActionController::TestProcess # Required to make fixture_file_upload work
+Rails.backtrace_cleaner.remove_silencers!
+Debugger.settings[:autoeval] = true
+
+include ActionDispatch::TestProcess # Required to make fixture_file_upload work
 
 begin
   require 'turn'
 rescue LoadError
   puts 'Install the Turn gem for prettier test output.'
-end
-
-module I18n 
-  def self.just_raise(*args) 
-    raise args.first 
-  end 
-end 
-I18n.exception_handler = :just_raise
-
-# Turn off Carrierwave processing
-CarrierWave.configure do |config|
-  config.storage = :file
-  config.enable_processing = false
 end
 
 # Truncate all tables first
@@ -32,7 +22,7 @@ ActiveRecord::Base.connection.tables.each{ |table| ActiveRecord::Base.connection
 # Initialize Settler
 Settler.load!
 Settler.search_default_engine.update_attribute(:value, 'ferret')
-        
+
 class ActiveSupport::TestCase
   # Transactional fixtures accelerate your tests by wrapping each test method
   # in a transaction that's rolled back on completion.  This ensures that the
@@ -64,11 +54,16 @@ class ActiveSupport::TestCase
   # Note: You'll currently still have to declare fixtures explicitly in integration tests
   # -- they do not yet inherit this setting
   self.fixture_path = File.dirname(__FILE__) + "/fixtures/"
+  
   fixtures :all
             
   # Add more helper methods to be used by all tests here...
-  include AuthenticatedTestHelper
-  include RoleRequirementTestHelper
+  include DevcmsCore::AuthenticatedTestHelper
+  include DevcmsCore::RoleRequirementTestHelper
+  
+  setup do 
+    Geokit::Geocoders::GoogleGeocoder.stubs(:geocode).returns(stub(:provider => 'google', :city => 'Deventer', :state => 'Gelderland', :lat => 52.25446, :lng => 6.160247, :country => 'NL', :zip => '', :street => '', :full_address => 'Deventer', :distance_to => 0, :success => true, :suggested_bounds => [52.25446, 6.160247]))         
+  end  
   
   # Validates all controller and integration test requests if set to true:
   ApplicationController.validate_all = false
@@ -98,4 +93,6 @@ class ActiveSupport::TestCase
       Object.send(:remove_const, constant)
     end
   end
+
 end
+

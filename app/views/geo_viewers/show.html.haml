@@ -1,11 +1,7 @@
 - content_for :javascript do
-  = GMap.header(:without_js => true)
-  = javascript_include_tag 'ym4r-gm',    :plugin => 'devcms-geo'
-  = javascript_include_tag 'devcms-geo', :plugin => 'devcms-geo'
-  = stylesheet_link_tag    'calendar_date_select/plain.css',               :plugin => 'calendar_date_select'
-  = javascript_include_tag 'calendar_date_select/calendar_date_select.js', :plugin => 'calendar_date_select'
-  = javascript_include_tag 'calendar_date_select/locale/nl.js',            :plugin => 'calendar_date_select'
-  = javascript_include_tag 'calendar_date_select/format_dutch.js',         :plugin => 'calendar_date_select'
+  = GMap.header(:without_js => true).html_safe
+  = javascript_include_tag 'devcms-geo'
+  = calendar_date_select_includes :locale => :nl
 
 .geoViewer.regularPage
   %h1= @geo_viewer.title
@@ -22,7 +18,7 @@
 
   %noscript= @expl
 
-  = @map.to_html
+  = raw @map.to_html
 
   .buttons.clearfix
     = print_button

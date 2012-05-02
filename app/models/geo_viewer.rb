@@ -38,8 +38,8 @@ class GeoViewer < ActiveRecord::Base
   has_many :geo_viewer_placements, :foreign_key => :geo_viewer_id, :dependent => :destroy  
   has_many :combined_geo_viewers, :through => :geo_viewer_placements
   
-  named_scope :combined, :conditions => { :combined_viewer => true }
-  named_scope :without_combined, :conditions => ['combined_viewer is null or combined_viewer = ?', false]
+  scope :combined, :conditions => { :combined_viewer => true }
+  scope :without_combined, :conditions => ['combined_viewer is null or combined_viewer = ?', false]
   
   accepts_nested_attributes_for :geo_viewer_placeables, :allow_destroy => true
   
@@ -147,7 +147,7 @@ class GeoViewer < ActiveRecord::Base
   
   def placeable_conditions(options = {})
     placeables = if options[:selection].present? && (selection = (options[:selection].to_a.map(&:to_i) & geo_viewer_placeables.toggable.map(&:id))).present?
-      geo_viewer_placeables.scoped(:conditions => ['geo_viewer_placements.id IN (?) or (geo_viewer_placements.is_toggled = ? and (geo_viewer_placements.is_toggable is null or geo_viewer_placements.is_toggable = ?))', selection, true, false])
+      geo_viewer_placeables.where(['geo_viewer_placements.id IN (?) or (geo_viewer_placements.is_toggled = ? and (geo_viewer_placements.is_toggable is null or geo_viewer_placements.is_toggable = ?))', selection, true, false])
     elsif options[:toggled_only_for_empty_selection]
       geo_viewer_placeables.toggled
     else
@@ -155,9 +155,9 @@ class GeoViewer < ActiveRecord::Base
     end
     
     conditions = []
-    placeables.scoped(:include => :geo_viewer).map(&:geo_viewer).each do |gv| 
-      scoped_find = gv.filtered_nodes.current_scoped_methods[:find]
-      conditions << "(#{GeoViewer.send(:sanitize_sql,scoped_find[:conditions])})" if scoped_find && scoped_find[:conditions]    
+    placeables.includes(:geo_viewer).map(&:geo_viewer).each do |gv| 
+      where_values = gv.filtered_nodes.where_values
+      conditions << "(#{gv.filtered_nodes.where_values.join(' AND ')})" if where_values.present? 
     end
     
     conditions.join(' OR ')

@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../test_helper'
+require File.expand_path('../../test_helper.rb', __FILE__)
 
 class NodeTest < ActiveSupport::TestCase
 
@@ -57,7 +57,7 @@ class NodeTest < ActiveSupport::TestCase
     assert_equal pin2, node.own_or_inherited_pin
     
     assert node.update_attribute(:pin, nil)
-    assert_equal pin1, node.reload.own_or_inherited_pin    
+    assert_equal pin1, Node.find(node.id).own_or_inherited_pin    
   end
 
 end

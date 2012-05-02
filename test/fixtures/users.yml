@@ -8,6 +8,7 @@ admin:
   verification_code: <%= User.generate_verification_code_for(User.new(:login => 'admin')) %>
   verified: true
   type: PrivilegedUser  
+
 editor:
   email_address: editor@nedforce.nl
   login: editor
@@ -16,6 +17,7 @@ editor:
   verification_code: <%= User.generate_verification_code_for(User.new(:login => 'editor')) %>
   verified: true
   type: PrivilegedUser  
+
 final_editor:
   email_address: final_editor@nedforce.nl
   login: final_editor
@@ -24,6 +26,7 @@ final_editor:
   verification_code: <%= User.generate_verification_code_for(User.new(:login => 'final_editor')) %>  
   verified: true
   type: PrivilegedUser  
+
 reader:
   email_address: reader@reader.nl
   login: reader

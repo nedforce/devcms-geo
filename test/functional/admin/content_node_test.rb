@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../test_helper'
+require File.expand_path('../../../test_helper.rb', __FILE__)
 
 class Admin::ContentNodeTest < ActionController::TestCase
   self.use_transactional_fixtures = true
@@ -15,7 +15,7 @@ class Admin::ContentNodeTest < ActionController::TestCase
 
     assert_response :success
     assert assigns(:page).node.valid?
-    assert assigns(:page).node.location =~ /Netherlands/
+    assert assigns(:page).node.location =~ /Deventer/
   end
 
   def test_should_not_update_page_location_with_identical_location
