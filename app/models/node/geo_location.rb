@@ -54,10 +54,14 @@ private
      return unless self.location_changed?
 
      if self.location.present?
-       begin
-         @geocode = Geokit::Geocoders::GoogleGeocoder.geocode(self.location, :bias => Node.geocoding_bias)
-       rescue Geokit::TooManyQueriesError
-         self.errors.add(:location, I18n.t('nodes.too_many_queries'))
+       if self.location.is_a?(Geokit::GeoLoc)
+         @geocode = self.location
+       else
+         begin
+           @geocode = Geokit::Geocoders::GoogleGeocoder.geocode(self.location, :bias => Node.geocoding_bias)
+         rescue Geokit::TooManyQueriesError
+           self.errors.add(:location, I18n.t('nodes.too_many_queries'))
+         end
        end
 
        if @geocode && @geocode.success
