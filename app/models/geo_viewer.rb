@@ -64,11 +64,11 @@ class GeoViewer < ActiveRecord::Base
   end
   
   def image_for(node)
-    if inherit_images?
-      node.path_children_by_depth.accessible.with_content_type('Image').include_content.first.try(:content)
-    else
-      node.children.accessible.with_content_type('Image').include_content.first.try(:content)
-    end
+    scope = Image.accessible.scoped(:include => :node, :conditions => { :is_for_header => [nil, false] })
+    image = scope.first(:conditions => { 'nodes.ancestry' => node.child_ancestry })
+    image = scope.first(:conditions => { 'nodes.ancestry' => node.parent.child_ancestry }) if inherit_images? && !image && node.parent.present?
+    
+    return image
   end
   
   def has_own_content_representation?

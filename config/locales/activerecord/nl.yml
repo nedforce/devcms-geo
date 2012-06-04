@@ -11,6 +11,7 @@ nl:
         map_settings: Kaartinstelling
         link_titles: Titels linken
         inherit_images: Afbeeldingen overerven
+        inherit_pins: Pins overerven        
       pin:
         title: Titel
         file: Bestand

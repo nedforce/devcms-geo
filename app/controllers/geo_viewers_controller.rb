@@ -89,7 +89,7 @@ class GeoViewersController < ApplicationController
         
         marker_opts = { :title => node.content.title, :maxWidth => 400, :info_window => render_to_string(:partial => '/shared/google_maps_popup', :locals => { :node => node, :geo_viewer => @geo_viewer }) }
         
-        if @geo_viewer.inherit_images?
+        if @geo_viewer.inherit_pins?
           marker_opts[:icon] = pin_variables["pin_#{node.own_or_inherited_pin.id}"] if node.own_or_inherited_pin.present?
         else
           marker_opts[:icon] = pin_variables["pin_#{node.pin.id}"] if node.pin.present?
