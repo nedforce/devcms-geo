@@ -6,21 +6,29 @@ admin:
   password_salt: <%= SALT %>
   password_hash: <%= User.encrypt('admin', SALT) %>
   verification_code: <%= User.generate_verification_code_for(User.new(:login => 'admin')) %>
+  verified: true
+  type: PrivilegedUser  
 editor:
   email_address: editor@nedforce.nl
   login: editor
   password_salt: <%= SALT %>
   password_hash: <%= User.encrypt('editor', SALT) %>
   verification_code: <%= User.generate_verification_code_for(User.new(:login => 'editor')) %>
+  verified: true
+  type: PrivilegedUser  
 final_editor:
   email_address: final_editor@nedforce.nl
   login: final_editor
   password_salt: <%= SALT %>
   password_hash: <%= User.encrypt('final_editor', SALT) %>
   verification_code: <%= User.generate_verification_code_for(User.new(:login => 'final_editor')) %>  
+  verified: true
+  type: PrivilegedUser  
 reader:
   email_address: reader@reader.nl
   login: reader
   password_salt: <%= SALT %>
   password_hash: <%= User.encrypt('reader', SALT) %>
   verification_code: <%= User.generate_verification_code_for(User.new(:login => 'reader')) %>  
+  verified: true
+  type: PrivilegedUser  
