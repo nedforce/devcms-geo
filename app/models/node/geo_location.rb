@@ -51,9 +51,11 @@ private
   # Geocode location into lat and lng, also set location field to full address for future reference
    # Set and validation error if the location cannot be geocoded
    def geocode_if_location_changed
-     return unless self.location_changed?
+     geocode! unless self.location_changed?    
+   end
 
-     if self.location.present?
+  def geocode!
+    if self.location.present?
        if self.location.is_a?(Geokit::GeoLoc)
          @geocode = self.location
        else
@@ -73,7 +75,7 @@ private
        self.lat = nil
        self.lng = nil
      end
-   end
+  end
 
   def valid_location
     self.errors.add_to_base(I18n.t('nodes.invalid_location')) if location_invalid?
