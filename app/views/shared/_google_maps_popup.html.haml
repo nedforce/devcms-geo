@@ -6,4 +6,4 @@
 
   - attr = [:description, :preamble, :summary].select { |attr| node.content.respond_to?(attr) }.first
   - if attr
-    %div= truncate_html(node.content.send(attr), 400)
+    %div= truncate_html(node.content.send(attr), :length => 400)
