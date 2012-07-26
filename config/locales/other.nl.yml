@@ -34,11 +34,11 @@ nl:
     pins: Pins    
     add: Pin toevoegen
     create_failed_title: Aanmaken mislukt
-    create_failed: "Pin kon niet aangemaakt worden: {{errors}}"
+    create_failed: "Pin kon niet aangemaakt worden: %{errors}"
     destroy_failed_title: Verwijderen mislukt 
-    destroy_failed: "Pin kon niet verwijderen worden: {{errors}}"
+    destroy_failed: "Pin kon niet verwijderen worden: %{errors}"
     no_pins_found: Geen pins gevonden
   nodes:
     geocoding_failed: Geocoderen mislukt.
-    too_many_queries: "Te veel addressen verwerkt, probeer het morgen weer."
+    too_many_queries: "Te veel adressen verwerkt, probeer het morgen weer."
     invalid_location: Locatie is ongeldig.
