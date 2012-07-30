@@ -1,5 +1,5 @@
 - geo_viewer.image_for(node).tap do |image|
-  - cache(:geo_popup_for => node.id, :with_image => image.id, :last_updated_at => [node.updated_at, image.updated_at].max)
+  - cache(:geo_popup_for => node.id, :with_image => image.try(:id), :last_updated_at => [node.updated_at, image.try(:updated_at)].compact.max) do
     %div
       %h2= geo_viewer.link_titles ? link_to_node(h(node.content.title), node) : node.content.title
       = image_tag(thumbnail_image_path(image, :format => :jpg), :alt => h(image.alt), :class => 'thumb', :height => 100) if image
