@@ -8,7 +8,9 @@ end
 #gem 'devcms_core', :path => '~/projects/devcms/devcms-core'
 gem 'devcms_core', :git => 'git@github.com:nedforce/devcms-core.git', :branch => 'rails3'
 
-gem 'debugger'  
+group :development do
+  gem 'debugger'  
+end
   
 gem 'geokit', '~> 1.5.0'
 gem 'ym4r_gm', :require => false
