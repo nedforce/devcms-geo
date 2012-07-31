@@ -51,12 +51,12 @@ class NodeTest < ActiveSupport::TestCase
     pin2 = Pin.create(:title => 'Pin 2', :file => File.open(File.dirname(__FILE__) + '/../fixtures/files/pin.png'))
 
     assert_nil node.own_or_inherited_pin        
-    assert node.root.update_attribute(:pin, pin1)
-    assert node.update_attribute(:pin, pin2)
+    assert node.root.update_attributes(:pin => pin1)
+    assert node.update_attributes(:pin => pin2)
     
     assert_equal pin2, node.own_or_inherited_pin
     
-    assert node.update_attribute(:pin, nil)
+    assert node.update_attributes(:pin => nil)
     assert_equal pin1, Node.find(node.id).own_or_inherited_pin    
   end
 

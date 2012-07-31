@@ -35,7 +35,7 @@ class GeoViewerTest < ActiveSupport::TestCase
     placeable_viewer2 = create_geo_viewer
        
     geo_viewer = create_geo_viewer(:combined_viewer => true, :geo_viewer_ids => [placeable_viewer.id, placeable_viewer2.id])
-    geo_viewer.geo_viewer_placeables.each{|placeable| placeable.update_attribute(:is_toggable, true) }
+    geo_viewer.geo_viewer_placeables.each{|placeable| placeable.update_attributes(:is_toggable => true) }
     
     assert_not_nil geo_viewer.placeable_conditions
     assert_not_nil geo_viewer.placeable_conditions(:toggled_only_for_empty_selection => true)
