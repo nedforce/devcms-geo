@@ -21,6 +21,8 @@ module NodeExtensions::GeoLocation
       :conditions => ["(publication_end_date <= DATE(:date) OR publication_end_date IS NULL) AND (publication_start_date <= DATE(:date) OR publication_start_date IS NULL)", { :date => date }] }
     }
 
+    attr_accessor :location_coordinates
+
   end
   
   module ClassMethods
@@ -48,7 +50,7 @@ module NodeExtensions::GeoLocation
 
   # Geocode location into lat and lng, also set location field to full address for future reference
   def geocode_if_location_changed
-    geocode! if location_changed?    
+    geocode! if location_changed? || location_coordinates.present?
   end
 
   def geocode!
@@ -68,6 +70,10 @@ module NodeExtensions::GeoLocation
         self.lng = @geocode.lng
         self.location = @geocode.full_address
       end
+    elsif self.location_coordinates.present?
+      ll = Geokit::LatLng.normalize(location_coordinates)
+      self.lat = ll.lat
+      self.lng = ll.lng
     else
       self.lat = nil
       self.lng = nil

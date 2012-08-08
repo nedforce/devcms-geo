@@ -21,6 +21,15 @@ class NodeTest < ActiveSupport::TestCase
     end
   end
 
+  def test_should_set_coordinates_if_present
+    assert_nothing_raised do
+      @node.update_attributes :location_coordinates => '52.22945332,6.20216252'
+      assert_not_nil @node.lat
+      assert_not_nil @node.lng
+      assert @node.valid?
+    end
+  end
+
   def test_should_geo_code_on_update_attributes
     assert_nothing_raised do
       @node.update_attributes :location => 'Welle, Deventer'
