@@ -9,7 +9,6 @@
     = javascript_include_tag 'devcms-geo'
     = raw @map.to_html
     = stylesheet_link_tag 'application.css'
-    = stylesheet_link_tag 'devcms_geo_application.css'
     = stylesheet_link_tag 'devcms_geo_fullscreen.css'
   %body
     .fullscreen_map{ :id => "geo_viewer_#{@geo_viewer.id}" }
