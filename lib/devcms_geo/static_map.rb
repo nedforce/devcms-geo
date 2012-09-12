@@ -1,15 +1,17 @@
 module DevcmsGeo
   class StaticMap
 
-    COLOURS      = %w(red green brown blue orange gray purple yellow)
-    LABELS       = ('A'..'Z').to_a
-    URL_TEMPLATE = "http://maps.google.com/maps/api/staticmap?%s"
-    MAX_MARKERS  = 30
+    COLOURS        = %w(red green brown blue orange gray purple yellow)
+    LABELS         = ('A'..'Z').to_a
+    URL_TEMPLATE   = "http://maps.google.com/maps/api/staticmap?%s"
+    MAX_MARKERS    = 30
+    DEFAULT_WIDTH  = 480
+    DEFAULT_HEIGHT = 400
 
     def initialize(options = {})
       @addresses = []
       @bounds = options.fetch(:bounds, nil)
-      @width, @height = options.fetch(:width, 480), options.fetch(:height, 400)
+      @width, @height = options.fetch(:width, DEFAULT_WIDTH), options.fetch(:height, DEFAULT_HEIGHT)
       @params = Hash.new.tap do |p|
         p[:sensor]  = false
         p[:size]    = "#{@width}x#{@height}"
