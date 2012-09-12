@@ -14,7 +14,7 @@
       
 
   .gmap{ :id => "geo_viewer_#{@geo_viewer.id}" }
-    = static_map_of_addresses(@nodes, { :center => @center, :bounds => @bounds })
+    = static_map_of_addresses(@nodes, { :center => @center, :bounds => @bounds, :width => nil, :height => nil })
 
   %noscript= @expl
 
