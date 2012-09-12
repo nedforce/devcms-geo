@@ -104,7 +104,7 @@ class GeoViewersController < ApplicationController
     end
 
     if (static)
-      @expl = render_to_string(:partial => 'node_list', :object => nodes_expl)
+      @expl = render_to_string(:partial => 'node_list', :object => nodes_expl).html_safe
     end
   end
 
