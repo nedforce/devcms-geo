@@ -91,8 +91,8 @@ class GeoViewersController < ApplicationController
         
         if @geo_viewer.inherit_pins?
           marker_opts[:icon] = pin_variables["pin_#{node.own_or_inherited_pin.id}"] if node.own_or_inherited_pin.present?
-        else
-          marker_opts[:icon] = pin_variables["pin_#{node.pin.id}"] if node.pin.present?
+        elsif node.pin.present?
+          marker_opts[:icon] = pin_variables["pin_#{node.pin.id}"]
         end
         
         @map.declare_global_init(GMarker.new([node.lat, node.lng], marker_opts), marker)        
