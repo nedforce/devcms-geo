@@ -3,7 +3,7 @@
 require 'open-uri'
 
 class GeoViewersController < ApplicationController  
-  before_filter :find_geo_viewer, :only => [:show, :fullscreen]
+  before_filter :find_geo_viewer, :only => [:show, :fullscreen, :screenreader]
   
   # * GET /geo_viewers/:id
   # * GET /geo_viewers/:id.xml
@@ -19,6 +19,10 @@ class GeoViewersController < ApplicationController
     generate_map(false)
 
     render :layout => false
+  end
+  
+  def screenreader
+    generate_map(true)
   end
 
   protected

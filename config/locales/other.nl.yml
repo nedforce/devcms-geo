@@ -26,6 +26,7 @@ nl:
       until_date: Tot
       legislations: Verordeningen
     all: Alles
+    goto_screen_reader: "U kunt hier een eenvoudige versie bekijken"
     map_settings:
       center: Startlocatie
       location: Uw adres of postcode

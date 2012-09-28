@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   resources :geo_viewers, :only => [:show] do  
     member do
       get :fullscreen
+      get :screenreader
     end  
   end
 
