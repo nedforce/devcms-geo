@@ -5,18 +5,18 @@
 
 .geoViewer.regularPage
   %h1= @geo_viewer.title
-  
+
   .offscreen= link_to t('geo_viewers.goto_screen_reader'), screenreader_geo_viewer_path(@geo_viewer)
-  
+
   - unless @geo_viewer.has_own_content_representation?
     - if @geo_viewer.description.present?
       .htmlField= w @geo_viewer.description
-    
+
     = render 'filters'
-      
+
 
   .gmap{ :id => "geo_viewer_#{@geo_viewer.id}" }
-    = static_map_of_addresses(@nodes, { :center => @center, :bounds => @bounds })
+    = static_map_of_addresses(@nodes, { :center => @center, :bounds => @bounds }, @geo_viewer.title)
 
   %noscript= @expl
 

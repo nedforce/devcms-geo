@@ -1,10 +1,10 @@
 - geo_viewer = node.content
-- nodes      = geo_viewer.filtered_nodes({},{ :limit => 26 }) # Fetch the different marks
+- nodes      = geo_viewer.filtered_nodes({}, { :limit => 26 }) # Fetch the different marks
 
 - # Center the map on the default address when no marks are available
 - center     = nodes.empty? ? geo_viewer.map_settings[:center] : nil
 
 .description
   = static_map_of_addresses(nodes, { :width => 230, :height => 160, :center => center })
-  
+
 = read_more_link(node.content)
