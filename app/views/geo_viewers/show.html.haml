@@ -7,9 +7,9 @@
   %h1= @geo_viewer.title
 
   %p
-    = t 'geo_viewers.screen_reader.before_text'
+    = t 'geo_viewers.screen_reader_before_text'
     = link_to t('geo_viewers.screen_reader_link'), screenreader_geo_viewer_path(@geo_viewer)
-    = t 'geo_viewers.screen_reader.after_text'
+    = t 'geo_viewers.screen_reader_after_text'
 
   - unless @geo_viewer.has_own_content_representation?
     - if @geo_viewer.description.present?
