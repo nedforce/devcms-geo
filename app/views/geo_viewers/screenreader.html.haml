@@ -7,10 +7,10 @@
 
     = render 'filters'
 
+  = @expl
+
   .gmap{ :id => "geo_viewer_#{@geo_viewer.id}" }
     = static_map_of_addresses(@nodes, { :center => @center, :bounds => @bounds }, @geo_viewer.title)
-
-  = @expl
 
   .buttons.clearfix
     = print_button

@@ -26,11 +26,13 @@ nl:
       until_date: Tot
       legislations: Verordeningen
     all: Alles
-    goto_screen_reader: "U kunt hier een eenvoudige versie bekijken"
     map_settings:
       center: Startlocatie
       location: Uw adres of postcode
       zoom: Startzoomniveau
+    screen_reader_after_text: "vinden. De alternatieve pagina is minder uitgebreid in functionaliteit, maar is potentieel voor u beter te gebruiken."
+    screen_reader_before_text: "Indien onderstaande pagina voor u niet goed wordt weergegeven, dan kunt u"
+    screen_reader_link: hier een alternatieve pagina
   pins:
     pins: Pins    
     add: Pin toevoegen
