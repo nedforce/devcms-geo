@@ -4,7 +4,7 @@ require 'open-uri'
 
 class GeoViewersController < ApplicationController  
   before_filter :find_geo_viewer, :only => [:show, :fullscreen, :screenreader]
-  
+
   # * GET /geo_viewers/:id
   # * GET /geo_viewers/:id.xml
   def show    
@@ -20,7 +20,7 @@ class GeoViewersController < ApplicationController
 
     render :layout => false
   end
-  
+
   def screenreader
     generate_map(true)
   end
@@ -39,7 +39,7 @@ class GeoViewersController < ApplicationController
     if @geo_viewer.combined_viewer?
       @filters[:layers]   = params[:layers]
       @filters[:layers] ||= @geo_viewer.filter_settings[:layers]
-    else    
+    else
       @filters[:search_scope]   = params[:search_scope]
       @filters[:search_scope] ||= @geo_viewer.filter_settings[:search_scope]
 
@@ -59,7 +59,7 @@ class GeoViewersController < ApplicationController
     @map = GMap.new("geo_viewer_#{@geo_viewer.id}")
     @map.control_init :small_map => true, :map_type => true
     @map.interface_init :continuous_zoom => true
-    
+
     pin_variables = {}
     Pin.all.each do |pin|
       width = pin.geometry.first; height = pin.geometry.last
@@ -82,33 +82,34 @@ class GeoViewersController < ApplicationController
     index = 0 # Counter for labels and colors (For static view as well)
     if @nodes.present?
       markers = {}
-      
+
       @nodes.each do |node|
         markers[node.id] = (marker = "marker_#{node.id}")
-        
+
         if static && (@bounds.blank? || @bounds.contains?(node))
           nodes_expl << { :color => DevcmsGeo::StaticMap::COLOURS[index % DevcmsGeo::StaticMap::COLOURS.size], :label => DevcmsGeo::StaticMap::LABELS[index % DevcmsGeo::StaticMap::LABELS.size], :node => node }
           index += 1
         end
-        
+
         marker_opts = { :title => node.content.title, :maxWidth => 400, :info_window => render_to_string(:partial => '/shared/google_maps_popup', :locals => { :node => node, :geo_viewer => @geo_viewer }) }
-        
+
         if @geo_viewer.inherit_pins?
           marker_opts[:icon] = pin_variables["pin_#{node.own_or_inherited_pin.id}"] if node.own_or_inherited_pin.present?
         elsif node.pin.present?
           marker_opts[:icon] = pin_variables["pin_#{node.pin.id}"]
         end
-        
+
         @map.declare_global_init(GMarker.new([node.lat, node.lng], marker_opts), marker)        
         @map.overlay_init Variable.new(marker)
       end
-      
+
       # Record markers for highlighting
       @map.record_global_init("var markers = { #{markers.map{|k,v| "'marker-#{k}':#{v}"}.join(', ')  } };\n")
     end
 
     if (static)
-      @expl = render_to_string(:partial => 'node_list', :object => nodes_expl).html_safe
+      @node_list_lettered = render_to_string(:partial => 'node_list_lettered', :object => nodes_expl).html_safe
+      @node_list_bulleted = render_to_string(:partial => 'node_list_bulleted', :object => nodes_expl).html_safe
     end
   end
 

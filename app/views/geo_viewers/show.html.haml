@@ -18,7 +18,7 @@
   .gmap{ :id => "geo_viewer_#{@geo_viewer.id}" }
     = static_map_of_addresses(@nodes, { :center => @center, :bounds => @bounds }, @geo_viewer.title)
 
-  %noscript= @expl
+  %noscript= @node_list_lettered
 
   = raw @map.to_html
 
