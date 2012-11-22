@@ -77,7 +77,7 @@ class GeoViewersController < ApplicationController
     end
 
     if static
-      nodes_expl = [] # Array nodes for static view
+      node_list = [] # Array nodes for static view
     end
     index = 0 # Counter for labels and colors (For static view as well)
     if @nodes.present?
@@ -87,7 +87,7 @@ class GeoViewersController < ApplicationController
         markers[node.id] = (marker = "marker_#{node.id}")
 
         if static && (@bounds.blank? || @bounds.contains?(node))
-          nodes_expl << { :color => DevcmsGeo::StaticMap::COLOURS[index % DevcmsGeo::StaticMap::COLOURS.size], :label => DevcmsGeo::StaticMap::LABELS[index % DevcmsGeo::StaticMap::LABELS.size], :node => node }
+          node_list << { :color => DevcmsGeo::StaticMap::COLOURS[index % DevcmsGeo::StaticMap::COLOURS.size], :label => DevcmsGeo::StaticMap::LABELS[index % DevcmsGeo::StaticMap::LABELS.size], :node => node }
           index += 1
         end
 
@@ -108,8 +108,8 @@ class GeoViewersController < ApplicationController
     end
 
     if (static)
-      @node_list_lettered = render_to_string(:partial => 'node_list_lettered', :object => nodes_expl).html_safe
-      @node_list_bulleted = render_to_string(:partial => 'node_list_bulleted', :object => nodes_expl).html_safe
+      @node_list_lettered = render_to_string(:partial => 'node_list_lettered', :locals => { :node_list => node_list }).html_safe
+      @node_list_bulleted = render_to_string(:partial => 'node_list_bulleted', :locals => { :node_list => node_list }).html_safe
     end
   end
 
