@@ -6,17 +6,14 @@
 .geoViewer.regularPage
   %h1= @geo_viewer.title
 
-  %p
-    = t 'geo_viewers.screen_reader_before_text'
-    = link_to t('geo_viewers.screen_reader_link'), screenreader_geo_viewer_path(@geo_viewer)
-    = t 'geo_viewers.screen_reader_after_text'
-
   - unless @geo_viewer.has_own_content_representation?
     - if @geo_viewer.description.present?
       .htmlField= w @geo_viewer.description
 
-    = render 'filters'
+  %p= t 'geo_viewers.screen_reader_text', :link => link_to(t('geo_viewers.screen_reader_link'), screenreader_geo_viewer_path(@geo_viewer))
 
+  - unless @geo_viewer.has_own_content_representation?
+    = render 'filters'
 
   .gmap{ :id => "geo_viewer_#{@geo_viewer.id}" }
     = static_map_of_addresses(@nodes, { :center => @center, :bounds => @bounds }, @geo_viewer.title)

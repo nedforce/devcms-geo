@@ -30,9 +30,8 @@ nl:
       center: Startlocatie
       location: Uw adres of postcode
       zoom: Startzoomniveau
-    screen_reader_after_text: "vinden. De alternatieve pagina is minder uitgebreid in functionaliteit, maar is potentieel voor u beter te gebruiken."
-    screen_reader_before_text: "Indien onderstaande pagina voor u niet goed wordt weergegeven, dan kunt u"
-    screen_reader_link: hier een alternatieve pagina
+    screen_reader_link: alternatieve pagina
+    screen_reader_text: "Is onderstaande kaart bij u niet goed weergegeven? Beschrijvingen van alle punten op de kaart vindt u op de %{link}. Zo kunt u de informatie inzien zonder dat u gebruikmaakt van de kaart."
   pins:
     pins: Pins    
     add: Pin toevoegen
