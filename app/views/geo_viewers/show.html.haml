@@ -20,7 +20,7 @@
 
   %noscript= @node_list_lettered
 
-  = raw @map.to_html
+  = javascript_tag(raw @map.to_html(:no_script_tag => true))
 
   .buttons.clearfix
     = print_button
