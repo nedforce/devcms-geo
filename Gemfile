@@ -5,8 +5,8 @@ group :test do
   gem 'turn'
 end
 
-gem 'devcms_core', :path => '~/projects/devcms/devcms-core'
-# gem 'devcms_core', :git => 'git@github.com:nedforce/devcms-core.git', :branch => 'master'
+# gem 'devcms_core', :path => '~/projects/devcms/devcms-core'
+gem 'devcms_core', :git => 'git@github.com:nedforce/devcms-core.git', :branch => 'master'
 
 group :development do
   gem 'debugger'  
