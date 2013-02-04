@@ -31,7 +31,7 @@
 
     %tbody    
       - @placeables.each_with_index do |placeable, index|
-        - fields_for "geo_viewer[geo_viewer_placeables_attributes][#{index}]", placeable do |placeable_fields|
+        = fields_for "geo_viewer[geo_viewer_placeables_attributes][#{index}]", placeable do |placeable_fields|
           = placeable_fields.hidden_field(:id) unless placeable.new_record?
           = placeable_fields.hidden_field :geo_viewer_id
           %tr

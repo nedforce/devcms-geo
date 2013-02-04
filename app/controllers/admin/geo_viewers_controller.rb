@@ -46,10 +46,6 @@ class Admin::GeoViewersController < Admin::AdminController
   def edit
     @geo_viewer.attributes = params[:geo_viewer]
     find_available_geo_viewer_placeables if @geo_viewer.combined_viewer?    
-    
-    if @geo_viewer.combined_viewer?
-      @placeables = @geo_viewer.geo_viewer_placeables.all + (GeoViewer.without_combined - @geo_viewer.geo_viewers - [@geo_viewer]).map{|gv| @geo_viewer.geo_viewer_placeables.build(:geo_viewer => gv) }
-    end
 
     respond_to do |format|
       format.html { render :template => 'admin/shared/edit', :locals => { :record => @geo_viewer }}
