@@ -7,29 +7,33 @@ class GeoViewersController < ApplicationController
 
   # * GET /geo_viewers/:id
   # * GET /geo_viewers/:id.xml
-  def show    
-    generate_map(true)
-
+  def show
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { generate_map(true) }
     end
   end
 
   def fullscreen
-    generate_map(false)
+    respond_to do |format|
+      format.html do
+        generate_map(false)
 
-    render :layout => false
+        render :layout => false
+      end
+    end
   end
 
   def screenreader
-    generate_map(true)
+    respond_to do |format|
+      format.html { generate_map(true) }
+    end
   end
 
   protected
 
   def generate_map(static)
     @filters = {}
-    
+
     @filters[:from_date]   = params[:from_date]
     @filters[:from_date] ||= @geo_viewer.filter_settings[:from_date]
 
@@ -99,7 +103,7 @@ class GeoViewersController < ApplicationController
           marker_opts[:icon] = pin_variables["pin_#{node.pin.id}"]
         end
 
-        @map.declare_global_init(GMarker.new([node.lat, node.lng], marker_opts), marker)        
+        @map.declare_global_init(GMarker.new([node.lat, node.lng], marker_opts), marker)
         @map.overlay_init Variable.new(marker)
       end
 
@@ -116,5 +120,5 @@ class GeoViewersController < ApplicationController
   # Finds the GeoViewer object corresponding to the passed in +id+ parameter.
   def find_geo_viewer
     @geo_viewer = @node.content
-  end  
+  end
 end
