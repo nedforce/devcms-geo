@@ -2,8 +2,7 @@
   %h2= h record.title
 
   .content
-    -# in translate stoppen
-    = link_to "Volledig scherm", '#'
+    = link_to_content_node "Volledig scherm", record, :action => 'fullscreen'
     .htmlField
       = process_video_tags(record.description)
       
