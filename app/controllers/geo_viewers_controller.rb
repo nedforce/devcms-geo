@@ -77,7 +77,20 @@ class GeoViewersController < ApplicationController
       @map.center_zoom_on_bounds_init(@bounds.to_a)
       @center = res.full_address
     else
-      @map.center_zoom_on_points_init(*@nodes.collect { |node| [ node.lat, node.lng ]})
+      coordinates    = @nodes.collect { |node| [ node.lat, node.lng ]}.transpose
+      
+      north = coordinates.first.max
+      south = coordinates.first.min
+      west  = coordinates.last.min
+      east  = coordinates.last.max
+      
+      longitudinal_margin = (east  - west)  * 0.05
+      latitudinal_margin  = (north - south) * 0.05
+
+      sw = [south - latitudinal_margin, west - longitudinal_margin]
+      ne = [north + latitudinal_margin, east + longitudinal_margin]
+     
+      @map.center_zoom_on_bounds_init GeoKit::Bounds.normalize(sw, ne)
     end
 
     if static

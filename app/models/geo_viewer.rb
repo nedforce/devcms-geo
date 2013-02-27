@@ -111,7 +111,7 @@ class GeoViewer < ActiveRecord::Base
       if filters[:search_scope] =~ /node_(\d+)/
         (node.id == $1.to_i ? parent : Node.find($1)).self_and_descendants
       elsif filters[:search_scope] =~ /content_type_(\w+)/
-        nodes.scoped(:conditions => { :content_type => $1.classify })
+        nodes.with_content_type($1.classify)
       else
         nodes        
       end
@@ -160,5 +160,5 @@ class GeoViewer < ActiveRecord::Base
     end
     
     conditions.join(' OR ')
-  end  
+  end
 end
