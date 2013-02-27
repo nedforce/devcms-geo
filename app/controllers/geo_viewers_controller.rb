@@ -90,7 +90,7 @@ class GeoViewersController < ApplicationController
       sw = [south - latitudinal_margin, west - longitudinal_margin]
       ne = [north + latitudinal_margin, east + longitudinal_margin]
      
-      @map.center_zoom_on_bounds_init GeoKit::Bounds.normalize(sw, ne)
+      @map.center_zoom_on_bounds_init GeoKit::Bounds.normalize(sw, ne).to_a
     end
 
     if static
