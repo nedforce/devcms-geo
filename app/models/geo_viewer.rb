@@ -109,7 +109,7 @@ class GeoViewer < ActiveRecord::Base
       nodes.scoped(:conditions => placeable_conditions(:selection => filters[:layers], :toggled_only_for_empty_selection => true))
     else
       if filters[:search_scope] =~ /node_(\d+)/
-        (node.id == $1.to_i ? parent : Node.find($1)).self_and_descendants
+        (node.id == $1.to_i ? parent : Node.find($1)).subtree
       elsif filters[:search_scope] =~ /content_type_(\w+)/
         nodes.scoped(:conditions => { :content_type => $1.classify })
       else
