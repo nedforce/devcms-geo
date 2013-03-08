@@ -95,9 +95,9 @@ class GeoViewer < ActiveRecord::Base
     if combined_viewer?
       conditions = placeable_conditions      
       # Return scope or ensure an empty scope is returned otherwise
-      conditions.present? ? Node.scoped(:conditions => conditions) : Node.scoped(:conditions => { :id => -1 })
+      conditions.present? ? Node.accessible.scoped(:conditions => conditions) : Node.scoped(:conditions => { :id => -1 })
     else
-      Node.scoped({})
+      Node.accessible
     end
   end
   
