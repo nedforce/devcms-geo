@@ -22,7 +22,6 @@ module NodeExtensions::GeoLocation
     }
 
     attr_accessor :location_coordinates
-
   end
 
   module ClassMethods
@@ -36,7 +35,15 @@ module NodeExtensions::GeoLocation
       end
       return bias.present? ? bias : 'NL'
     end
-  end  
+
+    def try_geocode(*args)
+      begin
+        Geokit::Geocoders::GoogleGeocoder.geocode(*args)
+      rescue Geokit::TooManyQueriesError
+        nil
+      end
+    end
+  end
 
   def own_or_inherited_pin
     @own_or_inherited_pin ||= pin.present? ? pin : ancestors.all(:select => :pin_id, :include => :pin, :order => ['nodes.ancestry_depth desc'], :conditions => 'nodes.pin_id is not null').first.try(:pin)
@@ -44,14 +51,6 @@ module NodeExtensions::GeoLocation
 
   def location_present?
     self.location.present?
-  end
-
-  def self.geocode(*args)
-    begin
-      Geokit::Geocoders::GoogleGeocoder.geocode(args)
-    rescue Geokit::TooManyQueriesError
-      nil
-    end
   end
 
   private
@@ -66,7 +65,7 @@ module NodeExtensions::GeoLocation
       if self.location.is_a?(Geokit::GeoLoc)
         @geocode = self.location
       else
-        @geocode = Node.geocode(self.location, :bias => Node.geocoding_bias)
+        @geocode = Node.try_geocode(self.location, :bias => Node.geocoding_bias)
       end
 
       if @geocode && @geocode.success
