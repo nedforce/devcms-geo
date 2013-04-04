@@ -50,7 +50,7 @@ module NodeExtensions::GeoLocation
 
   # Geocode location into lat and lng, also set location field to full address for future reference
   def geocode_if_location_changed
-    geocode! if location_changed? || location_coordinates.present?
+    geocode! if (location_changed? && !(lat_changed? || lng_changed?)) || location_coordinates.present?
   end
 
   def geocode!
@@ -61,7 +61,7 @@ module NodeExtensions::GeoLocation
         begin
           @geocode = Geokit::Geocoders::GoogleGeocoder.geocode(self.location, :bias => Node.geocoding_bias)
         rescue Geokit::TooManyQueriesError
-          self.errors.add(:location, I18n.t('nodes.too_many_queries'))
+          @geocode = nil
         end
       end
 
@@ -89,7 +89,7 @@ module NodeExtensions::GeoLocation
   end
   
   def location_present_and_valid?
-    location_present? && !location_invalid?
+    location_present? && @geocode.present? && !location_invalid?
   end
 
 end

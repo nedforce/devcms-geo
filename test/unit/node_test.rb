@@ -46,6 +46,28 @@ class NodeTest < ActiveSupport::TestCase
     assert_not_nil @node.location
   end
 
+  def test_should_ignore_rate_limit
+    Geokit::Geocoders::GoogleGeocoder.stubs(:geocode).raises(Geokit::TooManyQueriesError)
+    assert_nothing_raised do
+      @node.update_attributes :location => 'Polstraat, Deventer'
+      assert_nil @node.lat
+      assert_nil @node.lng
+      assert @node.valid?, @node.errors.full_messages.join(' ')
+    end
+  end
+
+  def test_should_not_allow_invalid_locations
+    assert_nothing_raised do
+      assert_nil @node.lat
+      assert_nil @node.lng
+      @node.update_attributes :location => 'Dit adres bestaat dus echt niet, 1235XX, De stad'
+      pp @node.location
+      assert_nil @node.lat
+      assert_nil @node.lng
+      assert !@node.valid?
+    end
+  end
+
   def test_should_be_biased
     @node.location = 'Polstraat'
     @node.save!
