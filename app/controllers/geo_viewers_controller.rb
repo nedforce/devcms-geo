@@ -72,24 +72,24 @@ class GeoViewersController < ApplicationController
     end
 
     if params[:location].present? || @nodes.blank?
-      res = Geokit::Geocoders::GoogleGeocoder.geocode(@filters[:location], :bias => Node.geocoding_bias) 
+      res = Node.try_geocode(@filters[:location], :bias => Node.geocoding_bias) 
       @bounds = res.suggested_bounds
       @map.center_zoom_on_bounds_init(@bounds.to_a)
       @center = res.full_address
     else
-      coordinates    = @nodes.collect { |node| [ node.lat, node.lng ]}.transpose
-      
+      coordinates = @nodes.collect { |node| [ node.lat, node.lng ]}.transpose
+
       north = coordinates.first.max
       south = coordinates.first.min
       west  = coordinates.last.min
       east  = coordinates.last.max
-      
+
       longitudinal_margin = (east  - west)  * 0.05
       latitudinal_margin  = (north - south) * 0.05
 
       sw = [south - latitudinal_margin, west - longitudinal_margin]
       ne = [north + latitudinal_margin, east + longitudinal_margin]
-     
+
       @map.center_zoom_on_bounds_init GeoKit::Bounds.normalize(sw, ne).to_a
     end
 
