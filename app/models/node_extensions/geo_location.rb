@@ -6,7 +6,9 @@ module NodeExtensions::GeoLocation
 
     belongs_to :pin
 
-    before_validation :geocode_if_location_changed
+    # Geocode before validation or after, if defer_geocoding is set
+    before_validation :geocode_if_location_changed, :unless => :defer_geocoding
+    before_save       :geocode_if_location_changed, :if => :defer_geocoding
 
     validates_presence_of :lng, :lat, :if => :location_present_and_valid?
     validate :valid_location
@@ -21,7 +23,7 @@ module NodeExtensions::GeoLocation
       :conditions => ["(publication_end_date <= DATE(:date) OR publication_end_date IS NULL) AND (publication_start_date <= DATE(:date) OR publication_start_date IS NULL)", { :date => date }] }
     }
 
-    attr_accessor :location_coordinates
+    attr_accessor :location_coordinates, :defer_geocoding
   end
 
   module ClassMethods
