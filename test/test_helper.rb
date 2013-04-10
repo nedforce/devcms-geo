@@ -63,7 +63,7 @@ class ActiveSupport::TestCase
   include DevcmsCore::RoleRequirementTestHelper
   
   setup do 
-    Geokit::Geocoders::GoogleGeocoder.stubs(:geocode).returns(stub(:provider => 'google', :city => 'Deventer', :state => 'Gelderland', :lat => 52.25446, :lng => 6.160247, :country => 'NL', :zip => '', :street => '', :full_address => 'Deventer', :distance_to => 0, :success => true, :suggested_bounds => [52.25446, 6.160247]))         
+    Node.stubs(:try_geocode).returns(stub(:provider => 'google', :city => 'Deventer', :state => 'Gelderland', :lat => 52.25446, :lng => 6.160247, :country => 'NL', :zip => '', :street => '', :full_address => 'Deventer', :distance_to => 0, :success => true, :suggested_bounds => [52.25446, 6.160247]))         
   end  
   
   # Validates all controller and integration test requests if set to true:
