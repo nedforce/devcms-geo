@@ -7,18 +7,20 @@ class GeoViewersController < ApplicationController
   
   # * GET /geo_viewers/:id
   # * GET /geo_viewers/:id.xml
-  def show    
-    generate_map(true)
-
+  def show
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { generate_map(true) }
     end
   end
 
   def fullscreen
-    generate_map(false)
+    respond_to do |format|
+      format.html do
+        generate_map(false)
 
-    render :layout => false
+        render :layout => false
+      end
+    end
   end
 
   protected
@@ -91,8 +93,8 @@ class GeoViewersController < ApplicationController
         
         if @geo_viewer.inherit_pins?
           marker_opts[:icon] = pin_variables["pin_#{node.own_or_inherited_pin.id}"] if node.own_or_inherited_pin.present?
-        else
-          marker_opts[:icon] = pin_variables["pin_#{node.pin.id}"] if node.pin.present?
+        elsif node.pin.present?
+          marker_opts[:icon] = pin_variables["pin_#{node.pin.id}"]
         end
         
         @map.declare_global_init(GMarker.new([node.lat, node.lng], marker_opts), marker)        
