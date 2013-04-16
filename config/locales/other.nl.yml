@@ -14,7 +14,7 @@ nl:
     go_to_location: Toon op kaart
     layers: Kaartlagen
     locations: Locaties
-    locations_description: "Klik op een locatie om deze te tonen op de kaart (javascript vereist):"
+    locations_description: "Klik op een locatie om deze te tonen op de kaart (JavaScript vereist):"
     related_content: Filteren en zoeken
     filter: Zoeken
     filters: Filteren en zoeken
