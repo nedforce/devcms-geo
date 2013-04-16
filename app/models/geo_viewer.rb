@@ -64,7 +64,7 @@ class GeoViewer < ActiveRecord::Base
   end
   
   def image_for(node)
-    scope = Image.accessible.scoped(:include => :node, :conditions => { :is_for_header => [nil, false] })
+    scope = Image.accessible.scoped(:include => :node, :conditions => { :is_for_header => [nil, false] }, :order => :position)
     image = scope.first(:conditions => { 'nodes.ancestry' => node.child_ancestry })
     image = scope.first(:conditions => { 'nodes.ancestry' => node.parent.child_ancestry }) if inherit_images? && !image && node.parent.present?
     
