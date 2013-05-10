@@ -1,14 +1,16 @@
+/*global document,window,$$*/
 var originalMarkerImages = {};
 
 document.observe('dom:loaded', function () {
   $$('.marker-link').each(function (link) {
     link.observe('click', function (event) {
       if (window.map) {
+        var marker, key;
         Event.stop(event);
         marker = markers[link.id];
 
         // Reset other markers
-        for (var key in markers) { 
+        for (key in markers) {
           otherMarker = markers[key];
           if (originalMarkerImages[key] && otherMarker != marker) { otherMarker.setImage(originalMarkerImages[key]); }
         }
@@ -38,7 +40,7 @@ function panAndZoomTo(address) {
   bounds = address.Placemark[0].ExtendedData.LatLonBox;
   bounds = new GLatLngBounds(new GLatLng(bounds.south, bounds.west), new GLatLng(bounds.north, bounds.east));
   zoom_target = map.getBoundsZoomLevel(bounds);
-  current_zoom = map.getZoom();
+  var current_zoom = map.getZoom();
   centered = false;
 
   if (current_zoom < zoom_target) {
