@@ -39,7 +39,7 @@ settings: &settings
     editable: true
   host: &host
     alt: De hostnaam van de website
-    value: 'localhost:3000'    
+    value: 'localhost'    
     validations:
       presence: true       
   mail_from_address: &mail_from
