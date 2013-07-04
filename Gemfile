@@ -5,6 +5,8 @@ group :test do
   gem 'turn'
 end
 
+gem 'data_checker', :git => 'git@git.nedforce.nl:data_checker.git', :branch => 'master'
+
 # gem 'devcms_core', :path => '~/projects/devcms/devcms-core'
 gem 'devcms_core', :git => 'git@github.com:nedforce/devcms-core.git', :branch => 'master'
 
@@ -18,6 +20,5 @@ gem 'geokit-rails'
 
 # Git repos
 gem 'calendar_date_select', :git => 'https://github.com/emyl/calendar_date_select.git', :branch => 'rails3_1'
-gem 'prototype_legacy_helper', '0.0.0', :git => 'http://github.com/willbryant/prototype_legacy_helper.git'
 
 gemspec
