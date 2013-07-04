@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: git@github.com:nedforce/devcms-core.git
-  revision: 5d3faf1fb8066a7c72b1061586b5322ca8ea781b
+  revision: fe770fa42a584cb3e3c46bba893926457b255c90
   branch: master
   specs:
     devcms_core (0.0.1)
