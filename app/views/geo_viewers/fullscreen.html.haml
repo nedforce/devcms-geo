@@ -5,7 +5,7 @@
     %meta{:content => "nl_nl", :name => "language"}/
     %title= h [Settler[:site_name], @page_title].compact.join(' | ')
     %link{:href => "http://#{Settler[:host]}/favicon.ico", :rel => "SHORTCUT ICON", :type => "image/vnd.microsoft.icon"}/
-    = GMap.header(:without_js => true).html_safe
+    = GMap.header(:without_js => true).gsub('http://', '//').html_safe
     = javascript_include_tag 'devcms_core', 'devcms-geo'
     = raw @map.to_html
     = stylesheet_link_tag 'application.css'

@@ -67,7 +67,7 @@ class GeoViewersController < ApplicationController
     pin_variables = {}
     Pin.all.each do |pin|
       width = pin.geometry.first; height = pin.geometry.last
-      @map.icon_global_init( GIcon.new(:image => pin.file.url, :icon_size => GSize.new(width, height), :icon_anchor => GPoint.new(width/2, height), :info_window_anchor => GPoint.new(width/2,2)), "pin_#{pin.id}" )
+      @map.icon_global_init( GIcon.new(:image => URI.join(root_url, pin.file.url).to_s, :icon_size => GSize.new(width, height), :icon_anchor => GPoint.new(width/2, height), :info_window_anchor => GPoint.new(width/2,2)), "pin_#{pin.id}" )
       pin_variables["pin_#{pin.id}"] = Variable.new("pin_#{pin.id}")
     end
 

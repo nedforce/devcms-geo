@@ -58,7 +58,7 @@
           = submit_tag t('geo_viewers.filter'), :class => 'submit search'
 
   .filters
-    = form_tag content_node_path(@geo_viewer.node), :method => :get, :class => 'clearfix', :id => 'geo_viewer_location_form', :onsubmit => 'showAddress($F(\'location\')); return false;' do
+    = form_tag content_node_path(@geo_viewer.node), :method => :get, :class => 'clearfix', :id => 'geo_viewer_location_form' do
       - # Filter Map Location
       .filter.last
         = label_tag      'location', t('geo_viewers.map_settings.location')

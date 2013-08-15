@@ -1,7 +1,6 @@
 - content_for :javascript do
-  = GMap.header(:without_js => true).html_safe
+  = GMap.header(:without_js => true).gsub('http://', '//').html_safe
   = javascript_include_tag 'devcms-geo'
-  = calendar_date_select_includes :locale => :nl
 
 .geoViewer.regularPage
   %h1= @geo_viewer.title
@@ -16,7 +15,7 @@
     = render 'filters'
 
   .gmap{ :id => "geo_viewer_#{@geo_viewer.id}" }
-    = static_map_of_addresses(@nodes, { :center => @center, :bounds => @bounds }, @geo_viewer.title)
+    = static_map_of_addresses @nodes, { :center => @center, :bounds => @bounds, :alt => @geo_viewer.title}
 
   %noscript= @node_list_lettered
 
