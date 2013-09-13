@@ -40,7 +40,7 @@ module NodeExtensions::GeoLocation
 
     def try_geocode(*args)
       begin
-        nil#Geokit::Geocoders::GoogleGeocoder.geocode(*args)
+        Geokit::Geocoders::YahooGeocoder.geocode(*args)
       rescue Geokit::TooManyQueriesError
         nil
       end
