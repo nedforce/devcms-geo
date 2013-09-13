@@ -147,7 +147,8 @@ GEM
       simple-rss (>= 1.1)
     ferret (0.11.8.5)
     ffi (1.2.1)
-    geokit (1.5.0)
+    geokit (1.6.5)
+      multi_json
     geokit-rails (1.1.4)
       geokit (>= 1.5.0)
     haml (3.1.8)
@@ -261,7 +262,7 @@ DEPENDENCIES
   debugger
   devcms_core!
   devcms_geo!
-  geokit (~> 1.5.0)
+  geokit (~> 1.6.1)
   geokit-rails
   jakewendt-html_test (~> 0.2.3)
   mocha
