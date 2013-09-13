@@ -5,7 +5,7 @@ module Ym4r
     class ApiKey
 
       def self.get(options = {})
-        SETTLER_LOADED ? Settler[:yahoo_maps_key] : ''
+        SETTLER_LOADED ? Settler[:google_maps_key] : ''
       end
       
     end
