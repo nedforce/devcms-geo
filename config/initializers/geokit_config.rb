@@ -23,7 +23,7 @@ if defined? Geokit
 	# This is your yahoo application key for the Yahoo Geocoder.
 	# See http://developer.yahoo.com/faq/index.html#appid
 	# and http://developer.yahoo.com/maps/rest/V1/geocode.html
-	Geokit::Geocoders::yahoo = Settler[:yahoo_maps_key] if defined?(SETTLER_LOADED) && SETTLER_LOADED
+	Geokit::Geocoders::yahoo = 'REPLACE_WITH_YOUR_YAHOO_KEY'
     
 	# This is your Google Maps geocoder key. 
 	# See http://www.google.com/apis/maps/signup.html
