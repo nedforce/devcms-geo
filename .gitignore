@@ -11,3 +11,5 @@ acts_as_ferret.log
 uploads
 test/dummy/log/*.log
 test/dummy/tmp/*
+vendor/bundle/
+.bundle/
