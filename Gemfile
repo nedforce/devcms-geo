@@ -14,7 +14,7 @@ group :development do
   gem 'debugger'  
 end
   
-gem 'geokit', '~> 1.6.1'
+gem 'geokit', :git => 'git@github.com:nedforce/geokit.git', :branch => 'bundler-gem-tasks-issue'
 gem 'ym4r_gm', :require => false
 gem 'geokit-rails'
 
