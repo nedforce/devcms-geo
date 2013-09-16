@@ -52,7 +52,7 @@ GIT
 GIT
   remote: git@github.com:nedforce/geokit.git
   revision: 3925f8d839763076386ee90f855e66042086f971
-  branch: bundler-gem-tasks-issue
+  branch: master
   specs:
     geokit (1.6.5)
       multi_json (>= 1.3.2)
