@@ -108,10 +108,13 @@ class GeoViewer < ActiveRecord::Base
       end
     end
 
-    
-    filtered_node_scope = filtered_node_scope.published_after(filters[:from_date].present? ? Time.parse(filters[:from_date]) : 2.weeks.ago.change(:usec => 0)) rescue filtered_node_scope
+    if filters[:from_date].present?
+      filtered_node_scope = filtered_node_scope.published_after(Time.parse(filters[:from_date]))    rescue filtered_node_scope
+    elsif !combined_viewer?
+      filtered_node_scope = filtered_node_scope.published_after(2.weeks.ago.change(:usec => 0))     rescue filtered_node_scope
+    end
     if filters[:until_date].present?
-      filtered_node_scope = filtered_node_scope.published_before(Time.parse(filters[:until_date])) rescue filtered_node_scope
+      filtered_node_scope = filtered_node_scope.published_before(Time.parse(filters[:until_date]))  rescue filtered_node_scope
     end
     
     if !(combined_viewer? || for_combined_viewer)
@@ -153,9 +156,8 @@ class GeoViewer < ActiveRecord::Base
     end
     
     conditions = []
-    placeables.includes(:geo_viewer).each do |node| 
-      where_clauses = node.geo_viewer.filtered_nodes_scope({},{}, true).where_clauses
-
+    placeables.includes(:geo_viewer).each do |placeable| 
+      where_clauses = placeable.geo_viewer.filtered_nodes_scope({},{}, true).where_clauses
       conditions << "(#{where_clauses.join(' AND ')})" if where_clauses.present? 
     end
     
