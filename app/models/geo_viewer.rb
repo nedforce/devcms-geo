@@ -90,40 +90,31 @@ class GeoViewer < ActiveRecord::Base
   def map_settings
     read_attribute(:map_settings) || {}
   end
-
-  def nodes
-    if combined_viewer?
-      conditions = placeable_conditions      
-      # Return scope or ensure an empty scope is returned otherwise
-      conditions.present? ? Node.accessible.scoped(:conditions => conditions) : Node.scoped(:conditions => { :id => -1 })
-    else
-      Node.accessible
-    end
-  end
   
-  def filtered_nodes(filters = {}, options = {})
+  def filtered_nodes_scope(filters = {}, options = {}, for_combined_viewer = false)
     filters = self.filter_settings.merge(filters)
     filters[:search_scope] ||= 'all'
 
     filtered_node_scope = if combined_viewer?
-      nodes.scoped(:conditions => placeable_conditions(:selection => filters[:layers], :toggled_only_for_empty_selection => true))
+      conditions = placeable_conditions(:selection => filters[:layers], :toggled_only_for_empty_selection => true) || {:id => -1}
+      nodes.scoped(:conditions => conditions)
     else
       if filters[:search_scope] =~ /node_(\d+)/
         (node.id == $1.to_i ? parent : Node.find($1)).self_and_descendants
       elsif filters[:search_scope] =~ /content_type_(\w+)/
         nodes.with_content_type($1.classify)
       else
-        nodes        
+        nodes
       end
     end
 
     
-    filtered_node_scope = filtered_node_scope.published_after(filters[:from_date].present? ? Time.parse(filters[:from_date]) : 2.weeks.ago) rescue filtered_node_scope
+    filtered_node_scope = filtered_node_scope.published_after(filters[:from_date].present? ? Time.parse(filters[:from_date]) : 2.weeks.ago.change(:usec => 0)) rescue filtered_node_scope
     if filters[:until_date].present?
       filtered_node_scope = filtered_node_scope.published_before(Time.parse(filters[:until_date])) rescue filtered_node_scope
     end
     
-    if !combined_viewer?
+    if !(combined_viewer? || for_combined_viewer)
       if filters[:search_scope] == 'content_type_permit'
         #Permit filters
         filtered_node_scope = filtered_node_scope.scoped(:joins => 'LEFT JOIN permits on permits.id = nodes.content_id AND nodes.content_type = \'Permit\'')
@@ -136,14 +127,22 @@ class GeoViewer < ActiveRecord::Base
       end
     end
 
-    return filtered_node_scope.geo_coded.accessible.scoped(options) 
+    return filtered_node_scope.scoped(options) 
+  end
+
+  def filtered_nodes(filters = {}, options = {})
+    filtered_nodes_scope(filters, options).accessible.geo_coded
+  end
+ 
+  def nodes
+    Node.scoped({})
   end
   
   # Combined viewer methods
   def toggled_placeable_ids
     @toggled_placeable_ids ||= geo_viewer_placeables.toggled.map(&:id)    
   end
-  
+ 
   def placeable_conditions(options = {})
     placeables = if options[:selection].present? && (selection = (options[:selection].to_a.map(&:to_i) & geo_viewer_placeables.toggable.map(&:id))).present?
       geo_viewer_placeables.where(['geo_viewer_placements.id IN (?) or (geo_viewer_placements.is_toggled = ? and (geo_viewer_placements.is_toggable is null or geo_viewer_placements.is_toggable = ?))', selection, true, false])
@@ -154,9 +153,10 @@ class GeoViewer < ActiveRecord::Base
     end
     
     conditions = []
-    placeables.includes(:geo_viewer).map(&:geo_viewer).each do |gv| 
-      where_values = gv.filtered_nodes.where_values
-      conditions << "(#{gv.filtered_nodes.where_values.join(' AND ')})" if where_values.present? 
+    placeables.includes(:geo_viewer).each do |node| 
+      where_clauses = node.geo_viewer.filtered_nodes_scope({},{}, true).where_clauses
+
+      conditions << "(#{where_clauses.join(' AND ')})" if where_clauses.present? 
     end
     
     conditions.join(' OR ')

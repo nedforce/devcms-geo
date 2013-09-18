@@ -25,9 +25,6 @@ class GeoViewerTest < ActiveSupport::TestCase
   def test_should_return_node_scope
     geo_viewer = create_geo_viewer
     assert_equal Node.scoped({}), geo_viewer.nodes
-    
-    geo_viewer = create_geo_viewer(:combined_viewer => true, :geo_viewer_ids => [create_geo_viewer(:filter_settings => { :from_date => 2.weeks.from_now.to_s }).id])
-    assert geo_viewer.nodes.where_values.first.include?('publication_start_date')
   end
   
   def test_should_return_placeable_conditions
@@ -41,6 +38,10 @@ class GeoViewerTest < ActiveSupport::TestCase
     assert_not_nil geo_viewer.placeable_conditions(:toggled_only_for_empty_selection => true)
     assert_not_nil geo_viewer.placeable_conditions(:selection => [placeable_viewer.id])
     assert_equal geo_viewer.placeable_conditions, geo_viewer.placeable_conditions(:selection => [])
+  end
+
+  def test_placeable_conditions_should_not_contain_default_scoping
+
   end
   
   protected
