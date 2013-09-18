@@ -91,12 +91,12 @@ class GeoViewer < ActiveRecord::Base
     read_attribute(:map_settings) || {}
   end
   
-  def filtered_nodes_scope(filters = {}, options = {}, for_combined_viewer = false)
-    filters = self.filter_settings.merge(filters)
+  def filtered_nodes_scope(user_filters = {}, options = {}, for_combined_viewer = false)
+    filters = self.filter_settings.merge(user_filters)
     filters[:search_scope] ||= 'all'
 
     filtered_node_scope = if combined_viewer?
-      conditions = placeable_conditions(:selection => filters[:layers], :toggled_only_for_empty_selection => true) || {:id => -1}
+      conditions = placeable_conditions({:selection => filters[:layers], :toggled_only_for_empty_selection => true}, user_filters) || {:id => -1}
       nodes.scoped(:conditions => conditions)
     else
       if filters[:search_scope] =~ /node_(\d+)/
@@ -146,7 +146,7 @@ class GeoViewer < ActiveRecord::Base
     @toggled_placeable_ids ||= geo_viewer_placeables.toggled.map(&:id)    
   end
  
-  def placeable_conditions(options = {})
+  def placeable_conditions(options = {}, filters = {})
     placeables = if options[:selection].present? && (selection = (options[:selection].to_a.map(&:to_i) & geo_viewer_placeables.toggable.map(&:id))).present?
       geo_viewer_placeables.where(['geo_viewer_placements.id IN (?) or (geo_viewer_placements.is_toggled = ? and (geo_viewer_placements.is_toggable is null or geo_viewer_placements.is_toggable = ?))', selection, true, false])
     elsif options[:toggled_only_for_empty_selection]
@@ -157,7 +157,7 @@ class GeoViewer < ActiveRecord::Base
     
     conditions = []
     placeables.includes(:geo_viewer).each do |placeable| 
-      where_clauses = placeable.geo_viewer.filtered_nodes_scope({},{}, true).where_clauses
+      where_clauses = placeable.geo_viewer.filtered_nodes_scope(filters, {}, true).where_clauses
       conditions << "(#{where_clauses.join(' AND ')})" if where_clauses.present? 
     end
     

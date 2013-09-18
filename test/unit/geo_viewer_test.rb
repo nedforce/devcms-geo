@@ -40,8 +40,15 @@ class GeoViewerTest < ActiveSupport::TestCase
     assert_equal geo_viewer.placeable_conditions, geo_viewer.placeable_conditions(:selection => [])
   end
 
-  def test_placeable_conditions_should_not_contain_default_scoping
-
+  def test_placeable_conditions_should_override_with_user_filters
+    from_date         = 2.weeks.from_now
+    placeable_viewer  = create_geo_viewer(:filter_settings => { :from_date => from_date.to_s })
+    placeable_viewer2 = create_geo_viewer
+       
+    geo_viewer = create_geo_viewer(:combined_viewer => true, :geo_viewer_ids => [placeable_viewer.id, placeable_viewer2.id])
+    
+    assert geo_viewer.filtered_nodes_scope.to_sql.include?(from_date.to_formatted_s(:db))
+    assert !geo_viewer.filtered_nodes_scope(:from_date => from_date + 2.week).to_sql.include?(from_date.to_formatted_s(:db))
   end
   
   protected
