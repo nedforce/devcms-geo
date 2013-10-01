@@ -25,14 +25,14 @@
         - # Filter From date
         - if @geo_viewer.filter_settings[:from_date_available]
           .filter
-            = label_tag                'from_date', t('geo_viewers.filter_settings.from_date') + ':'
-            = calendar_date_select_tag 'from_date', @filters[:from_date], :popup => :force, :image => 'icons/calendar.png'
+            = label_tag      'from_date', t('geo_viewers.filter_settings.from_date') + ':'
+            = text_field_tag 'from_date', @filters[:from_date], :class => 'datepicker'
             (dd-mm-jjjj)
         - # Filter Until date
         - if @geo_viewer.filter_settings[:until_date_available]
           .filter
-            = label_tag                'until_date', t('geo_viewers.filter_settings.until_date') + ':'
-            = calendar_date_select_tag 'until_date', @filters[:until_date], :popup => :force, :image => 'icons/calendar.png'
+            = label_tag      'until_date', t('geo_viewers.filter_settings.until_date') + ':'
+            = text_field_tag 'until_date', @filters[:until_date], :class => 'datepicker'
             (dd-mm-jjjj)
 
         - if defined?(DevcmsGov)
