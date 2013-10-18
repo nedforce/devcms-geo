@@ -1,51 +1,59 @@
 showAddress = (address) ->
-  geocoder = new GClientGeocoder()
-  geocoder.setViewport(window.map.getBounds())
-  geocoder.getLocations(address, panAndZoomTo)
+  geocoder = new google.maps.Geocoder()
+  geocoder.geocode({ address: address, bounds: window.map.getBounds() }, panAndZoomTo)
 
 panAndZoomTo = (address) ->
-  ll = address.Placemark[0].Point.coordinates;
-  ll = new GLatLng(ll[1], ll[0]);
-  # Add marker on given location, remove the old one
-  #if mapCenterMarker then map.removeOverlay(mapCenterMarker)
-  #mapCenterMarker = new GMarker(ll)
-  #map.addOverlay(mapCenterMarker)
-  #mapCenterMarker.setImage("/images/icons/red-pushpin.png")
-  bounds = address.Placemark[0].ExtendedData.LatLonBox
-  bounds = new GLatLngBounds(new GLatLng(bounds.south, bounds.west), new GLatLng(bounds.north, bounds.east))
+  if address[0] && address[0].geometry
+    ll = address[0].geometry.location
+    bounds = address[0].geometry.bounds
 
-  zoomTarget = map.getBoundsZoomLevel(bounds)
-  currentZoom = map.getZoom()
-  centered = false
-
-  if currentZoom < zoomTarget
-    while currentZoom < zoomTarget
-      window.map.zoomIn(ll, true, true)
-      currentZoom += 1
-  else if currentZoom == zoomTarget
+    zoomTarget = getZoomByBounds(bounds)
+    currentZoom = window.map.getZoom()
+    centered = false
+        
     window.map.panTo(ll)
-  else
-    while currentZoom > zoomTarget
-      window.map.zoomOut(ll, true)
-      currentZoom -= 1
+    if currentZoom < zoomTarget
+      while currentZoom < zoomTarget
+        window.map.setZoom currentZoom
+        currentZoom += 1
+    else if currentZoom > zoomTarget
+      while currentZoom > zoomTarget
+        window.map.setZoom currentZoom
+        currentZoom -= 1
+
+getZoomByBounds = (bounds) ->
+  MAX_ZOOM = window.map.mapTypes.get( map.getMapTypeId() ).maxZoom || 21
+  MIN_ZOOM = window.map.mapTypes.get( map.getMapTypeId() ).minZoom || 0
+
+  ne= window.map.getProjection().fromLatLngToPoint bounds.getNorthEast()
+  sw= window.map.getProjection().fromLatLngToPoint bounds.getSouthWest()
+
+  worldCoordWidth = Math.abs(ne.x-sw.x)
+  worldCoordHeight = Math.abs(ne.y-sw.y)
+  FIT_PAD = 40
+
+  for zoom in [MAX_ZOOM..MIN_ZOOM] by -1
+    return zoom if worldCoordWidth*(1<<zoom)+2*FIT_PAD < $(window.map.getDiv()).width() && worldCoordHeight*(1<<zoom)+2*FIT_PAD < $(window.map.getDiv()).height()
+
+  return 0
+
 
 jQuery ->
-  originalMarkerImages = {}
+  originalMarkerIcons = {}
   
   $('.marker-link').click (event) ->
     event.preventDefault()
     if window.map
       linkId = $(this).attr('id')
-      marker = markers[linkId]
-
-      # Reset other markers
-      for key in markers
-        otherMarker = markers[key]
-        if originalMarkerImages[key] && otherMarker != marker then otherMarker.setImage(originalMarkerImages[key])
+      marker = window.markers[linkId]
       
-      if !originalMarkerImages[linkId] then originalMarkerImages[linkId] = marker.Na.image
-      marker.setImage("/pins/highlighted_pin?pin=" + encodeURIComponent(marker.Na.image))
-      GEvent.trigger(marker, 'click')
+      # Reset other markers
+      $.each window.markers, (id, otherMarker) -> 
+        if originalMarkerIcons[id] && otherMarker != marker then otherMarker.setIcon(originalMarkerIcons[id])
+      
+      if !originalMarkerIcons[linkId] then originalMarkerIcons[linkId] = marker.icon
+      marker.setIcon "/pins/highlighted_pin?pin=#{encodeURIComponent(marker.icon)}" if marker.icon.indexOf('highlighted_pin') == -1
+      google.maps.event.trigger marker, 'click'
   
   $('form#geo_viewer_location_form').submit (event) -> 
     event.preventDefault()

@@ -60,70 +60,49 @@ class GeoViewersController < ApplicationController
 
     @nodes = @geo_viewer.filtered_nodes(@filters)
 
-    @map = GMap.new("geo_viewer_#{@geo_viewer.id}")
-    @map.control_init :small_map => true, :map_type => true
-    @map.interface_init :continuous_zoom => true
+    # Register pins
+    @pins = {}
+    Pin.all.each{|pin| @pins[pin.id] = { :image => URI.join(root_url, pin.file.url).to_s } }
 
-    pin_variables = {}
-    Pin.all.each do |pin|
-      width = pin.geometry.first; height = pin.geometry.last
-      @map.icon_global_init( GIcon.new(:image => URI.join(root_url, pin.file.url).to_s, :icon_size => GSize.new(width, height), :icon_anchor => GPoint.new(width/2, height), :info_window_anchor => GPoint.new(width/2,2)), "pin_#{pin.id}" )
-      pin_variables["pin_#{pin.id}"] = Variable.new("pin_#{pin.id}")
-    end
-
+    # Define map bounds
     if params[:location].present? || @nodes.blank?
       res = Node.try_geocode(@filters[:location], :bias => Node.geocoding_bias) 
       @bounds = res.suggested_bounds
-      @map.center_zoom_on_bounds_init(@bounds.to_a)
-      @center = res.full_address
     else
       coordinates = @nodes.collect { |node| [ node.lat, node.lng ]}.transpose
-
-      north = coordinates.first.max
-      south = coordinates.first.min
-      west  = coordinates.last.min
-      east  = coordinates.last.max
-
-      longitudinal_margin = (east  - west)  * 0.05
-      latitudinal_margin  = (north - south) * 0.05
+      north = coordinates.first.max; south = coordinates.first.min; west  = coordinates.last.min; east  = coordinates.last.max
+      longitudinal_margin = (east  - west)  * 0.05; latitudinal_margin  = (north - south) * 0.05
 
       sw = [south - latitudinal_margin, west - longitudinal_margin]
       ne = [north + latitudinal_margin, east + longitudinal_margin]
 
-      @map.center_zoom_on_bounds_init GeoKit::Bounds.normalize(sw, ne).to_a
+      @bounds = GeoKit::Bounds.normalize(sw, ne)
     end
 
-    if static
-      node_list = [] # Array nodes for static view
-    end
+    # Add node markers
+    @markers = {}    
+    node_list = [] if static
+    
     index = 0 # Counter for labels and colors (For static view as well)
     if @nodes.present?
-      markers = {}
-
       @nodes.each do |node|
-        markers[node.id] = (marker = "marker_#{node.id}")
-
+        marker_id = "marker-#{node.id}"
+        
         if static && (@bounds.blank? || @bounds.contains?(node))
           node_list << { :color => DevcmsGeo::StaticMap::COLOURS[index % DevcmsGeo::StaticMap::COLOURS.size], :label => DevcmsGeo::StaticMap::LABELS[index % DevcmsGeo::StaticMap::LABELS.size], :node => node }
           index += 1
         end
 
-        marker_opts = { :title => node.content.title, :maxWidth => 400, :info_window => render_to_string(:partial => '/shared/google_maps_popup', :locals => { :node => node, :geo_viewer => @geo_viewer }) }
+        @markers[marker_id] = { :title => node.content.title, :lat => node.lat, :lng => node.lng, :info_window => render_to_string(:partial => '/shared/google_maps_popup', :locals => { :node => node, :geo_viewer => @geo_viewer }) }
 
         if @geo_viewer.inherit_pins?
-          marker_opts[:icon] = pin_variables["pin_#{node.own_or_inherited_pin.id}"] if node.own_or_inherited_pin.present?
+          @markers[marker_id][:pin_id] = node.own_or_inherited_pin.id if node.own_or_inherited_pin.present?
         elsif node.pin.present?
-          marker_opts[:icon] = pin_variables["pin_#{node.pin.id}"]
+          @markers[marker_id][:pin_id] = node.pin.id
         end
-
-        @map.declare_global_init(GMarker.new([node.lat, node.lng], marker_opts), marker)
-        @map.overlay_init Variable.new(marker)
       end
-
-      # Record markers for highlighting
-      @map.record_global_init("var markers = { #{markers.map{|k,v| "'marker-#{k}':#{v}"}.join(', ')  } };\n")
     end
-
+    
     if (static)
       @node_list_lettered = render_to_string(:partial => 'node_list_lettered', :locals => { :node_list => node_list }).html_safe
       @node_list_bulleted = render_to_string(:partial => 'node_list_bulleted', :locals => { :node_list => node_list }).html_safe

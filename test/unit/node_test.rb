@@ -47,7 +47,7 @@ class NodeTest < ActiveSupport::TestCase
   end
 
   def test_should_ignore_rate_limit
-    Geokit::Geocoders::GoogleGeocoder3.stubs(:geocode).raises(Geokit::TooManyQueriesError)
+    Node.stubs(:try_geocode).returns(nil)
     assert_nothing_raised do
       @node.update_attributes :location => 'Polstraat, Deventer'
       assert_nil @node.lat
@@ -57,11 +57,11 @@ class NodeTest < ActiveSupport::TestCase
   end
 
   def test_should_not_allow_invalid_locations
+    Node.unstub(:try_geocode)
     assert_nothing_raised do
       assert_nil @node.lat
       assert_nil @node.lng
       @node.update_attributes :location => 'Dit adres bestaat dus echt niet, 1235XX, De stad'
-      pp @node.location
       assert_nil @node.lat
       assert_nil @node.lng
       assert !@node.valid?

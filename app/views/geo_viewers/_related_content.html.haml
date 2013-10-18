@@ -1,17 +1,18 @@
 - if @geo_viewer.description.present?
   .htmlField= w @geo_viewer.description
 
-%ul
-  %li.toggable
-    = toggable_section_link('map_locations', t('geo_viewers.locations'), :element_type => :h3)
-    #map_locations.toggable_section
-      .content-section
-        %p= t('geo_viewers.locations_description')
+  - unless action_name == 'screenreader'
+    %ul
+      %li.toggable
+        = toggable_section_link('map_locations', t('geo_viewers.locations'), :element_type => :h3)
+        #map_locations.toggable_section
+          .content-section
+            %p= t('geo_viewers.locations_description')
   
-        %ul.nodes
-          - @nodes.each do |node|
-            %li= link_to_node node.content.title, node, {}, :class => 'marker-link', :id => "marker-#{node.id}"                
+            %ul.nodes
+              - @nodes.each do |node|
+                %li= link_to_node node.content.title, node, {}, :class => 'marker-link', :id => "marker-#{node.id}"                
 
-  %li.toggable
-    = toggable_section_link('map_filters', t('geo_viewers.filters'), :element_type => :h3)    
-    #map_filters.toggable_section= render 'filters'
+      %li.toggable
+        = toggable_section_link('map_filters', t('geo_viewers.filters'), :element_type => :h3)    
+        #map_filters.toggable_section= render 'filters'

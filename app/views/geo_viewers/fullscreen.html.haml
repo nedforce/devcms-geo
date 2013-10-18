@@ -1,16 +1,18 @@
-!!! Strict
+!!! 5
 %html{:lang => "nl", "xml:lang" => "nl", :xmlns => "http://www.w3.org/1999/xhtml"}
   %head
-    %meta{:content => "text/html;charset=utf-8", "http-equiv" => "Content-Type"}/
-    %meta{:content => "nl_nl", :name => "language"}/
+    %meta{:content => "text/html;charset=utf-8", "http-equiv" => "Content-Type"}
+    %meta{:content => "initial-scale=1.0, user-scalable=no", :name => 'viewport' }    
+    %meta{:content => "nl_nl", :name => "language"}
+    
     %title= h [Settler[:site_name], @page_title].compact.join(' | ')
-    %link{:href => "http://#{Settler[:host]}/favicon.ico", :rel => "SHORTCUT ICON", :type => "image/vnd.microsoft.icon"}/
-    = GMap.header(:without_js => true).gsub('http://', '//').html_safe
-    = javascript_include_tag 'devcms_core', 'devcms-geo'
-    = raw @map.to_html
+    %link{:href => "http://#{Settler[:host]}/favicon.ico", :rel => "SHORTCUT ICON", :type => "image/vnd.microsoft.icon"}
+    
+    = javascript_include_tag '//maps.googleapis.com/maps/api/js?v=3&sensor=false&key=#{Settler[:google_maps_key]}&language=nl'
+    = javascript_include_tag 'devcms-core', 'devcms-geo'
     = stylesheet_link_tag 'application.css'
     = stylesheet_link_tag 'devcms_geo_fullscreen.css'
+    
   %body
-    .fullscreen_map{ :id => "geo_viewer_#{@geo_viewer.id}" }
-    .logo
-      = image_tag('geo_viewer_fullscreen_logo.png')
+    = render 'map'
+    .logo= image_tag('geo_viewer_fullscreen_logo.png')

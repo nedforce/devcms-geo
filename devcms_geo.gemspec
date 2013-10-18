@@ -15,7 +15,6 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }  
   
   s.add_dependency 'devcms_core'
-  s.add_dependency 'ym4r_gm'
   s.add_dependency 'geokit'
   s.add_dependency 'geokit-rails'
 

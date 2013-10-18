@@ -1,0 +1,5 @@
+- content_for :javascript, javascript_include_tag("//maps.googleapis.com/maps/api/js?v=3&sensor=false&key=#{Settler[:google_maps_key]}&language=nl")
+
+.gmap{ :id => "geo_viewer_#{@geo_viewer.id}", data: { :map => { bounds: @bounds.to_a, pins: @pins, markers: @markers }.to_json } }= static_map_of_addresses @nodes, { :center => @center, :bounds => @bounds, :alt => @geo_viewer.title}
+
+%noscript= @node_list_lettered

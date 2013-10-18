@@ -15,7 +15,6 @@ group :development do
 end
   
 gem 'geokit'
-gem 'ym4r_gm', :require => false
 gem 'geokit-rails'
 
 # Git repos

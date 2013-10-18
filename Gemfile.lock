@@ -63,7 +63,6 @@ PATH
       devcms_core
       geokit
       geokit-rails
-      ym4r_gm
 
 GEM
   remote: https://rubygems.org/
@@ -249,9 +248,6 @@ GEM
     whenever (0.8.4)
       activesupport (>= 2.3.4)
       chronic (>= 0.6.3)
-    ym4r (0.6.1)
-    ym4r_gm (0.2.0)
-      ym4r
 
 PLATFORMS
   ruby
@@ -268,4 +264,3 @@ DEPENDENCIES
   mocha
   rsolr (~> 0.12.1)
   turn
-  ym4r_gm
