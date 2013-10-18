@@ -25,7 +25,7 @@ $.fn.googlemap = () ->
         style:google.maps.ZoomControlStyle.SMALL
 
     window.map = new google.maps.Map(element, mapOptions)
-    window.map.fitBounds(new google.maps.LatLngBounds(new google.maps.LatLng(bounds[0][0], bounds[0][1]), new google.maps.LatLng(bounds[1][0], bounds[1][1])))
+    window.map.fitBounds(new google.maps.LatLngBounds(new google.maps.LatLng(bounds[0][0], bounds[0][1]), new google.maps.LatLng(bounds[1][0], bounds[1][1]))) if bounds && bounds.length > 0
     window.markers = {}
 
     $.each markers, (id, marker) ->
