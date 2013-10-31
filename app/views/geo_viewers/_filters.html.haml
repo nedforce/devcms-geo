@@ -1,26 +1,26 @@
 .content-section
-  - if @geo_viewer.filter_settings.keys.any? { |key| key.to_s.ends_with?('available') } || (@geo_viewer.combined_viewer? && @geo_viewer.geo_viewer_placeables.toggable.any?)
+  - if @geo_viewer.filter_settings.keys.any? { |key, value| key.to_s.ends_with?('available') && value.present? } || (@geo_viewer.combined_viewer? && @geo_viewer.geo_viewer_placeables.toggable.any?)
     .filters
-      
+
       - unless @geo_viewer.has_own_content_representation?
         %h2= t 'geo_viewers.filters'
-        
+
       = form_tag content_node_path(@geo_viewer.node), :method => :get, :class => 'clearfix', :id => 'geo_viewer_filter_form' do
 
         - if !@geo_viewer.combined_viewer?
-          - # Filter Searchscope        
+          - # Filter Searchscope
           - if @geo_viewer.filter_settings[:search_scope_available]
             .filter
               = label_tag  'search_scope', t('geo_viewers.filter_settings.search_scope') + ':'
               = select_tag 'search_scope', options_for_select(@search_scopes, @filters[:search_scope])
-        - else
+        - elsif @geo_viewer.geo_viewer_placeables.toggable.any?
           .filter.layers.clearfix
             = label_tag  'layers', t('geo_viewers.layers')  + ':'
             .check_boxes
               - @geo_viewer.geo_viewer_placeables.toggable.scoped(:include => :geo_viewer).each do |placeable|
                 .check_box
                   = check_box_tag 'layers[]', placeable.id, @filters[:layers].present? ? @filters[:layers].to_a.include?(placeable.id.to_s) : @geo_viewer.toggled_placeable_ids.include?(placeable.id), :id => "layer_#{placeable.id}"
-                  = label_tag "layer_#{placeable.id}", placeable.title             
+                  = label_tag "layer_#{placeable.id}", placeable.title
 
         - # Filter From date
         - if @geo_viewer.filter_settings[:from_date_available]
@@ -44,7 +44,7 @@
 
           - # Filter PermitPhase
           - if @geo_viewer.filter_settings[:permit_phase_available] && @geo_viewer.filter_settings[:search_scope] == 'content_type_permit'
-            .filter 
+            .filter
               = label_tag  'permit_phase', t('permits.phase') + ':'
               = select_tag('permit_phase', options_for_select(([[t('geo_viewers.all'), '']] + @geo_viewer.filter_settings[:permit_phase].collect{|p| [Permit::PHASES[p.to_i],p]}), params[:permit_phase]))
           - # Filter LegislationSubject

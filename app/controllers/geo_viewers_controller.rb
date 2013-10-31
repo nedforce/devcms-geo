@@ -3,21 +3,58 @@
 require 'open-uri'
 
 class GeoViewersController < ApplicationController
-  before_filter :find_geo_viewer, :only => [:show, :fullscreen, :screenreader]
+  before_filter :find_geo_viewer
+
+  before_filter :find_nodes
+  before_filter :find_bounds, except: :info_window
+  before_filter :static_map_data, only: :screenreader
 
   # * GET /geo_viewers/:id
-  # * GET /geo_viewers/:id.xml
   def show
     respond_to do |format|
-      format.html { generate_map(true) }
+      format.html
+    end
+  end
+
+  def info_window
+    @node = @nodes.find(params[:node_id])
+    render formats: [:html], layout: false
+  end
+
+  # * GET /geo_viewers/:id/map.json
+  def map
+    respond_to do |format|
+      format.json do
+        pins = {}
+        markers = {}
+
+        if @filters[:bounds]
+          if @nodes.present?
+            @nodes.each do |node|
+              marker_id = "marker-#{node.id}"
+              markers[marker_id] = { :title => node.content.title, :lat => node.lat, :lng => node.lng }
+
+              if @geo_viewer.inherit_pins?
+                markers[marker_id][:pin_id] = node.own_or_inherited_pin.id if node.own_or_inherited_pin.present?
+              elsif node.pin.present?
+                markers[marker_id][:pin_id] = node.pin.id
+              end
+            end
+          end
+
+          # Register pins
+          Pin.all.each{|pin| pins[pin.id] = { :image => URI.join(root_url, pin.file.url).to_s } }
+        end
+
+        # Return map data
+        render :json => { bounds: @bounds.to_a, pins: pins, markers: markers }.to_json
+      end
     end
   end
 
   def fullscreen
     respond_to do |format|
       format.html do
-        generate_map(false)
-
         render :layout => false
       end
     end
@@ -25,14 +62,21 @@ class GeoViewersController < ApplicationController
 
   def screenreader
     respond_to do |format|
-      format.html { generate_map(true) }
+      format.html
     end
   end
 
   protected
 
-  def generate_map(static)
+  # Finds the GeoViewer object corresponding to the passed in +id+ parameter.
+  def find_geo_viewer
+    @geo_viewer = @node.content
+  end
+
+  def find_nodes
     @filters = {}
+
+    @filters[:bounds] = params[:bounds]
 
     @filters[:from_date]   = params[:from_date]
     @filters[:from_date] ||= @geo_viewer.filter_settings[:from_date]
@@ -59,12 +103,9 @@ class GeoViewersController < ApplicationController
     @filters[:location]                      = params[:location].present?                      ? params[:location]                      : @geo_viewer.map_settings[:center]
 
     @nodes = @geo_viewer.filtered_nodes(@filters)
+  end
 
-    # Register pins
-    @pins = {}
-    Pin.all.each{|pin| @pins[pin.id] = { :image => URI.join(root_url, pin.file.url).to_s } }
-
-    # Define map bounds
+  def find_bounds
     if @filters[:location].present? || @nodes.blank?
       res = Node.try_geocode(@filters[:location].to_s, :bias => Node.geocoding_bias)
       @bounds = res.suggested_bounds
@@ -78,39 +119,22 @@ class GeoViewersController < ApplicationController
 
       @bounds = GeoKit::Bounds.normalize(sw, ne)
     end
+  end
 
-    # Add node markers
-    @markers = {}
-    node_list = [] if static
+  def static_map_data
+    node_list = []
+    index = 0
 
-    index = 0 # Counter for labels and colors (For static view as well)
     if @nodes.present?
       @nodes.each do |node|
-        marker_id = "marker-#{node.id}"
-
-        if static && (@bounds.blank? || @bounds.contains?(node))
+        if @bounds.blank? || @bounds.contains?(node)
           node_list << { :color => DevcmsGeo::StaticMap::COLOURS[index % DevcmsGeo::StaticMap::COLOURS.size], :label => DevcmsGeo::StaticMap::LABELS[index % DevcmsGeo::StaticMap::LABELS.size], :node => node }
           index += 1
-        end
-
-        @markers[marker_id] = { :title => node.content.title, :lat => node.lat, :lng => node.lng, :info_window => render_to_string(:partial => '/shared/google_maps_popup', :locals => { :node => node, :geo_viewer => @geo_viewer }) }
-
-        if @geo_viewer.inherit_pins?
-          @markers[marker_id][:pin_id] = node.own_or_inherited_pin.id if node.own_or_inherited_pin.present?
-        elsif node.pin.present?
-          @markers[marker_id][:pin_id] = node.pin.id
         end
       end
     end
 
-    if (static)
-      @node_list_lettered = render_to_string(:partial => 'node_list_lettered', :locals => { :node_list => node_list }).html_safe
-      @node_list_bulleted = render_to_string(:partial => 'node_list_bulleted', :locals => { :node_list => node_list }).html_safe
-    end
-  end
-
-  # Finds the GeoViewer object corresponding to the passed in +id+ parameter.
-  def find_geo_viewer
-    @geo_viewer = @node.content
+    @node_list_lettered = render_to_string(:partial => 'node_list_lettered', :locals => { :node_list => node_list }).html_safe
+    @node_list_bulleted = render_to_string(:partial => 'node_list_bulleted', :locals => { :node_list => node_list }).html_safe
   end
 end

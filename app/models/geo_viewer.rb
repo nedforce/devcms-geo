@@ -107,6 +107,12 @@ class GeoViewer < ActiveRecord::Base
         nodes
       end
     end
+    
+    if filters[:bounds].present?
+      sw = GeoKit::LatLng.new *filters[:bounds]['sw']
+      ne = GeoKit::LatLng.new *filters[:bounds]['ne']
+      filtered_node_scope = filtered_node_scope.in_bounds [sw, ne]
+    end
 
     if filters[:from_date].present?
       filtered_node_scope = filtered_node_scope.published_after(Time.parse(filters[:from_date]))    rescue filtered_node_scope

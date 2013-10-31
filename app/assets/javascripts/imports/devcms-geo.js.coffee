@@ -10,7 +10,7 @@ panAndZoomTo = (address) ->
     zoomTarget = getZoomByBounds(bounds)
     currentZoom = window.map.getZoom()
     centered = false
-        
+
     window.map.panTo(ll)
     if currentZoom < zoomTarget
       while currentZoom < zoomTarget
@@ -39,23 +39,38 @@ getZoomByBounds = (bounds) ->
 
 
 jQuery ->
+  $mapElement = $('div[data-map]')
+
   originalMarkerIcons = {}
-  
+
   $('.marker-link').click (event) ->
     event.preventDefault()
     if window.map
       linkId = $(this).attr('id')
-      marker = window.markers[linkId]
-      
-      # Reset other markers
-      $.each window.markers, (id, otherMarker) -> 
-        if originalMarkerIcons[id] && otherMarker != marker then otherMarker.setIcon(originalMarkerIcons[id])
-      
-      if !originalMarkerIcons[linkId] then originalMarkerIcons[linkId] = marker.icon
-      marker.setIcon "/pins/highlighted_pin?pin=#{encodeURIComponent(marker.icon)}" if marker.icon.indexOf('highlighted_pin') == -1
-      google.maps.event.trigger marker, 'click'
-  
-  $('form#geo_viewer_location_form').submit (event) -> 
+      latLng = $(this).data('lat-lng')
+
+      if marker = window.markers[linkId]
+        window.map.panTo new google.maps.LatLng(latLng[0], latLng[1])
+        google.maps.event.trigger marker, 'click'
+      else
+        # Simulate a callback for panTo
+        $mapElement.on 'markers-loaded', ->
+          $mapElement.off 'markers-loaded'
+          marker = window.markers[linkId]
+
+          # Reset other markers
+          $.each window.markers, (id, otherMarker) ->
+            if originalMarkerIcons[id] && otherMarker != marker then otherMarker.setIcon(originalMarkerIcons[id])
+
+          if marker.icon
+            if !originalMarkerIcons[linkId] then originalMarkerIcons[linkId] = marker.icon
+            marker.setIcon "/pins/highlighted_pin?pin=#{encodeURIComponent(marker.icon)}" if marker.icon.indexOf('highlighted_pin') == -1
+
+          google.maps.event.trigger marker, 'click'
+
+        window.map.panTo new google.maps.LatLng(latLng[0], latLng[1])
+
+  $('form#geo_viewer_location_form').submit (event) ->
     event.preventDefault()
     showAddress $('#location', $(this)).val()
 

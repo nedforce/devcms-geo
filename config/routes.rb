@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
-  resources :geo_viewers, :only => [:show] do  
+  resources :geo_viewers, :only => [:show] do
     member do
+      get :map
       get :fullscreen
       get :screenreader
+      get :info_window
     end  
   end
 

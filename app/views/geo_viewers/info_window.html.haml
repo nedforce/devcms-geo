@@ -1,0 +1,9 @@
+- @geo_viewer.image_for(@node).tap do |image|
+  - cache(:geo_popup_for => @node.id, :with_image => image.try(:id), :last_updated_at => [@node.updated_at, image.try(:updated_at)].compact.max) do
+    %div
+      %h2= @geo_viewer.link_titles ? link_to_node(h(@node.content.title), @node) : @node.content.title
+      - if image
+        = image_tag(content_node_path(image, :action => :thumbnail,  :format => :jpg), :alt => h(image.alt), :class => 'thumb', :height => 100)
+      - attr = [:description, :preamble, :summary].select { |attr| @node.content.respond_to?(attr) }.first
+      - if attr
+        %div= truncate_html(@node.content.send(attr), :length => 400)
