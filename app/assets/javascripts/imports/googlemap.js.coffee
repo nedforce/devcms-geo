@@ -35,7 +35,7 @@ $.fn.googlemap = () ->
         position: new google.maps.LatLng(marker.lat, marker.lng)
         map: window.map
         title: marker.title
-        icon: pins[marker.pin_id].image
+        icon: (pins[marker.pin_id].image if pins[marker.pin_id])
         content: marker.info_window
       
       google.maps.event.addListener(gMarker, 'click', () ->
