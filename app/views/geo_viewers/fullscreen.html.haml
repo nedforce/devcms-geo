@@ -10,8 +10,8 @@
     
     = javascript_include_tag '//maps.googleapis.com/maps/api/js?v=3&sensor=false&key=#{Settler[:google_maps_key]}&language=nl'
     = javascript_include_tag 'devcms-core', 'devcms-geo'
-    = stylesheet_link_tag 'application.css'
-    = stylesheet_link_tag 'devcms_geo_fullscreen.css'
+    = stylesheet_link_tag 'application'
+    = stylesheet_link_tag 'devcms_geo_fullscreen'
     
   %body
     = render 'map'
