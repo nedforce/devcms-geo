@@ -65,7 +65,7 @@ class GeoViewersController < ApplicationController
     Pin.all.each{|pin| @pins[pin.id] = { :image => URI.join(root_url, pin.file.url).to_s } }
 
     # Define map bounds
-    if params[:location].present? || @nodes.blank?
+    if @filters[:location].present? || @nodes.blank?
       res = Node.try_geocode(@filters[:location], :bias => Node.geocoding_bias) 
       @bounds = res.suggested_bounds
     else
