@@ -1,8 +1,8 @@
-# This +RESTful+ controller is used to orchestrate and control the flow of 
+# This +RESTful+ controller is used to orchestrate and control the flow of
 # the application relating to GeoViewer objects.
 require 'open-uri'
 
-class GeoViewersController < ApplicationController  
+class GeoViewersController < ApplicationController
   before_filter :find_geo_viewer, :only => [:show, :fullscreen, :screenreader]
 
   # * GET /geo_viewers/:id
@@ -66,7 +66,7 @@ class GeoViewersController < ApplicationController
 
     # Define map bounds
     if @filters[:location].present? || @nodes.blank?
-      res = Node.try_geocode(@filters[:location], :bias => Node.geocoding_bias) 
+      res = Node.try_geocode(@filters[:location].to_s, :bias => Node.geocoding_bias)
       @bounds = res.suggested_bounds
     else
       coordinates = @nodes.collect { |node| [ node.lat, node.lng ]}.transpose
@@ -80,14 +80,14 @@ class GeoViewersController < ApplicationController
     end
 
     # Add node markers
-    @markers = {}    
+    @markers = {}
     node_list = [] if static
-    
+
     index = 0 # Counter for labels and colors (For static view as well)
     if @nodes.present?
       @nodes.each do |node|
         marker_id = "marker-#{node.id}"
-        
+
         if static && (@bounds.blank? || @bounds.contains?(node))
           node_list << { :color => DevcmsGeo::StaticMap::COLOURS[index % DevcmsGeo::StaticMap::COLOURS.size], :label => DevcmsGeo::StaticMap::LABELS[index % DevcmsGeo::StaticMap::LABELS.size], :node => node }
           index += 1
@@ -102,7 +102,7 @@ class GeoViewersController < ApplicationController
         end
       end
     end
-    
+
     if (static)
       @node_list_lettered = render_to_string(:partial => 'node_list_lettered', :locals => { :node_list => node_list }).html_safe
       @node_list_bulleted = render_to_string(:partial => 'node_list_bulleted', :locals => { :node_list => node_list }).html_safe
