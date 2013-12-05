@@ -27,30 +27,30 @@
 # * Timeframe - Filter on last update timestamp
 # * Permit & Legislation specific filters
 class GeoViewer < ActiveRecord::Base
-  
+
   has_many :pins, :dependent => :destroy
-  
+
   # Can have many geo viewers (= combined geo viewer)
   has_many :geo_viewer_placeables, :foreign_key => :combined_geo_viewer_id, :class_name => 'GeoViewerPlacement', :dependent => :destroy
   has_many :geo_viewers, :through => :geo_viewer_placeables
-  
+
   # Can have been included by several combined geo viewers
-  has_many :geo_viewer_placements, :foreign_key => :geo_viewer_id, :dependent => :destroy  
+  has_many :geo_viewer_placements, :foreign_key => :geo_viewer_id, :dependent => :destroy
   has_many :combined_geo_viewers, :through => :geo_viewer_placements
-  
+
   scope :combined, :conditions => { :combined_viewer => true }
   scope :without_combined, :conditions => ['combined_viewer is null or combined_viewer = ?', false]
-  
+
   accepts_nested_attributes_for :geo_viewer_placeables, :allow_destroy => true
-  
+
   attr_readonly :combined_viewer
-  
+
   acts_as_content_node({
     :allowed_roles_for_update           => %w( admin final_editor ),
     :allowed_roles_for_create           => %w( admin ),
     :allowed_roles_for_destroy          => %w( admin ),
     :available_content_representations  => ['content_box'],
-    :has_own_content_box                => true    
+    :has_own_content_box                => true
   })
 
   validates_presence_of :title
@@ -58,22 +58,22 @@ class GeoViewer < ActiveRecord::Base
 
   serialize :filter_settings
   serialize :map_settings
-  
-  def after_initialize 
+
+  def after_initialize
     self.link_titles = true if link_titles.nil? && new_record?
   end
-  
+
   def image_for(node)
     scope = Image.accessible.scoped(:include => :node, :conditions => { :is_for_header => [nil, false] }, :order => :position)
     image = scope.first(:conditions => { 'nodes.ancestry' => node.child_ancestry })
     image = scope.first(:conditions => { 'nodes.ancestry' => node.parent.child_ancestry }) if inherit_images? && !image && node.parent.present?
-    
+
     return image
   end
-  
+
   def has_own_content_representation?
     @has_own_content_representation ||= node.content_representations.any?{|cr| cr.custom_type == 'related_content' && cr.parent_id == node.id }
-  end  
+  end
 
   def tree_icon_class
     'map_icon'
@@ -90,7 +90,7 @@ class GeoViewer < ActiveRecord::Base
   def map_settings
     read_attribute(:map_settings) || {}
   end
-  
+
   def filtered_nodes_scope(user_filters = {}, options = {}, for_combined_viewer = false)
     filters = self.filter_settings.merge(user_filters)
     filters[:search_scope] ||= 'all'
@@ -107,7 +107,7 @@ class GeoViewer < ActiveRecord::Base
         nodes
       end
     end
-    
+
     if filters[:bounds].present?
       sw = GeoKit::LatLng.new *filters[:bounds]['sw']
       ne = GeoKit::LatLng.new *filters[:bounds]['ne']
@@ -116,13 +116,14 @@ class GeoViewer < ActiveRecord::Base
 
     if filters[:from_date].present?
       filtered_node_scope = filtered_node_scope.published_after(Time.parse(filters[:from_date]))    rescue filtered_node_scope
-    elsif !combined_viewer?
+    elsif !combined_viewer? || geo_viewer_placeables.empty?
       filtered_node_scope = filtered_node_scope.published_after(2.weeks.ago.change(:usec => 0))     rescue filtered_node_scope
     end
+
     if filters[:until_date].present?
       filtered_node_scope = filtered_node_scope.published_before(Time.parse(filters[:until_date]))  rescue filtered_node_scope
     end
-    
+
     if !(combined_viewer? || for_combined_viewer)
       if filters[:search_scope] == 'content_type_permit'
         #Permit filters
@@ -136,22 +137,22 @@ class GeoViewer < ActiveRecord::Base
       end
     end
 
-    return filtered_node_scope.scoped(options) 
+    return filtered_node_scope.scoped(options)
   end
 
   def filtered_nodes(filters = {}, options = {})
     filtered_nodes_scope(filters, options).accessible.geo_coded
   end
- 
+
   def nodes
     Node.scoped({})
   end
-  
+
   # Combined viewer methods
   def toggled_placeable_ids
-    @toggled_placeable_ids ||= geo_viewer_placeables.toggled.map(&:id)    
+    @toggled_placeable_ids ||= geo_viewer_placeables.toggled.map(&:id)
   end
- 
+
   def placeable_conditions(options = {}, filters = {})
     placeables = if options[:selection].present? && (selection = (options[:selection].to_a.map(&:to_i) & geo_viewer_placeables.toggable.map(&:id))).present?
       geo_viewer_placeables.where(['geo_viewer_placements.id IN (?) or (geo_viewer_placements.is_toggled = ? and (geo_viewer_placements.is_toggable is null or geo_viewer_placements.is_toggable = ?))', selection, true, false])
@@ -160,13 +161,13 @@ class GeoViewer < ActiveRecord::Base
     else
       geo_viewer_placeables
     end
-    
+
     conditions = []
-    placeables.includes(:geo_viewer).each do |placeable| 
+    placeables.includes(:geo_viewer).each do |placeable|
       where_clauses = placeable.geo_viewer.filtered_nodes_scope(filters, {}, true).where_clauses
-      conditions << "(#{where_clauses.join(' AND ')})" if where_clauses.present? 
+      conditions << "(#{where_clauses.join(' AND ')})" if where_clauses.present?
     end
-    
+
     conditions.join(' OR ')
   end
 end
