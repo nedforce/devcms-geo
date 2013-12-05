@@ -6,7 +6,7 @@ class GeoViewersController < ApplicationController
   before_filter :find_geo_viewer
 
   before_filter :find_nodes
-  before_filter :find_bounds, except: :info_window
+  before_filter :find_bounds, only: [:map, :screenreader]
   before_filter :static_map_data, only: :screenreader
 
   # * GET /geo_viewers/:id
@@ -108,7 +108,7 @@ class GeoViewersController < ApplicationController
   def find_bounds
     if @filters[:location].present? || @nodes.blank?
       res = Node.try_geocode(@filters[:location].to_s, :bias => Node.geocoding_bias)
-      @bounds = res.suggested_bounds
+      @bounds = res.suggested_bounds || Node.geocoding_bias
     else
       coordinates = @nodes.collect { |node| [ node.lat, node.lng ]}.transpose
       north = coordinates.first.max; south = coordinates.first.min; west  = coordinates.last.min; east  = coordinates.last.max

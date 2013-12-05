@@ -1,38 +1,40 @@
 showMarkers = ($mapElement) ->
   bounds = window.map.getBounds()
-  sw = bounds.getSouthWest()
-  ne = bounds.getNorthEast()
 
-  $.get $mapElement.data('map'), { bounds: { sw: [sw.lat(), sw.lng()], ne: [ne.lat(), ne.lng()] } }, (map) ->
-    window.markers ||= {}
+  if bounds
+    sw = bounds.getSouthWest()
+    ne = bounds.getNorthEast()
 
-    $.each window.markers, (id, marker) ->
-      unless bounds.contains(marker.getPosition())
-        marker.setMap(null)
-        delete window.markers[id]
+    $.get $mapElement.data('map'), { bounds: { sw: [sw.lat(), sw.lng()], ne: [ne.lat(), ne.lng()] } }, (map) ->
+      window.markers ||= {}
 
-    pins = map.pins
-    $.each map.markers, (id, marker) ->
-      unless window.markers[id]
-        gMarker = new google.maps.Marker
-          id: id
-          position: new google.maps.LatLng(marker.lat, marker.lng)
-          map: window.map
-          title: marker.title
-          icon: (pins[marker.pin_id].image if pins[marker.pin_id])
+      $.each window.markers, (id, marker) ->
+        unless bounds.contains(marker.getPosition())
+          marker.setMap(null)
+          delete window.markers[id]
 
-        google.maps.event.addListener gMarker, 'click', () ->
-          if gMarker.infoWindow
-            gMarker.infoWindow.open(window.map, gMarker)
-          else
-            $.get $mapElement.data('info-window'), { node_id: gMarker.id.replace('marker-', '') },  (infoWindow) ->
-              gMarker.infoWindow = new google.maps.InfoWindow()
-              gMarker.infoWindow.setOptions { content: infoWindow }
-              gMarker.infoWindow.open window.map, gMarker
+      pins = map.pins
+      $.each map.markers, (id, marker) ->
+        unless window.markers[id]
+          gMarker = new google.maps.Marker
+            id: id
+            position: new google.maps.LatLng(marker.lat, marker.lng)
+            map: window.map
+            title: marker.title
+            icon: (pins[marker.pin_id].image if pins[marker.pin_id])
 
-        window.markers[id] = gMarker
+          google.maps.event.addListener gMarker, 'click', () ->
+            if gMarker.infoWindow
+              gMarker.infoWindow.open(window.map, gMarker)
+            else
+              $.get $mapElement.data('info-window'), { node_id: gMarker.id.replace('marker-', '') },  (infoWindow) ->
+                gMarker.infoWindow = new google.maps.InfoWindow()
+                gMarker.infoWindow.setOptions { content: infoWindow }
+                gMarker.infoWindow.open window.map, gMarker
 
-    $mapElement.trigger 'markers-loaded'
+          window.markers[id] = gMarker
+
+      $mapElement.trigger 'markers-loaded'
 
 $.fn.googlemap = () ->
   this.each ->
@@ -41,7 +43,7 @@ $.fn.googlemap = () ->
 
     $.get $mapElement.data('map'), (map) ->
       zoomLevel = map.zoom || 7
-      bounds  = map.bounds
+      bounds    = map.bounds
 
       if map.size
         [width, height] = map.size.split('x')
