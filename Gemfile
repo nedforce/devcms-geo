@@ -10,14 +10,12 @@ gem 'data_checker', :git => 'git@git.nedforce.nl:data_checker.git', :branch => '
 # gem 'devcms_core', :path => '~/projects/devcms/devcms-core'
 gem 'devcms_core', :git => 'git@github.com:nedforce/devcms-core.git', :branch => 'master'
 
-group :development do
-  gem 'debugger'  
-end
-  
+gem 'debugger'
 gem 'geokit'
 gem 'geokit-rails'
 
-# Git repos
-gem 'calendar_date_select', :git => 'https://github.com/emyl/calendar_date_select.git', :branch => 'rails3_1'
+gem 'sass-rails',   '~> 3.2.3'
+gem 'coffee-rails', '~> 3.2.1'
+gem 'uglifier',     '~> 1.3'
 
 gemspec

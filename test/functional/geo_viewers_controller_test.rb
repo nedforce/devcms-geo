@@ -25,7 +25,6 @@ class GeoViewersControllerTest < ActionController::TestCase
 
     assert assigns(:geo_viewer)
     assert assigns(:nodes)
-    assert assigns(:bounds)
   end
 
   def test_should_show_screenreader_geo_viewer

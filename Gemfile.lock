@@ -49,13 +49,6 @@ GIT
       uglifier (~> 1.0)
       whenever (>= 0.4)
 
-GIT
-  remote: https://github.com/emyl/calendar_date_select.git
-  revision: 56aec17d5f2c78e716474d8c60cc2e9919b3bc01
-  branch: rails3_1
-  specs:
-    calendar_date_select (1.16.3)
-
 PATH
   remote: .
   specs:
@@ -115,6 +108,8 @@ GEM
       activesupport (>= 2)
     bartt-ssl_requirement (1.4.2)
     builder (3.0.4)
+    calendar_date_select (2.0.0)
+      rails (>= 3.1)
     carrierwave (0.9.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -253,7 +248,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  calendar_date_select!
+  coffee-rails (~> 3.2.1)
   data_checker!
   debugger
   devcms_core!
@@ -263,4 +258,6 @@ DEPENDENCIES
   jakewendt-html_test (~> 0.2.3)
   mocha
   rsolr (~> 0.12.1)
+  sass-rails (~> 3.2.3)
   turn
+  uglifier (~> 1.3)
