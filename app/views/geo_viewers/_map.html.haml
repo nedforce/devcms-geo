@@ -1,4 +1,3 @@
 - content_for :javascript, javascript_include_tag("//maps.googleapis.com/maps/api/js?v=3&sensor=false&key=#{Settler[:google_maps_key]}&language=nl")
 
-.gmap{ :id => "geo_viewer_#{@geo_viewer.id}", data: { map: map_geo_viewer_url(@geo_viewer, format: 'json'), info_window: info_window_geo_viewer_url(@geo_viewer) } }
-  =# static_map_of_addresses @nodes, { :center => "#{@bounds.center.lat},#{@bounds.center.lng}", :bounds => @bounds, :alt => @geo_viewer.title}
+.gmap{ id: "geo_viewer_#{@geo_viewer.id}", tabindex: '0', data: { map: map_geo_viewer_url(@geo_viewer, format: 'json'), info_window: info_window_geo_viewer_url(@geo_viewer) } }

@@ -41,6 +41,10 @@ getZoomByBounds = (bounds) ->
 jQuery ->
   $mapElement = $('div[data-map]')
 
+  $mapElement.focus (event) ->
+    if window.map
+      $mapElement.children().children().first().children().trigger('click')
+
   originalMarkerIcons = {}
 
   $('.marker-link').click (event) ->

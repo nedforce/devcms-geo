@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }  
   
   s.add_dependency 'devcms_core'
-  s.add_dependency 'geokit'
+  s.add_dependency 'geokit', '~> 1.6.7'
   s.add_dependency 'geokit-rails'
 
   s.add_development_dependency 'jakewendt-html_test', '~> 0.2.3'

@@ -31,8 +31,7 @@ class GeoViewersControllerTest < ActionController::TestCase
     get :screenreader, :id => geo_viewers(:geo_viewer).id
     assert_response :success
     assert assigns(:geo_viewer)
-    assert assigns(:node_list_lettered)
-    assert assigns(:node_list_bulleted)
+    assert assigns(:nodes)
   end
 
 

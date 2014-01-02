@@ -5,7 +5,11 @@
     - if @geo_viewer.description.present?
       .htmlField= w @geo_viewer.description
 
-  = @node_list_bulleted
+  .node_list.bulleted.clearfix
+  - if @nodes.present?
+    %ul
+      - @nodes.each do |node|
+        %li= link_to_content_node(node.content.title, node.content)
 
   .buttons.clearfix
     = print_button

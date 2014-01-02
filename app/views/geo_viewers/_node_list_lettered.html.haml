@@ -1,9 +1,0 @@
-.node_list.lettered.clearfix
-  - if node_list.present?
-    %ul
-      - letter = 'A'
-      - node_list.each do |node|
-        %li{ :class => node[:color] }
-          = "#{letter}. "
-          = link_to_content_node(node[:node].content.title, node[:node].content)
-          - letter = letter.next
