@@ -37,31 +37,32 @@ showMarkers = ($mapElement) ->
       $mapElement.trigger 'markers-loaded'
 
 $.fn.googlemap = () ->
-  this.each ->
-    $mapElement = $(this)
-    element = $mapElement.get(0)
+  if $(".gmap").css('height') == '400px'
+    this.each ->
+      $mapElement = $(this)
+      element = $mapElement.get(0)
 
-    $.get $mapElement.data('map'), (map) ->
-      zoomLevel = map.zoom || 7
-      bounds    = map.bounds
+      $.get $mapElement.data('map'), (map) ->
+        zoomLevel = map.zoom || 7
+        bounds    = map.bounds
 
-      if map.size
-        [width, height] = map.size.split('x')
-        $mapElement.css({width: Number(width), height: Number(height), background: '#fff'})
+        if map.size
+          [width, height] = map.size.split('x')
+          $mapElement.css({width: Number(width), height: Number(height), background: '#fff'})
 
-      wrapperElem = $mapElement.wrap('<div class="map-wrap"/>').css({background:'#fff'})
+        wrapperElem = $mapElement.wrap('<div class="map-wrap"/>').css({background:'#fff'})
 
-      mapOptions =
-        mapTypeControl: true
-        overviewMapControl: false
-        scrollwheel: false
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-        zoom: zoomLevel
-        zoomControlOptions:
-          style:google.maps.ZoomControlStyle.SMALL
+        mapOptions =
+          mapTypeControl: true
+          overviewMapControl: false
+          scrollwheel: false
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+          zoom: zoomLevel
+          zoomControlOptions:
+            style:google.maps.ZoomControlStyle.SMALL
 
-      window.map = new google.maps.Map(element, mapOptions)
-      window.map.fitBounds(new google.maps.LatLngBounds(new google.maps.LatLng(bounds[0][0], bounds[0][1]), new google.maps.LatLng(bounds[1][0], bounds[1][1]))) if bounds && bounds.length > 0
-      google.maps.event.addListener(window.map, 'idle', -> showMarkers($mapElement) );
+        window.map = new google.maps.Map(element, mapOptions)
+        window.map.fitBounds(new google.maps.LatLngBounds(new google.maps.LatLng(bounds[0][0], bounds[0][1]), new google.maps.LatLng(bounds[1][0], bounds[1][1]))) if bounds && bounds.length > 0
+        google.maps.event.addListener(window.map, 'idle', -> showMarkers($mapElement) );
 
 $ -> $('div[data-map]').googlemap()
