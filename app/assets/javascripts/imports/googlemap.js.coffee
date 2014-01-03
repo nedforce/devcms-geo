@@ -37,7 +37,7 @@ showMarkers = ($mapElement) ->
       $mapElement.trigger 'markers-loaded'
 
 $.fn.googlemap = () ->
-  if $(".gmap").css('height') == '400px'
+  if $(".gmap").css('height')? && $(".gmap").css('height') != "0px"
     this.each ->
       $mapElement = $(this)
       element = $mapElement.get(0)
