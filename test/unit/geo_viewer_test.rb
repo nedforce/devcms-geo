@@ -11,9 +11,9 @@ class GeoViewerTest < ActiveSupport::TestCase
   end
 
   def test_should_serialize_settings
-    geo_viewer = create_geo_viewer({ :filter_settings => { :setting => [:value] }, :map_settings => { :setting_2 => [:value_a] }})
-    assert_equal({ :setting   => [:value]  }, GeoViewer.find(geo_viewer.id).filter_settings)
-    assert_equal({ :setting_2 => [:value_a]}, GeoViewer.find(geo_viewer.id).map_settings)
+    geo_viewer = create_geo_viewer({ :filter_settings => { :setting => [:value] }, :map_settings => { :setting_2 => [:value_a] } })
+    assert_equal({ :setting   => [:value]   }, GeoViewer.find(geo_viewer.id).filter_settings)
+    assert_equal({ :setting_2 => [:value_a] }, GeoViewer.find(geo_viewer.id).map_settings)
   end
 
   def test_should_return_empty_hash_for_missing_setting

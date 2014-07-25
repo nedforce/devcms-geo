@@ -31,9 +31,7 @@ module NodeExtensions::GeoLocation
     def geocoding_bias
       if SETTLER_LOADED
         bias = Settler[:geocode_bias]
-        if bias.present?
-          bias = GeoKit::Bounds.normalize(bias) rescue 'NL'
-        end
+        bias = GeoKit::Bounds.normalize(bias) rescue 'NL' if bias.present?
       end
       return bias.present? ? bias : 'NL'
     end

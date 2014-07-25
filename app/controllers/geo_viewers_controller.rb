@@ -55,9 +55,7 @@ class GeoViewersController < ApplicationController
 
   def fullscreen
     respond_to do |format|
-      format.html do
-        render :layout => false
-      end
+      format.html { render :layout => false }
     end
   end
 
@@ -92,9 +90,7 @@ class GeoViewersController < ApplicationController
       @filters[:search_scope]   = params[:search_scope]
       @filters[:search_scope] ||= @geo_viewer.filter_settings[:search_scope]
 
-      if @filters[:search_scope] == 'separator'
-        @filters[:search_scope] = ''
-      end
+      @filters[:search_scope] = '' if @filters[:search_scope] == 'separator'
     end
 
     @filters[:legislation_subject_available] = params[:legislation_subject_available].present? ? params[:legislation_subject_available] : @geo_viewer.filter_settings[:legislation_subject_available]
@@ -116,9 +112,15 @@ class GeoViewersController < ApplicationController
       res = Node.try_geocode(@filters[:location].to_s, :bias => Node.geocoding_bias)
       @bounds = res.suggested_bounds || Node.geocoding_bias
     else
-      coordinates = @nodes.map { |node| [ node.lat, node.lng ]}.transpose
-      north = coordinates.first.max; south = coordinates.first.min; west  = coordinates.last.min; east  = coordinates.last.max
-      longitudinal_margin = (east  - west)  * 0.05; latitudinal_margin  = (north - south) * 0.05
+      coordinates = @nodes.map { |node| [node.lat, node.lng] }.transpose
+
+      north = coordinates.first.max
+      south = coordinates.first.min
+      west  = coordinates.last.min
+      east  = coordinates.last.max
+
+      longitudinal_margin = (east  - west)  * 0.05
+      latitudinal_margin  = (north - south) * 0.05
 
       sw = [south - latitudinal_margin, west - longitudinal_margin]
       ne = [north + latitudinal_margin, east + longitudinal_margin]

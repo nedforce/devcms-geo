@@ -37,7 +37,7 @@ class Admin::GeoViewersController < Admin::AdminController
     find_available_geo_viewer_placeables
 
     respond_to do |format|
-      format.html { render :template => 'admin/shared/new', :locals => { :record => @geo_viewer }}
+      format.html { render :template => 'admin/shared/new', :locals => { :record => @geo_viewer } }
     end
   end
 

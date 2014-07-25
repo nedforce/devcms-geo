@@ -1,7 +1,6 @@
 # encoding: utf-8
 
 class PinUploader < CarrierWave::Uploader::Base
-
   # Include RMagick or ImageScience support
   include CarrierWave::RMagick
   #     include CarrierWave::ImageScience
@@ -40,11 +39,10 @@ class PinUploader < CarrierWave::Uploader::Base
   #     end
   def extension_white_list
     %w(png)
-  end  
+  end
 
   # Override the filename of the uploaded files
   #     def filename
   #       "something.jpg" if original_filename
   #     end
-
 end

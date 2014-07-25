@@ -34,8 +34,5 @@ class Devcms
         }
       }
     end
-
-
-
   end
 end

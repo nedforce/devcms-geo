@@ -11,7 +11,6 @@
 #
 # * Requires the presence of +title+, +file+.
 class Pin < ActiveRecord::Base
-
   HIGHLIGHT_OVERLAY = ::Magick::Image::read(DevcmsGeo::Engine.root.to_s + '/app/assets/images/star_overlay.png').first rescue nil
 
   has_many :nodes, :dependent => :nullify
@@ -24,9 +23,9 @@ class Pin < ActiveRecord::Base
     if file
       @geometry ||= begin
         img = ::Magick::Image::read(file.path).first
-        [ img.columns, img.rows ]
+        [img.columns, img.rows]
       end
-    end 
+    end
 
     @geometry
   end

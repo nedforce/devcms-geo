@@ -27,7 +27,6 @@
 # * Timeframe - Filter on last update timestamp
 # * Permit & Legislation specific filters
 class GeoViewer < ActiveRecord::Base
-
   has_many :pins, :dependent => :destroy
 
   # Can have many geo viewers (= combined geo viewer)
@@ -96,7 +95,7 @@ class GeoViewer < ActiveRecord::Base
     filters[:search_scope] ||= 'all'
 
     filtered_node_scope = if combined_viewer?
-      conditions = placeable_conditions({:selection => filters[:layers], :toggled_only_for_empty_selection => true}, user_filters) || {:id => -1}
+      conditions = placeable_conditions({ :selection => filters[:layers], :toggled_only_for_empty_selection => true }, user_filters) || { :id => -1 }
       nodes.scoped(:conditions => conditions)
     else
       if filters[:search_scope] =~ /node_(\d+)/
@@ -115,25 +114,25 @@ class GeoViewer < ActiveRecord::Base
     end
 
     if filters[:from_date].present?
-      filtered_node_scope = filtered_node_scope.published_after(Time.parse(filters[:from_date]))    rescue filtered_node_scope
+      filtered_node_scope = filtered_node_scope.published_after(Time.parse(filters[:from_date])) rescue filtered_node_scope
     elsif !combined_viewer? || geo_viewer_placeables.empty?
-      filtered_node_scope = filtered_node_scope.published_after(2.weeks.ago.change(:usec => 0))     rescue filtered_node_scope
+      filtered_node_scope = filtered_node_scope.published_after(2.weeks.ago.change(:usec => 0)) rescue filtered_node_scope
     end
 
     if filters[:until_date].present?
-      filtered_node_scope = filtered_node_scope.published_before(Time.parse(filters[:until_date]))  rescue filtered_node_scope
+      filtered_node_scope = filtered_node_scope.published_before(Time.parse(filters[:until_date])) rescue filtered_node_scope
     end
 
     if !(combined_viewer? || for_combined_viewer)
       if filters[:search_scope] == 'content_type_permit'
-        #Permit filters
+        # Permit filters
         filtered_node_scope = filtered_node_scope.scoped(:joins => 'LEFT JOIN permits on permits.id = nodes.content_id AND nodes.content_type = \'Permit\'')
-        filtered_node_scope = filtered_node_scope.scoped(:conditions => { :permits => { :phase_id        => filters[:permit_phase]       }}) if filters[:permit_phase].present?
-        filtered_node_scope = filtered_node_scope.scoped(:conditions => { :permits => { :product_type_id => filters[:permit_product_type]}}) if filters[:permit_product_type].present?
+        filtered_node_scope = filtered_node_scope.scoped(:conditions => { :permits => { :phase_id        => filters[:permit_phase]        } }) if filters[:permit_phase].present?
+        filtered_node_scope = filtered_node_scope.scoped(:conditions => { :permits => { :product_type_id => filters[:permit_product_type] } }) if filters[:permit_product_type].present?
       elsif filters[:search_scope] == 'content_type_legislation'
-        #Permit filters
+        # Permit filters
         filtered_node_scope = filtered_node_scope.scoped(:joins => 'LEFT JOIN legislations on legislations.id = nodes.content_id AND nodes.content_type = \'Legislation\'')
-        filtered_node_scope = filtered_node_scope.scoped(:conditions => { :legislations => { :subject => filters[:legislation_subject] }}) if filters[:legislation_subject].present?
+        filtered_node_scope = filtered_node_scope.scoped(:conditions => { :legislations => { :subject => filters[:legislation_subject] } }) if filters[:legislation_subject].present?
       end
     end
 
