@@ -21,19 +21,19 @@ class GeoViewerTest < ActiveSupport::TestCase
     assert_not_nil geo_viewer.filter_settings
     assert geo_viewer.filter_settings.is_a?(Hash)
   end
-  
+
   def test_should_return_node_scope
     geo_viewer = create_geo_viewer
     assert_equal Node.scoped({}), geo_viewer.nodes
   end
-  
+
   def test_should_return_placeable_conditions
     placeable_viewer = create_geo_viewer(:filter_settings => { :from_date => 2.weeks.from_now.to_s })
     placeable_viewer2 = create_geo_viewer
-       
+
     geo_viewer = create_geo_viewer(:combined_viewer => true, :geo_viewer_ids => [placeable_viewer.id, placeable_viewer2.id])
-    geo_viewer.geo_viewer_placeables.each{|placeable| placeable.update_attributes(:is_toggable => true) }
-    
+    geo_viewer.geo_viewer_placeables.each { |placeable| placeable.update_attributes(:is_toggable => true) }
+
     assert_not_nil geo_viewer.placeable_conditions
     assert_not_nil geo_viewer.placeable_conditions(:toggled_only_for_empty_selection => true)
     assert_not_nil geo_viewer.placeable_conditions(:selection => [placeable_viewer.id])
@@ -44,13 +44,13 @@ class GeoViewerTest < ActiveSupport::TestCase
     from_date         = 2.weeks.from_now
     placeable_viewer  = create_geo_viewer(:filter_settings => { :from_date => from_date.to_s })
     placeable_viewer2 = create_geo_viewer
-       
+
     geo_viewer = create_geo_viewer(:combined_viewer => true, :geo_viewer_ids => [placeable_viewer.id, placeable_viewer2.id])
-    
+
     assert geo_viewer.filtered_nodes_scope.to_sql.include?(from_date.to_formatted_s(:db))
     assert !geo_viewer.filtered_nodes_scope(:from_date => from_date + 2.week).to_sql.include?(from_date.to_formatted_s(:db))
   end
-  
+
   protected
 
   def create_geo_viewer(options = {})

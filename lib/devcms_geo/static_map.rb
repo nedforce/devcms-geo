@@ -15,7 +15,7 @@ module DevcmsGeo
       @params = Hash.new.tap do |p|
         p[:sensor]  = false
         p[:size]    = "#{@width}x#{@height}"
-        p[:maptype] = options.fetch(:type, "roadmap")
+        p[:maptype] = options.fetch(:type, 'roadmap')
         #p[:zoom]    = options.fetch(:zoom, 2)
         p[:center]  = options.fetch(:center, nil)
       end
@@ -27,7 +27,7 @@ module DevcmsGeo
 
     def to_url
       params = @params.to_param
-      params << "&"
+      params << '&'
       params << build_marker_params
       (URL_TEMPLATE % params)
     end
@@ -48,13 +48,13 @@ module DevcmsGeo
 
     def build_marker_params
       params = []
-      @addresses.sort {|x,y| x.updated_at <=> y.updated_at }[0..MAX_MARKERS].each_with_index do |address, index|
+      @addresses.sort { |x,y| x.updated_at <=> y.updated_at }[0..MAX_MARKERS].each_with_index do |address, index|
         return "markers=#{to_ll @addresses.first}" if @addresses.size == 1
         color = COLOURS[index % COLOURS.size]
         label = LABELS[index % LABELS.size]
         params << "markers=color:#{color}|label:#{label}|#{to_ll(address)}"
       end
-      params.join("&")
+      params.join('&')
     end
 
     def to_ll(address)

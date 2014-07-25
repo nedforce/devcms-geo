@@ -4,7 +4,7 @@ require 'geokit-rails'
 
 module DevcmsGeo
   extend ActiveSupport::Autoload
-  
+
   autoload :StaticMap
 end
 

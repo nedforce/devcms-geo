@@ -40,18 +40,18 @@
           - if @geo_viewer.filter_settings[:permit_product_type_available] && @geo_viewer.filter_settings[:search_scope] == 'content_type_permit'
             .filter
               = label_tag  'permit_product_type', t('permits.product_type') + ':'
-              = select_tag('permit_product_type', options_for_select(([[t('geo_viewers.all'), '']] + @geo_viewer.filter_settings[:permit_product_type].collect{|p| [Permit::PRODUCT_TYPES[p.to_i],p]}), params[:permit_product_type]))
+              = select_tag('permit_product_type', options_for_select(([[t('geo_viewers.all'), '']] + @geo_viewer.filter_settings[:permit_product_type].map { |p| [Permit::PRODUCT_TYPES[p.to_i],p] }), params[:permit_product_type]))
 
           - # Filter PermitPhase
           - if @geo_viewer.filter_settings[:permit_phase_available] && @geo_viewer.filter_settings[:search_scope] == 'content_type_permit'
             .filter
               = label_tag  'permit_phase', t('permits.phase') + ':'
-              = select_tag('permit_phase', options_for_select(([[t('geo_viewers.all'), '']] + @geo_viewer.filter_settings[:permit_phase].collect{|p| [Permit::PHASES[p.to_i],p]}), params[:permit_phase]))
+              = select_tag('permit_phase', options_for_select(([[t('geo_viewers.all'), '']] + @geo_viewer.filter_settings[:permit_phase].map { |p| [Permit::PHASES[p.to_i],p] }), params[:permit_phase]))
           - # Filter LegislationSubject
           - if @geo_viewer.filter_settings[:legislation_subject_available] && @geo_viewer.filter_settings[:search_scope] == 'content_type_legislation'
             .filter
               = label_tag  'legislation_subject_available', t('legislations.subject') + ':'
-              = select_tag('legislation_subject_available', options_for_select([[t('geo_viewers.all'), '']] + Legislation.all(:select => 'DISTINCT subject', :conditions => 'subject IS NOT null').collect{ |l| l.subject }, @geo_viewer.filter_settings[:legislation_subject]))
+              = select_tag('legislation_subject_available', options_for_select([[t('geo_viewers.all'), '']] + Legislation.all(:select => 'DISTINCT subject', :conditions => 'subject IS NOT null').map { |l| l.subject }, @geo_viewer.filter_settings[:legislation_subject]))
 
         - # Submit tag
         %div

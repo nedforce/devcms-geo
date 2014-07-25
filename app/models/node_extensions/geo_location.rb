@@ -1,5 +1,5 @@
 module NodeExtensions::GeoLocation
-  extend ActiveSupport::Concern  
+  extend ActiveSupport::Concern
 
   included do
     acts_as_mappable :default_units => :kms
@@ -8,7 +8,7 @@ module NodeExtensions::GeoLocation
 
     # Geocode before validation or after, if defer_geocoding is set
     before_validation :geocode_if_location_changed, :unless => :defer_geocoding
-    before_save       :geocode_if_location_changed, :if => :defer_geocoding
+    before_save       :geocode_if_location_changed,     :if => :defer_geocoding
 
     validates_presence_of :lng, :lat, :if => :location_present_and_valid?
     validate :valid_location

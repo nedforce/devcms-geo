@@ -1,4 +1,4 @@
-<% def fixtures_to_ancestry(*names); names.collect { |name| ActiveRecord::Fixtures.identify(name) }.join("/"); end %>
+<% def fixtures_to_ancestry(*names); names.map { |name| ActiveRecord::Fixtures.identify(name) }.join("/"); end %>
 
 root_section_node:
   content: root_section (Section)
@@ -23,7 +23,7 @@ section_with_frontpage_node:
   sub_content_type: Section
   hidden: false
   private: false
-      
+
 bis_section_node:
   content: bis_section (Section)
   ancestry: <%= fixtures_to_ancestry(:root_section_node, :section_with_frontpage_node) %>
@@ -41,24 +41,24 @@ bis_page_node:
   ancestry: <%= fixtures_to_ancestry(:root_section_node, :section_with_frontpage_node, :bis_section_node) %>
   show_in_menu: true
   publication_start_date: <%= 1.day.ago.to_s(:db) %>
-  position: 1 
-  publishable: true    
+  position: 1
+  publishable: true
   sub_content_type: Page
   hidden: false
   private: false
-  
+
 economie_section_node:
   content: economie_section (Section)
   ancestry: <%= fixtures_to_ancestry(:root_section_node) %>
   url_alias: economie
   show_in_menu: true
   publication_start_date: <%= 1.day.ago.to_s(:db) %>
-  position: 4 
+  position: 4
   publishable: true
   sub_content_type: Section
   hidden: false
   private: false
-  
+
 news_node:
   content: news_page (Page)
   ancestry: <%= fixtures_to_ancestry(:root_section_node) %>

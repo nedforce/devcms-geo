@@ -18,7 +18,7 @@ rescue LoadError
 end
 
 # Truncate all tables first
-ActiveRecord::Base.connection.tables.each{ |table| ActiveRecord::Base.connection.execute("TRUNCATE #{table} CASCADE") }
+ActiveRecord::Base.connection.tables.each { |table| ActiveRecord::Base.connection.execute("TRUNCATE #{table} CASCADE") }
 
 # Initialize Settler
 Settler.load!
@@ -54,7 +54,7 @@ class ActiveSupport::TestCase
   #
   # Note: You'll currently still have to declare fixtures explicitly in integration tests
   # -- they do not yet inherit this setting
-  self.fixture_path = File.dirname(__FILE__) + "/fixtures/"
+  self.fixture_path = File.dirname(__FILE__) + '/fixtures/'
   
   fixtures :all
             
@@ -69,13 +69,13 @@ class ActiveSupport::TestCase
   # Validates all controller and integration test requests if set to true:
   ApplicationController.validate_all = false
   # What html validators to use, options: :w3c, :tidy, :xmllint
-  ApplicationController.validators = [ :w3c ]
+  ApplicationController.validators = [:w3c]
   # Check all redirects
   ApplicationController.check_redirects = true
   # Don't check all links
   ApplicationController.check_urls = false
   # Comment the following line when not developing at the office
-  Html::Test::Validator.w3c_url = "http://office.nedforce.nl/w3c-validator/check"
+  Html::Test::Validator.w3c_url = 'http://office.nedforce.nl/w3c-validator/check'
 
   def get_file_as_string(filename)
     data = ''
@@ -96,4 +96,3 @@ class ActiveSupport::TestCase
   end
 
 end
-

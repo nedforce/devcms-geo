@@ -44,7 +44,7 @@ class GeoViewersController < ApplicationController
           end
 
           # Register pins
-          Pin.all.each{|pin| pins[pin.id] = { :image => URI.join(root_url, pin.file.url).to_s } }
+          Pin.all.each { |pin| pins[pin.id] = { :image => URI.join(root_url, pin.file.url).to_s } }
         end
 
         # Return map data
@@ -116,7 +116,7 @@ class GeoViewersController < ApplicationController
       res = Node.try_geocode(@filters[:location].to_s, :bias => Node.geocoding_bias)
       @bounds = res.suggested_bounds || Node.geocoding_bias
     else
-      coordinates = @nodes.collect { |node| [ node.lat, node.lng ]}.transpose
+      coordinates = @nodes.map { |node| [ node.lat, node.lng ]}.transpose
       north = coordinates.first.max; south = coordinates.first.min; west  = coordinates.last.min; east  = coordinates.last.max
       longitudinal_margin = (east  - west)  * 0.05; latitudinal_margin  = (north - south) * 0.05
 

@@ -7,7 +7,7 @@
         = toggable_section_link('map_locations', t('geo_viewers.locations'), :element_type => :h3)
         #map_locations.toggable_section
           .content-section
-            %p= t('geo_viewers.locations_description')
+            %p= t 'geo_viewers.locations_description'
 
             %ul.nodes
               - @nodes.each do |node|

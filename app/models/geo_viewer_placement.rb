@@ -1,5 +1,5 @@
-# This model represents a self referential join model between geo viewers to support creation of geo viewers 
-# that represents other geo viewers
+# This model represents a self referential join model between geo viewers to support creation of geo viewers
+# that represent other geo viewers
 #
 # Attributes
 #
@@ -10,12 +10,12 @@
 class GeoViewerPlacement < ActiveRecord::Base
   belongs_to :combined_geo_viewer, :class_name => 'GeoViewer'
   belongs_to :geo_viewer
-  
-  scope :toggled, :conditions => { :is_toggled => true }  
+
+  scope :toggled,  :conditions => { :is_toggled  => true }
   scope :toggable, :conditions => { :is_toggable => true }
-  
+
   delegate :title, :to => :geo_viewer
-  
+
   def _destroy
     !new_record?
   end

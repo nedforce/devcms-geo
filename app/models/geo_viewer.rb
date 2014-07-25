@@ -72,7 +72,7 @@ class GeoViewer < ActiveRecord::Base
   end
 
   def has_own_content_representation?
-    @has_own_content_representation ||= node.content_representations.any?{|cr| cr.custom_type == 'related_content' && cr.parent_id == node.id }
+    @has_own_content_representation ||= node.content_representations.any? { |cr| cr.custom_type == 'related_content' && cr.parent_id == node.id }
   end
 
   def tree_icon_class

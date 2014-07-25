@@ -4,7 +4,7 @@ class Admin::GeoViewersControllerTest < ActionController::TestCase
   self.use_transactional_fixtures = true
 
   def setup
-    @geo_viewer = GeoViewer.create!({:parent => Node.root, :title => "GeoViewer"})
+    @geo_viewer = GeoViewer.create!({ :parent => Node.root, :title => 'GeoViewer' })
   end
 
   def test_should_get_show
@@ -32,7 +32,7 @@ class Admin::GeoViewersControllerTest < ActionController::TestCase
       assert !assigns(:geo_viewer).new_record?, assigns(:geo_viewer).errors.full_messages.join('; ')
     end
   end
-  
+
   def test_should_create_combined_geo_viewer
     login_as :admin
 
@@ -109,7 +109,7 @@ class Admin::GeoViewersControllerTest < ActionController::TestCase
   def test_should_get_valid_preview_for_update
     login_as :admin
 
-    geo_viewer      = @geo_viewer
+    geo_viewer = @geo_viewer
     old_title = geo_viewer.title
     put :update, :id => geo_viewer.id, :geo_viewer => { :title => 'updated title', :description => 'updated_description' }, :commit_type => 'preview'
     assert_response :success
@@ -121,7 +121,7 @@ class Admin::GeoViewersControllerTest < ActionController::TestCase
   def test_should_not_get_invalid_preview_for_update
     login_as :admin
 
-    geo_viewer      = @geo_viewer
+    geo_viewer = @geo_viewer
     old_title = geo_viewer.title
     put :update, :id => geo_viewer.id, :geo_viewer => { :title => nil, :description => 'updated_description' }, :commit_type => 'preview'
     assert_response :unprocessable_entity
@@ -143,9 +143,8 @@ protected
   def create_geo_viewer(attributes = {}, options = {})
     post :create, { :parent_node_id => nodes(:root_section_node).id, :geo_viewer => { :title => 'new title' }.merge(attributes) }.merge(options)
   end
-  
+
   def create_combined_geo_viewer(attributes = {}, options = {})
-    post :create, { :parent_node_id => nodes(:root_section_node).id, :geo_viewer => { :title => 'new title', :combined_viewer => '1', :geo_viewer_placeables_attributes => {'0' => { :geo_viewer_id => @geo_viewer.id, :is_toggable => true } } }.merge(attributes) }.merge(options)
-  end  
-  
+    post :create, { :parent_node_id => nodes(:root_section_node).id, :geo_viewer => { :title => 'new title', :combined_viewer => '1', :geo_viewer_placeables_attributes => { '0' => { :geo_viewer_id => @geo_viewer.id, :is_toggable => true } } }.merge(attributes) }.merge(options)
+  end
 end

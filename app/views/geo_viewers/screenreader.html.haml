@@ -1,6 +1,6 @@
 .geo-viewer.regularPage
   %h1= @geo_viewer.title
-  
+
   - unless @geo_viewer.has_own_content_representation?
     - if @geo_viewer.description.present?
       .htmlField= w @geo_viewer.description

@@ -1,4 +1,4 @@
-# This model is used to represent a pin that can be places on a map. 
+# This model is used to represent a pin that can be places on a map.
 #
 # *Specification*
 #
@@ -11,15 +11,15 @@
 #
 # * Requires the presence of +title+, +file+.
 class Pin < ActiveRecord::Base
-  
+
   HIGHLIGHT_OVERLAY = ::Magick::Image::read(DevcmsGeo::Engine.root.to_s + '/app/assets/images/star_overlay.png').first rescue nil
-  
+
   has_many :nodes, :dependent => :nullify
 
   mount_uploader :file, PinUploader
-  
+
   validates_presence_of :title, :file
-  
+
   def geometry
     if file
       @geometry ||= begin
@@ -27,8 +27,7 @@ class Pin < ActiveRecord::Base
         [ img.columns, img.rows ]
       end
     end 
-    
-    @geometry   
-  end
 
+    @geometry
+  end
 end

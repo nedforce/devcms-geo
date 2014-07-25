@@ -34,12 +34,10 @@ class GeoViewersControllerTest < ActionController::TestCase
     assert assigns(:nodes)
   end
 
-
   def test_should_increment_hits_on_show
     geo_viewer = geo_viewers(:geo_viewer)
     old_hits = geo_viewer.node.hits
     get :show, :id => geo_viewer
     assert_equal old_hits + 1, geo_viewer.node.reload.hits
   end
-
 end
