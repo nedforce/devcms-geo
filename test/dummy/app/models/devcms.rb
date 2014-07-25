@@ -1,7 +1,6 @@
 extension_of DevcmsCore
 
 class Devcms
-
   class << self
     # Overrides for ContentType configurations
     def content_types_configuration

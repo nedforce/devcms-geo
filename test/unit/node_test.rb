@@ -1,7 +1,6 @@
 require File.expand_path('../../test_helper.rb', __FILE__)
 
 class NodeTest < ActiveSupport::TestCase
-
   def setup
     @node = Node.root
   end
@@ -71,24 +70,23 @@ class NodeTest < ActiveSupport::TestCase
   def test_should_be_biased
     @node.location = 'Polstraat'
     @node.save!
-    
+
     assert @node.location =~ /Deventer/, "Location expected to be in Deventer, but was #{@node.location} instead"
   end
-  
+
   def test_should_inherit_pins
     node = Section.create(:title => 'test', :parent => Node.root, :location => 'Polstraat 1, Deventer').node
-        
+
     pin1 = Pin.create(:title => 'Pin 1', :file => File.open(File.dirname(__FILE__) + '/../fixtures/files/pin.png'))
     pin2 = Pin.create(:title => 'Pin 2', :file => File.open(File.dirname(__FILE__) + '/../fixtures/files/pin.png'))
 
-    assert_nil node.own_or_inherited_pin        
+    assert_nil node.own_or_inherited_pin
     assert node.root.update_attributes(:pin => pin1)
     assert node.update_attributes(:pin => pin2)
-    
-    assert_equal pin2, node.own_or_inherited_pin
-    
-    assert node.update_attributes(:pin => nil)
-    assert_equal pin1, Node.find(node.id).own_or_inherited_pin    
-  end
 
+    assert_equal pin2, node.own_or_inherited_pin
+
+    assert node.update_attributes(:pin => nil)
+    assert_equal pin1, Node.find(node.id).own_or_inherited_pin
+  end
 end

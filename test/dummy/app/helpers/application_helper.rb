@@ -2,7 +2,7 @@ module ApplicationHelper
   def search_url(options = {})
     options ||= {}
     parameters = []
-    parameters << "view=advanced"                          if options[:advanced].present?
+    parameters << 'view=advanced'                          if options[:advanced].present?
     parameters << "thema=#{options[:project]}"             if options[:project].present?
     parameters << "thema=#{options[:programme]}"           if options[:project].blank? && options[:programme].present?
     parameters << "search_scope=#{options[:search_scope]}" if options[:search_scope].present?

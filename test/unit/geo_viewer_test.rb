@@ -1,7 +1,6 @@
 require File.expand_path('../../test_helper.rb', __FILE__)
 
 class GeoViewerTest < ActiveSupport::TestCase
-
   def test_should_create_geo_viewer
     assert_nothing_raised do
       geo_viewer = create_geo_viewer

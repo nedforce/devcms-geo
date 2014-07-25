@@ -1,7 +1,6 @@
 require File.expand_path('../../test_helper.rb', __FILE__)
 
 class PinTest < ActiveSupport::TestCase
-
   def setup
     @pin = create_pin
   end
