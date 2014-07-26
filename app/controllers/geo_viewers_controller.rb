@@ -13,12 +13,13 @@ class GeoViewersController < ApplicationController
   # * GET /geo_viewers/:id
   def show
     respond_to do |format|
-      format.html
+      format.html # show.html.haml
     end
   end
 
   def info_window
     @node = Node.accessible.find(params[:node_id])
+
     render formats: [:html], layout: false
   end
 
@@ -61,7 +62,7 @@ class GeoViewersController < ApplicationController
 
   def screenreader
     respond_to do |format|
-      format.html
+      format.html # screenreader.html.haml
     end
   end
 

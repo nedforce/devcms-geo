@@ -1,4 +1,4 @@
-ENV["RAILS_ENV"] = 'test'
+ENV['RAILS_ENV'] = 'test'
 
 require File.expand_path('../dummy/config/environment.rb', __FILE__)
 require 'rails/test_help'
@@ -55,17 +55,21 @@ class ActiveSupport::TestCase
   # Note: You'll currently still have to declare fixtures explicitly in integration tests
   # -- they do not yet inherit this setting
   self.fixture_path = File.dirname(__FILE__) + '/fixtures/'
-  
+
   fixtures :all
-            
+
   # Add more helper methods to be used by all tests here...
   include DevcmsCore::AuthenticatedTestHelper
   include DevcmsCore::RoleRequirementTestHelper
-  
-  setup do 
-    Node.stubs(:try_geocode).returns(stub(:provider => 'google', :city => 'Deventer', :state => 'Gelderland', :lat => 52.25446, :lng => 6.160247, :country => 'NL', :zip => '', :street => '', :full_address => 'Deventer', :distance_to => 0, :success => true, :suggested_bounds => [52.25446, 6.160247]))         
-  end  
-  
+
+  setup do
+    Node.stubs(:try_geocode).returns(
+      stub(:provider => 'google',  :city => 'Deventer', :state => 'Gelderland',
+           :lat => 52.25446, :lng => 6.160247, :country => 'NL', :zip => '',
+           :street => '', :full_address => 'Deventer', :distance_to => 0,
+           :success => true, :suggested_bounds => [52.25446, 6.160247]))
+  end
+
   # Validates all controller and integration test requests if set to true:
   ApplicationController.validate_all = false
   # What html validators to use, options: :w3c, :tidy, :xmllint
@@ -94,5 +98,4 @@ class ActiveSupport::TestCase
       Object.send(:remove_const, constant)
     end
   end
-
 end

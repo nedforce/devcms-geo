@@ -4,7 +4,6 @@ class CreatePins < ActiveRecord::Migration
       t.string :title
       t.string :file
     end
-
   end
 
   def self.down

@@ -9,7 +9,7 @@ GIT
 
 GIT
   remote: git@github.com:nedforce/devcms-core.git
-  revision: 39d6e5bfd357b5cc1a00d40a767de4ea676b988d
+  revision: 1eacc62d4329960631383ec9017e3ea27ba3cd60
   branch: master
   specs:
     devcms_core (0.0.1)
@@ -124,13 +124,13 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.5.0)
-    columnize (0.3.6)
-    debugger (1.6.5)
+    columnize (0.8.9)
+    debugger (1.6.8)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.2.0)
-      debugger-ruby_core_source (~> 1.3.1)
+      debugger-ruby_core_source (~> 1.3.5)
     debugger-linecache (1.2.0)
-    debugger-ruby_core_source (1.3.1)
+    debugger-ruby_core_source (1.3.5)
     dsl_accessor (0.3.3)
     dynamic_attributes (1.2.0)
     erubis (2.7.0)
@@ -154,7 +154,7 @@ GEM
     i18n (0.6.11)
     jakewendt-html_test (0.2.3)
     journey (1.0.4)
-    jquery-rails (3.1.0)
+    jquery-rails (3.1.1)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (4.0.3)
@@ -172,14 +172,15 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    metaclass (0.0.1)
+    metaclass (0.0.4)
     mime-types (1.25.1)
-    mini_portile (0.5.2)
-    mocha (0.14.0)
+    mini_portile (0.6.0)
+    minitest (4.7.5)
+    mocha (1.1.0)
       metaclass (~> 0.0.1)
     multi_json (1.10.1)
-    nokogiri (1.6.1)
-      mini_portile (~> 0.5.0)
+    nokogiri (1.6.3.1)
+      mini_portile (= 0.6.0)
     pg (0.17.1)
     polyglot (0.3.5)
     prototype-rails (3.2.1)
@@ -247,8 +248,9 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     truncate_html (0.5.5)
-    turn (0.9.6)
+    turn (0.9.7)
       ansi
+      minitest (~> 4)
     tzinfo (0.3.40)
     uglifier (1.3.0)
       execjs (>= 0.3.0)

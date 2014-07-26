@@ -62,7 +62,7 @@ class Admin::GeoViewersController < Admin::AdminController
         format.html { render :template => 'admin/shared/create_preview', :locals => { :record => @geo_viewer }, :layout => 'admin/admin_preview' }
         format.xml  { render :xml => @geo_viewer, :status => :created, :location => @geo_viewer }
       elsif @commit_type == 'save' && @geo_viewer.save
-        format.html { render :template => 'admin/shared/create' }
+        format.html { render 'admin/shared/create' }
         format.xml  { head :ok }
       else
         find_available_geo_viewer_placeables
@@ -85,7 +85,7 @@ class Admin::GeoViewersController < Admin::AdminController
         end
         format.xml  { render :xml => @geo_viewer, :status => :created, :location => @geo_viewer }
       elsif @commit_type == 'save' && @geo_viewer.save
-        format.html { render :template => 'admin/shared/update' }
+        format.html { render 'admin/shared/update' }
         format.xml  { head :ok }
       else
         find_available_geo_viewer_placeables if @geo_viewer.combined_viewer?

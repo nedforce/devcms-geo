@@ -4,12 +4,15 @@ class AddGeoDataToNode < ActiveRecord::Migration
     add_column :nodes, :lng, :float
     add_column :nodes, :location, :string, :length => 1024
     add_index :nodes, [:lat, :lng]
-    
+
+    say 'Resetting the column information on node'
     Node.reset_column_information
-    
+
     if defined?(Permit)
-      Permit.all do |permit|
-        permit.node.update_attribute :location, permit.addresses.first.to_s
+      say_with_time 'Adding location information to all permits' do
+        Permit.all do |permit|
+          permit.node.update_attribute :location, permit.addresses.first.to_s
+        end
       end
     end
   end

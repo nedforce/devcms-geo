@@ -46,6 +46,8 @@ module ApplicationHelper
       'Icoon van een persoon die een poll invult'
     when 'uitgelicht'
       'Icoon van een persoon die belangrijke content bekijkt'
+    else
+      ''
     end
   end
 

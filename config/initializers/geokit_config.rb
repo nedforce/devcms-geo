@@ -46,7 +46,7 @@ if defined? Geokit
   Geokit::Geocoders::geocoder_ca = false
 
   # Uncomment to use a username with the Geonames geocoder
-  #Geokit::Geocoders::geonames="REPLACE_WITH_YOUR_GEONAMES_USERNAME"
+  # Geokit::Geocoders::geonames="REPLACE_WITH_YOUR_GEONAMES_USERNAME"
 
   # This is the order in which the geocoders are called in a failover scenario
   # If you only want to use a single geocoder, put a single symbol in the array.
