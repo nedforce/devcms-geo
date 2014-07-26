@@ -82,7 +82,6 @@ class ActiveSupport::TestCase
   Html::Test::Validator.w3c_url = 'http://office.nedforce.nl/w3c-validator/check'
 
   def get_file_as_string(filename)
-    data = ''
     f = File.open(File.dirname(__FILE__) + "/fixtures/#{filename}")
     f.read
   end

@@ -16,11 +16,11 @@ module NodeExtensions::GeoLocation
     scope :geo_coded, { :conditions => 'nodes.lat IS NOT NULL AND nodes.lng IS NOT NULL' }
 
     scope :published_after, lambda { |date| {
-      :conditions => ["publication_start_date >= DATE(:date)", { :date => date }] }
+      :conditions => ['publication_start_date >= DATE(:date)', { :date => date }] }
     }
 
     scope :published_before, lambda { |date| {
-      :conditions => ["publication_start_date <= DATE(:date)", { :date => date }] }
+      :conditions => ['publication_start_date <= DATE(:date)', { :date => date }] }
     }
 
     attr_accessor :location_coordinates, :defer_geocoding
