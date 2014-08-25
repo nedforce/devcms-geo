@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-source 'http://gems.github.com'
+source 'https://gems.github.com'
 
 group :test do
   gem 'turn'
