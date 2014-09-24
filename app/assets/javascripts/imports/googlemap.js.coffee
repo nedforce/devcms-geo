@@ -28,8 +28,9 @@ showMarkers = ($mapElement) ->
               gMarker.infoWindow.open(window.map, gMarker)
             else
               $.get $mapElement.data('info-window'), { node_id: gMarker.id.replace('marker-', '') },  (infoWindow) ->
+                maxWidth = $(window.map.getDiv()).width()-200
                 gMarker.infoWindow = new google.maps.InfoWindow()
-                gMarker.infoWindow.setOptions { content: infoWindow }
+                gMarker.infoWindow.setOptions { content: infoWindow, maxWidth: maxWidth  }
                 gMarker.infoWindow.open window.map, gMarker
 
           window.markers[id] = gMarker
