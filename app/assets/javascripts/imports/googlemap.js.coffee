@@ -22,18 +22,8 @@ showMarkers = ($mapElement) ->
             map: window.map
             title: marker.title
             icon: (pins[marker.pin_id].image if pins[marker.pin_id])
-
-          google.maps.event.addListener gMarker, 'click', () ->
-            if gMarker.infoWindow
-              gMarker.infoWindow.open(window.map, gMarker)
-            else
-              $.get $mapElement.data('info-window'), { node_id: gMarker.id.replace('marker-', '') },  (infoWindow) ->
-                maxWidth = $(window.map.getDiv()).width()-200
-                gMarker.infoWindow = new google.maps.InfoWindow()
-                gMarker.infoWindow.setOptions { content: infoWindow, maxWidth: maxWidth  }
-                gMarker.infoWindow.open window.map, gMarker
-
           window.markers[id] = gMarker
+          window.oms.addMarker(gMarker)
 
       $mapElement.trigger 'markers-loaded'
 
@@ -65,5 +55,18 @@ $.fn.googlemap = () ->
         window.map = new google.maps.Map(element, mapOptions)
         window.map.fitBounds(new google.maps.LatLngBounds(new google.maps.LatLng(bounds[0][0], bounds[0][1]), new google.maps.LatLng(bounds[1][0], bounds[1][1]))) if bounds && bounds.length > 0
         google.maps.event.addListener(window.map, 'idle', -> showMarkers($mapElement) );
+        window.oms = new OverlappingMarkerSpiderfier(window.map)
+        window.oms.addListener 'click', (gMarker, event) ->
+          if gMarker.infoWindow
+            gMarker.infoWindow.open(window.map, gMarker)
+          else
+            $.get $mapElement.data('info-window'), { node_id: gMarker.id.replace('marker-', '') },  (infoWindow) ->
+              maxWidth = $(window.map.getDiv()).width()-200
+              gMarker.infoWindow = new google.maps.InfoWindow()
+              gMarker.infoWindow.setOptions { content: infoWindow, maxWidth: maxWidth  }
+              gMarker.infoWindow.open window.map, gMarker
+        window.oms.addListener 'spiderfy', (gMarkers) ->
+          for gMarker in gMarkers
+            gMarker.infoWindow.close()
 
 $ -> $('div[data-map]').googlemap()

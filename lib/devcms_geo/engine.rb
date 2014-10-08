@@ -7,6 +7,7 @@ module DevcmsGeo
     end
 
     initializer 'devcms_precompile' do |app|
+      app.config.assets.precompile << 'oms.js'
       app.config.assets.precompile << 'devcms-geo.js'
       app.config.assets.precompile << 'devcms_geo_fullscreen.css'
     end
