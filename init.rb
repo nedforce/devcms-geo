@@ -1,5 +1,3 @@
-p 'Initializing DevCMS Geo..'
-
 plugin_root = File.dirname(__FILE__)
 
 Dir["#{plugin_root}/config/initializers/**/*.rb"].sort.each do |initializer|
