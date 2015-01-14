@@ -72,7 +72,7 @@ module NodeExtensions::GeoLocation
         self.lat = @geocode.lat
         self.lng = @geocode.lng
         self.location = @geocode.full_address
-        self.location_code = (@geocode.zip + @geocode.street_number).gsub(/\s+/, "")
+        self.location_code = "#{@geocode.zip} #{@geocode.street_number}".gsub(/\s+/, "")
       end
     elsif self.location_coordinates.present?
       ll = Geokit::LatLng.normalize(location_coordinates)
