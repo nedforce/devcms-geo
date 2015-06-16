@@ -6,7 +6,7 @@
     %meta{ :content => "nl_nl", :name => "language" }
 
     %title= h [Settler[:site_name], @page_title].compact.join(' | ')
-    %link{ :href => "http://#{Settler[:host]}/favicon.ico", :rel => "SHORTCUT ICON", :type => "image/vnd.microsoft.icon" }
+    %link{ href: "//#{Settler[:host]}/favicon.ico", rel: 'shortcut icon', type: 'image/vnd.microsoft.icon' }
 
     = javascript_include_tag '//maps.googleapis.com/maps/api/js?v=3&sensor=false&key=#{Settler[:google_maps_key]}&language=nl'
     = javascript_include_tag 'devcms-core', 'devcms-geo'
