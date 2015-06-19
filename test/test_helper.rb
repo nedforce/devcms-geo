@@ -4,17 +4,11 @@ require File.expand_path('../dummy/config/environment.rb', __FILE__)
 require 'rails/test_help'
 require 'mocha/setup'
 require 'html_test'
-if RUBY_VERSION =~ /^2\.\d{1}\.\d{1}$/
-  require 'byebug'
-else
-  require 'debugger'
-  Debugger.settings[:autoeval] = true
-end
+require 'byebug'
 
 Rails.backtrace_cleaner.remove_silencers!
 
 include ActionDispatch::TestProcess # Required to make fixture_file_upload work
-
 
 begin
   require 'turn'
@@ -69,10 +63,20 @@ class ActiveSupport::TestCase
 
   setup do
     Node.stubs(:try_geocode).returns(
-      stub(:provider => 'google',  :city => 'Deventer', :state => 'Gelderland',
-           :lat => 52.25446, :lng => 6.160247, :country => 'NL', :zip => '',
-           :street => '', :full_address => 'Deventer', :distance_to => 0,
-           :success => true, :suggested_bounds => [52.25446, 6.160247]))
+      stub(provider: 'google',
+           city: 'Deventer',
+           state: 'Gelderland',
+           lat: 52.25446,
+           lng: 6.160247,
+           country: 'NL',
+           zip: '',
+           street: '',
+           street_number: '',
+           full_address: 'Deventer',
+           distance_to: 0,
+           success: true,
+           suggested_bounds: [52.25446, 6.160247])
+    )
   end
 
   # Validates all controller and integration test requests if set to true:
