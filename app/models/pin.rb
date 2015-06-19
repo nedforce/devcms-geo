@@ -13,7 +13,7 @@
 class Pin < ActiveRecord::Base
   HIGHLIGHT_OVERLAY = ::Magick::Image::read(DevcmsGeo::Engine.root.to_s + '/app/assets/images/star_overlay.png').first rescue nil
 
-  has_many :nodes, :dependent => :nullify
+  has_many :nodes, dependent: :nullify
 
   mount_uploader :file, PinUploader
 
