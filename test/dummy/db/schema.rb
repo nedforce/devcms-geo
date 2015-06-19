@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20150114085822) do
+ActiveRecord::Schema.define(:version => 20150619142628) do
 
   create_table "abbreviations", :force => true do |t|
     t.string   "abbr",       :null => false
@@ -163,8 +163,8 @@ ActiveRecord::Schema.define(:version => 20150114085822) do
   add_index "comments", ["user_name"], :name => "index_comments_on_user_name"
 
   create_table "contact_boxes", :force => true do |t|
-    t.string   "title",               :null => false
-    t.text     "contact_information", :null => false
+    t.string   "title",                                      :null => false
+    t.text     "contact_information",                        :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "default_text"
@@ -176,6 +176,10 @@ ActiveRecord::Schema.define(:version => 20150114085822) do
     t.text     "saturday_text"
     t.text     "sunday_text"
     t.datetime "deleted_at"
+    t.boolean  "show_more_addresses_link", :default => true
+    t.boolean  "show_more_times_link",     :default => true
+    t.string   "more_addresses_url"
+    t.string   "more_times_url"
   end
 
   add_index "contact_boxes", ["deleted_at"], :name => "index_contact_boxes_on_deleted_at"
@@ -260,6 +264,23 @@ ActiveRecord::Schema.define(:version => 20150114085822) do
   add_index "events", ["meeting_category_id"], :name => "index_calendar_items_on_meeting_category_id"
   add_index "events", ["start_time"], :name => "index_calendar_items_on_start_time"
   add_index "events", ["updated_at"], :name => "index_calendar_items_on_updated_at"
+
+  create_table "faq_archives", :force => true do |t|
+    t.string   "title",       :null => false
+    t.text     "description"
+    t.datetime "deleted_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  create_table "faqs", :force => true do |t|
+    t.string   "title",      :null => false
+    t.text     "answer"
+    t.integer  "hits"
+    t.datetime "deleted_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "feeds", :force => true do |t|
     t.string   "url",                :null => false
@@ -485,12 +506,13 @@ ActiveRecord::Schema.define(:version => 20150114085822) do
   add_index "news_archives", ["updated_at"], :name => "index_news_archives_on_updated_at"
 
   create_table "news_items", :force => true do |t|
-    t.string   "title",      :null => false
-    t.text     "body",       :null => false
+    t.string   "title",            :null => false
+    t.text     "body",             :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "preamble"
     t.datetime "deleted_at"
+    t.string   "meta_description"
   end
 
   add_index "news_items", ["created_at"], :name => "index_news_items_on_created_at"
@@ -634,6 +656,7 @@ ActiveRecord::Schema.define(:version => 20150114085822) do
     t.string   "locale"
     t.datetime "last_checked_at"
     t.string   "location_code"
+    t.string   "content_box_url"
   end
 
   add_index "nodes", ["ancestry"], :name => "index_nodes_on_ancestry"
@@ -667,12 +690,13 @@ ActiveRecord::Schema.define(:version => 20150114085822) do
   end
 
   create_table "pages", :force => true do |t|
-    t.string   "title",      :null => false
-    t.text     "body",       :null => false
+    t.string   "title",            :null => false
+    t.text     "body",             :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "preamble"
     t.datetime "deleted_at"
+    t.string   "meta_description"
   end
 
   add_index "pages", ["created_at"], :name => "index_pages_on_created_at"
@@ -1051,7 +1075,6 @@ ActiveRecord::Schema.define(:version => 20150114085822) do
   create_table "social_media_links_boxes", :force => true do |t|
     t.string   "title",        :null => false
     t.string   "twitter_url"
-    t.string   "hyves_url"
     t.string   "facebook_url"
     t.string   "linkedin_url"
     t.string   "youtube_url"

@@ -21,4 +21,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'jakewendt-html_test', '~> 0.2.3'
   s.add_development_dependency 'mocha'
   s.add_development_dependency 'rsolr', '~> 0.12.1'
+  s.add_development_dependency 'acts_as_ferret', '~> 0.5.4'
 end
