@@ -11,8 +11,7 @@ gem 'data_checker', git: 'git@git.nedforce.nl:data_checker.git', branch: 'master
 gem 'devcms_core', git: 'git@github.com:nedforce/devcms-core.git', branch: 'master'
 
 group :development do
-  gem 'byebug',   platform: 'mri_21'
-  gem 'debugger', platform: 'mri_19'
+  gem 'byebug'
 end
 
 gem 'geokit'
