@@ -118,7 +118,7 @@ class GeoViewer < ActiveRecord::Base
     if filters[:from_date].present?
       filtered_node_scope = filtered_node_scope.published_after(Time.parse(filters[:from_date])) rescue filtered_node_scope
     elsif !combined_viewer? || geo_viewer_placeables.empty?
-      filtered_node_scope = filtered_node_scope.published_after(2.weeks.ago.change(usec: 0)) rescue filtered_node_scope
+      filtered_node_scope = filtered_node_scope.published_after(2.weeks.ago.change(usec: 0))
     end
 
     if filters[:until_date].present?
