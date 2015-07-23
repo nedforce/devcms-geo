@@ -112,8 +112,8 @@ protected
   end
 
   def filter_parameters_for_viewer_type
-    if params[:geo_viewer].try(:[], :combined_viewer)
-      params[:geo_viewer].delete(:geo_viewer_placeable_attributes) if params[:geo_viewer][:combined_viewer] == '0'
+    if params[:geo_viewer].try(:[], :combined_viewer) && params[:geo_viewer][:combined_viewer] == '0'
+      params[:geo_viewer].delete(:geo_viewer_placeable_attributes)
     end
   end
 end
