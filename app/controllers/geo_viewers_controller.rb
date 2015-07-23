@@ -1,7 +1,7 @@
-# This +RESTful+ controller is used to orchestrate and control the flow of
-# the application relating to GeoViewer objects.
 require 'open-uri'
 
+# This +RESTful+ controller is used to orchestrate and control the flow of
+# the application relating to GeoViewer objects.
 class GeoViewersController < ApplicationController
   before_filter :find_geo_viewer
 
@@ -34,7 +34,7 @@ class GeoViewersController < ApplicationController
           if @nodes.present?
             @nodes.each do |node|
               marker_id = "marker-#{node.id}"
-              markers[marker_id] = { :title => node.content.title, :lat => node.lat, :lng => node.lng }
+              markers[marker_id] = { title: node.content.title, lat: node.lat, lng: node.lng }
 
               if @geo_viewer.inherit_pins?
                 markers[marker_id][:pin_id] = node.own_or_inherited_pin.id if node.own_or_inherited_pin.present?
@@ -45,18 +45,18 @@ class GeoViewersController < ApplicationController
           end
 
           # Register pins
-          Pin.all.each { |pin| pins[pin.id] = { :image => URI.join(root_url, pin.file.url).to_s } }
+          Pin.all.each { |pin| pins[pin.id] = { image: URI.join(root_url, pin.file.url).to_s } }
         end
 
         # Return map data
-        render :json => { bounds: @bounds.to_a, pins: pins, markers: markers }.to_json
+        render json: { bounds: @bounds.to_a, pins: pins, markers: markers }.to_json
       end
     end
   end
 
   def fullscreen
     respond_to do |format|
-      format.html { render :layout => false }
+      format.html { render layout: false }
     end
   end
 
@@ -110,7 +110,7 @@ class GeoViewersController < ApplicationController
 
   def find_bounds
     if @filters[:location].present? || @nodes.blank?
-      res = Node.try_geocode(@filters[:location].to_s, :bias => Node.geocoding_bias)
+      res = Node.try_geocode(@filters[:location].to_s, bias: Node.geocoding_bias)
       @bounds = res.suggested_bounds || Node.geocoding_bias
     else
       coordinates = @nodes.map { |node| [node.lat, node.lng] }.transpose
