@@ -58,7 +58,7 @@ module Node::GeoLocation
          @geocode = location
        else
          begin
-           @geocode = Geokit::Geocoders::GoogleGeocoder.geocode(location, :bias => Node.geocoding_bias)
+           @geocode = Geokit::Geocoders::GoogleGeocoder3.geocode(location, :bias => Node.geocoding_bias)
          rescue Geokit::TooManyQueriesError
            errors.add(:location, I18n.t('nodes.too_many_queries'))
          end
