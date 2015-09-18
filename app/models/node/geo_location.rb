@@ -30,11 +30,9 @@ module Node::GeoLocation
     def geocoding_bias
       if SETTLER_LOADED
         bias = Settler[:geocode_bias]
-        if bias.present?
-          bias = GeoKit::Bounds.normalize(bias) rescue 'NL'
-        end
+        bias = GeoKit::Bounds.normalize(bias) rescue 'NL' if bias.present?
       end
-      return bias.present? ? bias : 'NL'
+      bias.present? ? bias : 'NL'
     end
   end
 
@@ -43,7 +41,7 @@ module Node::GeoLocation
   end
 
   def location_present?
-    self.location.present?
+    location.present?
   end
 
   private
@@ -55,14 +53,14 @@ module Node::GeoLocation
   end
 
   def geocode!
-    if self.location.present?
-       if self.location.is_a?(Geokit::GeoLoc)
-         @geocode = self.location
+    if location.present?
+       if location.is_a?(Geokit::GeoLoc)
+         @geocode = location
        else
          begin
-           @geocode = Geokit::Geocoders::GoogleGeocoder.geocode(self.location, :bias => Node.geocoding_bias)
+           @geocode = Geokit::Geocoders::GoogleGeocoder.geocode(location, :bias => Node.geocoding_bias)
          rescue Geokit::TooManyQueriesError
-           self.errors.add(:location, I18n.t('nodes.too_many_queries'))
+           errors.add(:location, I18n.t('nodes.too_many_queries'))
          end
        end
 
@@ -78,7 +76,7 @@ module Node::GeoLocation
   end
 
   def valid_location
-    self.errors.add_to_base(I18n.t('nodes.invalid_location')) if location_invalid?
+    errors.add_to_base(I18n.t('nodes.invalid_location')) if location_invalid?
   end
 
   def location_invalid?
@@ -88,5 +86,4 @@ module Node::GeoLocation
   def location_present_and_valid?
     location_present? && @geocode.present? && !location_invalid?
   end
-
 end
