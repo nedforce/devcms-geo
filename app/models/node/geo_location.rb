@@ -1,7 +1,6 @@
 require 'geokit-rails'
 
 module Node::GeoLocation
-
   def self.included(base)
     base.acts_as_mappable :default_units => :kms
 
@@ -46,33 +45,34 @@ module Node::GeoLocation
 
   private
 
-  # Geocode location into lat and lng, also set location field to full address for future reference
-  # Set and validation error if the location cannot be geocoded
+  # Geocode location into lat and lng, also set location field to full address
+  # for future reference.
+  # Set a validation error if the location cannot be geocoded.
   def geocode_if_location_changed
     geocode! if (location_changed? && !(lat_changed? || lng_changed?))
   end
 
   def geocode!
     if location.present?
-       if location.is_a?(Geokit::GeoLoc)
-         @geocode = location
-       else
-         begin
-           @geocode = Geokit::Geocoders::GoogleGeocoder3.geocode(location, :bias => Node.geocoding_bias)
-         rescue Geokit::TooManyQueriesError
-           errors.add(:location, I18n.t('nodes.too_many_queries'))
-         end
-       end
+      if location.is_a?(Geokit::GeoLoc)
+        @geocode = location
+      else
+        begin
+          @geocode = Geokit::Geocoders::GoogleGeocoder3.geocode(location, :bias => Node.geocoding_bias)
+        rescue Geokit::TooManyQueriesError
+          errors.add(:location, I18n.t('nodes.too_many_queries'))
+        end
+      end
 
-       if @geocode && @geocode.success
-         self.lat = @geocode.lat
-         self.lng = @geocode.lng
-         self.location = @geocode.full_address
-       end
-     else
-       self.lat = nil
-       self.lng = nil
-     end
+      if @geocode && @geocode.success
+        self.lat = @geocode.lat
+        self.lng = @geocode.lng
+        self.location = @geocode.full_address
+      end
+    else
+      self.lat = nil
+      self.lng = nil
+    end
   end
 
   def valid_location
