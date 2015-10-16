@@ -93,7 +93,7 @@ class GeoViewer < ActiveRecord::Base
   end
 
   def filtered_nodes_scope(user_filters = {}, options = {}, for_combined_viewer = false)
-    filters = self.filter_settings.merge(user_filters)
+    filters = filter_settings.merge(user_filters)
     filters[:search_scope] ||= 'all'
 
     filtered_node_scope = if combined_viewer?
