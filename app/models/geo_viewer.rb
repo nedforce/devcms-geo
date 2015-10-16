@@ -55,6 +55,8 @@ class GeoViewer < ActiveRecord::Base
     has_own_content_box:               true
   )
 
+  after_paranoid_delete :remove_associated_content
+
   validates :title, presence: true, length: { maximum: 255 }
 
   serialize :filter_settings
@@ -170,5 +172,11 @@ class GeoViewer < ActiveRecord::Base
     end
 
     conditions.join(' OR ')
+  end
+
+  protected
+
+  def remove_associated_content
+    geo_viewer_placements.destroy_all
   end
 end
