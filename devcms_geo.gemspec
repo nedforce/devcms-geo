@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors     = ['Nedforce Informatica Specialisten B.V.']
   s.email       = ['info@nedforce.nl']
   s.homepage    = 'http://www.nedforce.nl'
-  s.summary     = 'Geo engine for rails 3.2'
-  s.description = 'Geo engine for rails 3.2'
+  s.summary     = 'Geo engine for Rails 3.2'
+  s.description = 'Geo engine for Rails 3.2'
   s.version     = DevcmsGeo::VERSION
 
   s.files         = `git ls-files`.split("\n")
