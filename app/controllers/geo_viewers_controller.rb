@@ -111,7 +111,7 @@ class GeoViewersController < ApplicationController
   def find_bounds
     if @filters[:location].present? || @nodes.blank?
       res = Node.try_geocode(@filters[:location].to_s, bias: Node.geocoding_bias)
-      @bounds = res.suggested_bounds || Node.geocoding_bias
+      @bounds = res.try(:suggested_bounds) || Node.geocoding_bias
     else
       coordinates = @nodes.map { |node| [node.lat, node.lng] }.transpose
 
