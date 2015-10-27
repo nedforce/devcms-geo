@@ -15,7 +15,7 @@ module DevcmsGeo
         p[:sensor]  = false
         p[:size]    = "#{@width}x#{@height}"
         p[:maptype] = options.fetch(:type, 'roadmap')
-        #p[:zoom]    = options.fetch(:zoom, 2)
+        # p[:zoom]    = options.fetch(:zoom, 2)
         p[:center]  = options.fetch(:center, nil)
       end
     end
@@ -32,13 +32,13 @@ module DevcmsGeo
     end
 
     def self.for_address(address, opts = {})
-      map = self.new(opts.reverse_merge(:zoom => 10))
+      map = new(opts.reverse_merge(zoom: 10))
       map << address
       map.to_url
     end
 
     def self.for_addresses(*addresses)
-      map = self.new(addresses.extract_options!)
+      map = new(addresses.extract_options!)
       addresses.flatten.each { |a| map << a }
       map.to_url
     end
