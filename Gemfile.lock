@@ -52,7 +52,7 @@ GIT
 PATH
   remote: .
   specs:
-    devcms_geo (2.0.6)
+    devcms_geo (2.0.7)
       devcms_core
       geokit (~> 1.6.7)
       geokit-rails
