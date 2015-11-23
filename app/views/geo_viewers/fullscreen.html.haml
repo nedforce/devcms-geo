@@ -8,7 +8,7 @@
     %title= h [Settler[:site_name], @page_title].compact.join(' | ')
     %link{ href: "//#{Settler[:host]}/favicon.ico", rel: 'shortcut icon', type: 'image/vnd.microsoft.icon' }
 
-    = javascript_include_tag "https://maps.googleapis.com/maps/api/js?v=3&sensor=false&key=#{Settler[:google_maps_key]}&language=nl"
+    = javascript_include_tag "https://maps.googleapis.com/maps/api/js?v=3&key=#{Settler[:google_maps_key]}&language=nl"
     = javascript_include_tag 'devcms-core', 'devcms-geo'
     = stylesheet_link_tag 'application'
     = stylesheet_link_tag 'devcms_geo_fullscreen'

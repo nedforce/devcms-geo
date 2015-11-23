@@ -12,7 +12,6 @@ module DevcmsGeo
       @bounds = options.fetch(:bounds, nil)
       @width, @height = options.fetch(:width, DEFAULT_WIDTH), options.fetch(:height, DEFAULT_HEIGHT)
       @params = Hash.new.tap do |p|
-        p[:sensor]  = false
         p[:size]    = "#{@width}x#{@height}"
         p[:maptype] = options.fetch(:type, 'roadmap')
         # p[:zoom]    = options.fetch(:zoom, 2)
