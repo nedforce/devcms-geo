@@ -59,7 +59,6 @@ PATH
 
 GEM
   remote: https://rubygems.org/
-  remote: http://gems.github.com/
   specs:
     actionmailer (3.2.22)
       actionpack (= 3.2.22)
@@ -273,3 +272,6 @@ DEPENDENCIES
   rsolr (~> 0.12.1)
   sass-rails (~> 3.2.3)
   turn
+
+BUNDLED WITH
+   1.11.2
