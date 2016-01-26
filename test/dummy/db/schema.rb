@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151123105027) do
+ActiveRecord::Schema.define(:version => 20160126094944) do
 
   create_table "abbreviations", :force => true do |t|
     t.string   "abbr",       :null => false
@@ -506,13 +506,14 @@ ActiveRecord::Schema.define(:version => 20151123105027) do
   add_index "meeting_categories", ["updated_at"], :name => "index_meeting_categories_on_updated_at"
 
   create_table "news_archives", :force => true do |t|
-    t.string   "title",          :null => false
+    t.string   "title",                             :null => false
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
     t.integer  "items_featured"
     t.integer  "items_max"
+    t.boolean  "archived",       :default => false
   end
 
   add_index "news_archives", ["created_at"], :name => "index_news_archives_on_created_at"
@@ -576,9 +577,11 @@ ActiveRecord::Schema.define(:version => 20151123105027) do
   add_index "newsletter_archives", ["deleted_at"], :name => "index_newsletter_archives_on_deleted_at"
   add_index "newsletter_archives", ["updated_at"], :name => "index_newsletter_archives_on_updated_at"
 
-  create_table "newsletter_archives_users", :id => false, :force => true do |t|
-    t.integer "newsletter_archive_id"
-    t.integer "user_id"
+  create_table "newsletter_archives_users", :force => true do |t|
+    t.integer  "newsletter_archive_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "newsletter_archives_users", ["newsletter_archive_id", "user_id"], :name => "unique_index_on_newsletter_archive_and_user_ids", :unique => true
@@ -671,6 +674,7 @@ ActiveRecord::Schema.define(:version => 20151123105027) do
     t.datetime "last_checked_at"
     t.string   "location_code"
     t.string   "content_box_url"
+    t.boolean  "content_box_show_link",          :default => true
   end
 
   add_index "nodes", ["ancestry"], :name => "index_nodes_on_ancestry"
@@ -1087,7 +1091,7 @@ ActiveRecord::Schema.define(:version => 20151123105027) do
   add_index "share_point_lists", ["node_id"], :name => "index_share_point_lists_on_node_id"
 
   create_table "social_media_links_boxes", :force => true do |t|
-    t.string   "title",        :null => false
+    t.string   "title",         :null => false
     t.string   "twitter_url"
     t.string   "facebook_url"
     t.string   "linkedin_url"
@@ -1096,6 +1100,7 @@ ActiveRecord::Schema.define(:version => 20151123105027) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
+    t.string   "instagram_url"
   end
 
   add_index "social_media_links_boxes", ["deleted_at"], :name => "index_social_media_links_boxes_on_deleted_at"
@@ -1200,8 +1205,6 @@ ActiveRecord::Schema.define(:version => 20151123105027) do
     t.string   "email_address",                                :null => false
     t.string   "password_hash",                                :null => false
     t.string   "password_salt",                                :null => false
-    t.string   "remember_token"
-    t.datetime "remember_token_expires_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "verified",                  :default => false, :null => false
@@ -1214,14 +1217,14 @@ ActiveRecord::Schema.define(:version => 20151123105027) do
     t.boolean  "blocked",                   :default => false
     t.integer  "failed_logins",             :default => 0
     t.string   "type"
-    t.string   "remember_token_ip"
+    t.string   "auth_token"
   end
 
+  add_index "users", ["auth_token"], :name => "index_users_on_auth_token"
   add_index "users", ["created_at"], :name => "index_users_on_created_at"
   add_index "users", ["email_address"], :name => "index_users_on_email_address", :unique => true
   add_index "users", ["first_name"], :name => "index_users_on_first_name"
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true
-  add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
   add_index "users", ["sex"], :name => "index_users_on_sex"
   add_index "users", ["surname"], :name => "index_users_on_surname"
   add_index "users", ["updated_at"], :name => "index_users_on_updated_at"

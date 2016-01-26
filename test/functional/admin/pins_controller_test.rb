@@ -30,6 +30,7 @@ class Admin::PinsControllerTest < ActionController::TestCase
     login_as :admin
 
     post :create, pin: { file: fixture_file_upload('files/pin.png', 'image/png', true) }, format: 'js'
+    assert assigns(:pin)
     assert !assigns(:pin).valid?
   end
 
@@ -39,6 +40,6 @@ class Admin::PinsControllerTest < ActionController::TestCase
     delete :destroy, id: @pin.id, format: 'js'
     assert_response :success
 
-    assert_nil Pin.find_by_id @pin.id
+    assert_nil Pin.find_by_id(@pin.id)
   end
 end
