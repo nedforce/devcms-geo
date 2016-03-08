@@ -19,8 +19,8 @@
   }
 
 - if @geo_viewer.new_record?
-  = form.check_box :combined_viewer, :label => t('geo_viewers.combined_viewer')
-= form.html_editor :description, :label => t('shared.description')
+  = form.check_box :combined_viewer, label: t('geo_viewers.combined_viewer')
+= form.html_editor :description, label: t('shared.description')
 
 - if @geo_viewer.new_record? || @geo_viewer.combined_viewer?
   %table#layers
@@ -49,30 +49,31 @@
     - if @geo_viewer.new_record? || !@geo_viewer.combined_viewer?
       %tr#search-scope-row
         %td= wrap_with_label(select_tag('geo_viewer[filter_settings][search_scope]', options_for_select(@search_scopes, record.filter_settings[:search_scope])),
-              { :text => I18n.t('geo_viewers.filter_settings.search_scope'), :for => 'geo_viewer[filter_settings][search_scope]' })
-        %td= check_box_tag "geo_viewer[filter_settings][search_scope_available]", 1,  record.filter_settings[:search_scope_available]
+              { text: I18n.t('geo_viewers.filter_settings.search_scope'), for: 'geo_viewer[filter_settings][search_scope]' })
+        %td= check_box_tag 'geo_viewer[filter_settings][search_scope_available]', 1, record.filter_settings[:search_scope_available]
 
     %tr
-      %td= wrap_with_label(admin_date_field_tag('geo_viewer[filter_settings][from_date]', (Date.parse(record.filter_settings[:from_date]) rescue nil), :allow_empty => true),
-            { :text => I18n.t('geo_viewers.filter_settings.from_date'), :for => 'geo_viewer[filter_settings][from_date]' })
-      %td= check_box_tag "geo_viewer[filter_settings][from_date_available]", 1, record.filter_settings[:from_date_available]
+      %td= wrap_with_label(admin_date_field_tag('geo_viewer[filter_settings][from_date]', (Date.parse(record.filter_settings[:from_date]) rescue nil), allow_empty: true),
+            { text: I18n.t('geo_viewers.filter_settings.from_date'), for: 'geo_viewer[filter_settings][from_date]' })
+      %td= check_box_tag 'geo_viewer[filter_settings][from_date_available]', 1, record.filter_settings[:from_date_available]
     %tr
-      %td= wrap_with_label(admin_date_field_tag('geo_viewer[filter_settings][until_date]', (Date.parse(record.filter_settings[:until_date]) rescue nil), :allow_empty => true),
-            { :text => I18n.t('geo_viewers.filter_settings.until_date'), :for => 'geo_viewer[filter_settings][until_date]' })
-      %td= check_box_tag "geo_viewer[filter_settings][until_date_available]", 1, record.filter_settings[:until_date_available]
+      %td= wrap_with_label(admin_date_field_tag('geo_viewer[filter_settings][until_date]', (Date.parse(record.filter_settings[:until_date]) rescue nil), allow_empty: true),
+            { text: I18n.t('geo_viewers.filter_settings.until_date'), for: 'geo_viewer[filter_settings][until_date]' })
+      %td= check_box_tag 'geo_viewer[filter_settings][until_date_available]', 1, record.filter_settings[:until_date_available]
+
     - if defined?(Permit)
       %thead.content_specific_setting.permit
         %th= Permit.human_name
         %th= t 'geo_viewers.available_in_frontend'
       %tbody.content_specific_setting.permit
         %tr
-          %td= wrap_with_label(select_tag('geo_viewer[filter_settings][permit_product_type]', options_for_select(Permit::PRODUCT_TYPES.map { |p| [p, Permit::PRODUCT_TYPES.index(p)] }, (record.filter_settings[:permit_product_type] || []).map { |p| p.to_i }), :multiple => true),
-                { :text => I18n.t('permits.product_type'), :for => 'geo_viewer[filter_settings][permit_product_type]' })
-          %td= check_box_tag "geo_viewer[filter_settings][permit_product_type_available]", 1,  record.filter_settings[:permit_product_type_available]
+          %td= wrap_with_label(select_tag('geo_viewer[filter_settings][permit_product_type]', options_for_select(Permit::PRODUCT_TYPES.map { |p| [p, Permit::PRODUCT_TYPES.index(p)] }, (record.filter_settings[:permit_product_type] || []).map(&:to_i)), multiple: true),
+                { text: I18n.t('permits.product_type'), for: 'geo_viewer[filter_settings][permit_product_type]' })
+          %td= check_box_tag 'geo_viewer[filter_settings][permit_product_type_available]', 1, record.filter_settings[:permit_product_type_available]
         %tr
-          %td= wrap_with_label(select_tag('geo_viewer[filter_settings][permit_phase]', options_for_select(Permit::PHASES.map { |p| [p, Permit::PHASES.index(p)] }, (record.filter_settings[:permit_phase] || []).map { |p| p.to_i }), :multiple => true),
-                { :text => I18n.t('permits.phase'), :for => 'geo_viewer[filter_settings][permit_phase]' })
-          %td= check_box_tag "geo_viewer[filter_settings][permit_phase_available]", 1,  record.filter_settings[:permit_phase_available]
+          %td= wrap_with_label(select_tag('geo_viewer[filter_settings][permit_phase]', options_for_select(Permit::PHASES.map { |p| [p, Permit::PHASES.index(p)] }, (record.filter_settings[:permit_phase] || []).map(&:to_i)), multiple: true),
+                { text: I18n.t('permits.phase'), for: 'geo_viewer[filter_settings][permit_phase]' })
+          %td= check_box_tag 'geo_viewer[filter_settings][permit_phase_available]', 1, record.filter_settings[:permit_phase_available]
 
     - if defined?(Legislation)
       %thead.content_specific_setting.legislation
@@ -80,30 +81,30 @@
         %th= t 'geo_viewers.available_in_frontend'
       %tbody.content_specific_setting.legislation
         %tr
-          %td= wrap_with_label(select_tag('geo_viewer[filter_settings][legislation_subject]', options_for_select(Legislation.all(:select => 'distinct subject', :conditions => 'subject is not null').map { |l| [l.id, l.subject] }, record.filter_settings[:legislation_subject]), :multiple => true),
-                { :text => I18n.t('legislations.subject'), :for => 'geo_viewer[filter_settings][legislation_subject]' })
-          %td= check_box_tag "geo_viewer[filter_settings][legislation_subject_available]", 1,  record.filter_settings[:legislation_subject_available]
+          %td= wrap_with_label(select_tag('geo_viewer[filter_settings][legislation_subject]', options_for_select(Legislation.all(select: 'distinct subject', conditions: 'subject is not null').map { |l| [l.id, l.subject] }, record.filter_settings[:legislation_subject]), multiple: true),
+                { text: I18n.t('legislations.subject'), for: 'geo_viewer[filter_settings][legislation_subject]' })
+          %td= check_box_tag 'geo_viewer[filter_settings][legislation_subject_available]', 1, record.filter_settings[:legislation_subject_available]
 
     %thead
       %th= GeoViewer.human_attribute_name(:map_settings)
       %th= t 'geo_viewers.available_in_frontend'
     %tbody
       %tr
-        %td= wrap_with_label(text_field_tag('geo_viewer[map_settings][center]', record.map_settings[:center], :class => 'admin_form_text_field'),
-              { :text => I18n.t('geo_viewers.map_settings.center'), :for => 'geo_viewer[map_settings][center]' })
-        %td= check_box_tag '', true, {}, { :disabled => true }
+        %td= wrap_with_label(text_field_tag('geo_viewer[map_settings][center]', record.map_settings[:center], class: 'admin_form_text_field'),
+              { text: I18n.t('geo_viewers.map_settings.center'), for: 'geo_viewer[map_settings][center]' })
+        %td= check_box_tag '', true, {}, { disabled: true }
       %tr
-        %td= form.check_box :link_titles, :label => GeoViewer.human_attribute_name(:link_titles)
+        %td= form.check_box :link_titles, label: GeoViewer.human_attribute_name(:link_titles)
         %td &nbsp;
       %tr
-        %td= form.check_box :inherit_images, :label => GeoViewer.human_attribute_name(:inherit_images)
+        %td= form.check_box :inherit_images, label: GeoViewer.human_attribute_name(:inherit_images)
         %td &nbsp;
       %tr
-        %td= form.check_box :inherit_pins, :label => GeoViewer.human_attribute_name(:inherit_pins)
+        %td= form.check_box :inherit_pins, label: GeoViewer.human_attribute_name(:inherit_pins)
         %td &nbsp;
 
-= observe_field('geo_viewer_filter_settings_search_scope', :function => 'toggle_content_specific_settings($F(\'geo_viewer_filter_settings_search_scope\'))') if @geo_viewer.new_record? || !@geo_viewer.combined_viewer?
-= observe_field('geo_viewer_combined_viewer', :function => 'toggle_combined_viewer_settings()') if @geo_viewer.new_record?
+= observe_field('geo_viewer_filter_settings_search_scope', function: 'toggle_content_specific_settings($F(\'geo_viewer_filter_settings_search_scope\'))') if @geo_viewer.new_record? || !@geo_viewer.combined_viewer?
+= observe_field('geo_viewer_combined_viewer', function: 'toggle_combined_viewer_settings()') if @geo_viewer.new_record?
 
 :javascript
   toggle_content_specific_settings('#{record.filter_settings[:search_scope]}')

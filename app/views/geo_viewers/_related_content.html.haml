@@ -4,15 +4,15 @@
   - unless action_name == 'screenreader'
     %ul
       %li.toggable
-        = toggable_section_link('map_locations', t('geo_viewers.locations'), :element_type => :h3)
-        #map_locations.toggable_section
+        = toggable_section_link('map_locations', t('geo_viewers.locations'), element_type: :h3)
+        .toggable_section#map_locations
           .content-section
             %p= t 'geo_viewers.locations_description'
 
             %ul.nodes
               - @nodes.each do |node|
-                %li= link_to_node node.content.title, node, {}, :class => 'marker-link', :id => "marker-#{node.id}", data: { lat_lng: [node.lat, node.lng] }
+                %li= link_to_node node.content.title, node, {}, class: 'marker-link', id: "marker-#{node.id}", data: { lat_lng: [node.lat, node.lng] }
 
       %li.toggable
-        = toggable_section_link('map_filters', t('geo_viewers.filters'), :element_type => :h3)
-        #map_filters.toggable_section= render 'filters'
+        = toggable_section_link('map_filters', t('geo_viewers.filters'), element_type: :h3)
+        .toggable_section#map_filters= render 'filters'

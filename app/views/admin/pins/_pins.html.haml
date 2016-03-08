@@ -1,10 +1,10 @@
 - if (pins = Pin.all).any?
   %table
     - pins.each do |pin|
-      %tr{ :id => "pin_#{pin.id}" }
+      %tr{ id: "pin_#{pin.id}" }
         %td.pin-image= image_tag pin.file.url
         %td.title= pin.title
-        %td= link_to_remote image_tag('icons/delete.png'), :url => admin_pin_path(pin), :method => :delete
+        %td= link_to_remote image_tag('icons/delete.png'), url: admin_pin_path(pin), method: :delete
 
 - else
   %p= t 'pins.no_pins_found'

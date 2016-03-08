@@ -5,7 +5,7 @@
       - unless @geo_viewer.has_own_content_representation?
         %h2= t 'geo_viewers.filters'
 
-      = form_tag content_node_path(@geo_viewer.node), :method => :get, :class => 'clearfix', :id => 'geo_viewer_filter_form' do
+      = form_tag content_node_path(@geo_viewer.node), method: :get, class: 'clearfix', id: 'geo_viewer_filter_form' do
 
         - if !@geo_viewer.combined_viewer?
           - # Filter Searchscope
@@ -17,22 +17,22 @@
           .filter.layers.clearfix
             = label_tag 'layers', t('geo_viewers.layers') + ':'
             .check_boxes
-              - @geo_viewer.geo_viewer_placeables.toggable.scoped(:include => :geo_viewer).each do |placeable|
+              - @geo_viewer.geo_viewer_placeables.toggable.scoped(include: :geo_viewer).each do |placeable|
                 .check_box
-                  = check_box_tag 'layers[]', placeable.id, @filters[:layers].present? ? @filters[:layers].to_a.include?(placeable.id.to_s) : @geo_viewer.toggled_placeable_ids.include?(placeable.id), :id => "layer_#{placeable.id}"
+                  = check_box_tag 'layers[]', placeable.id, @filters[:layers].present? ? @filters[:layers].to_a.include?(placeable.id.to_s) : @geo_viewer.toggled_placeable_ids.include?(placeable.id), id: "layer_#{placeable.id}"
                   = label_tag "layer_#{placeable.id}", placeable.title
 
         - # Filter From date
         - if @geo_viewer.filter_settings[:from_date_available]
           .filter
             = label_tag      'from_date', t('geo_viewers.filter_settings.from_date') + ':'
-            = text_field_tag 'from_date', @filters[:from_date], :class => 'datepicker'
+            = text_field_tag 'from_date', @filters[:from_date], class: 'datepicker'
             (dd-mm-jjjj)
         - # Filter Until date
         - if @geo_viewer.filter_settings[:until_date_available]
           .filter
             = label_tag      'until_date', t('geo_viewers.filter_settings.until_date') + ':'
-            = text_field_tag 'until_date', @filters[:until_date], :class => 'datepicker'
+            = text_field_tag 'until_date', @filters[:until_date], class: 'datepicker'
             (dd-mm-jjjj)
 
         - if defined?(DevcmsGov)
@@ -40,28 +40,28 @@
           - if @geo_viewer.filter_settings[:permit_product_type_available] && @geo_viewer.filter_settings[:search_scope] == 'content_type_permit'
             .filter
               = label_tag  'permit_product_type', t('permits.product_type') + ':'
-              = select_tag('permit_product_type', options_for_select(([[t('geo_viewers.all'), '']] + @geo_viewer.filter_settings[:permit_product_type].map { |p| [Permit::PRODUCT_TYPES[p.to_i],p] }), params[:permit_product_type]))
+              = select_tag('permit_product_type', options_for_select(([[t('geo_viewers.all'), '']] + @geo_viewer.filter_settings[:permit_product_type].map { |p| [Permit::PRODUCT_TYPES[p.to_i], p] }), params[:permit_product_type]))
 
           - # Filter PermitPhase
           - if @geo_viewer.filter_settings[:permit_phase_available] && @geo_viewer.filter_settings[:search_scope] == 'content_type_permit'
             .filter
               = label_tag  'permit_phase', t('permits.phase') + ':'
-              = select_tag('permit_phase', options_for_select(([[t('geo_viewers.all'), '']] + @geo_viewer.filter_settings[:permit_phase].map { |p| [Permit::PHASES[p.to_i],p] }), params[:permit_phase]))
+              = select_tag('permit_phase', options_for_select(([[t('geo_viewers.all'), '']] + @geo_viewer.filter_settings[:permit_phase].map { |p| [Permit::PHASES[p.to_i], p] }), params[:permit_phase]))
           - # Filter LegislationSubject
           - if @geo_viewer.filter_settings[:legislation_subject_available] && @geo_viewer.filter_settings[:search_scope] == 'content_type_legislation'
             .filter
               = label_tag  'legislation_subject_available', t('legislations.subject') + ':'
-              = select_tag('legislation_subject_available', options_for_select([[t('geo_viewers.all'), '']] + Legislation.all(:select => 'DISTINCT subject', :conditions => 'subject IS NOT null').map { |l| l.subject }, @geo_viewer.filter_settings[:legislation_subject]))
+              = select_tag('legislation_subject_available', options_for_select([[t('geo_viewers.all'), '']] + Legislation.all(select: 'DISTINCT subject', conditions: 'subject IS NOT null').map(&:subject), @geo_viewer.filter_settings[:legislation_subject]))
 
         - # Submit tag
         %div
-          = submit_tag t('geo_viewers.filter'), :class => 'submit search'
+          = submit_tag t('geo_viewers.filter'), class: 'submit search'
 
   .filters
-    = form_tag content_node_path(@geo_viewer.node), :method => :get, :class => 'clearfix', :id => 'geo_viewer_location_form' do
+    = form_tag content_node_path(@geo_viewer.node), method: :get, class: 'clearfix', id: 'geo_viewer_location_form' do
       - # Filter Map Location
       .filter.last
         = label_tag      'location', t('geo_viewers.map_settings.location')
         = text_field_tag 'location', params[:location]
       %div
-        = submit_tag t('geo_viewers.go_to_location'), :class => 'submit location'
+        = submit_tag t('geo_viewers.go_to_location'), class: 'submit location'

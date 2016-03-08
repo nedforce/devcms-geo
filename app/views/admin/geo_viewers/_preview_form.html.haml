@@ -13,8 +13,8 @@
       = placeable_fields.hidden_field :is_toggled
       = placeable_fields.hidden_field :is_toggable
 
-- form.object.filter_settings.each do |k,v|
+- form.object.filter_settings.each do |k, v|
   = hidden_field_tag "geo_viewer[filter_settings][#{k}]", v
 
-- form.object.map_settings.each do |k,v|
+- form.object.map_settings.each do |k, v|
   = hidden_field_tag "geo_viewer[map_settings][#{k}]", v

@@ -5,7 +5,7 @@
     - if @geo_viewer.description.present?
       .htmlField= w @geo_viewer.description
 
-  %p= t('geo_viewers.screen_reader_text', :link => link_to_node(t('geo_viewers.screen_reader_link'), @geo_viewer, action: :screenreader)).html_safe
+  %p= t('geo_viewers.screen_reader_text', link: link_to_node(t('geo_viewers.screen_reader_link'), @geo_viewer, action: :screenreader)).html_safe
 
   = render 'filters' unless @geo_viewer.has_own_content_representation?
   = render 'map'

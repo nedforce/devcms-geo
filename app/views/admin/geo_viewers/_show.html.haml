@@ -2,13 +2,13 @@
   %h2= h record.title
 
   .content
-    = link_to_content_node 'Volledig scherm', record, :action => 'fullscreen'
+    = link_to_content_node 'Volledig scherm', record, action: 'fullscreen'
     .htmlField
       = process_video_tags(record.description)
 
     - [:filter_settings, :map_settings].each do |attr|
       %h3= GeoViewer.human_attribute_name(attr)
-      - record.send(attr).each do |k,v|
+      - record.send(attr).each do |k, v|
         - unless k.to_s.end_with?('available')
           - text = v.respond_to?(:to_sentence) ? v.to_sentence : v.to_s
-          = wrap_with_label(text, :text => GeoViewer.human_attribute_name(k))
+          = wrap_with_label(text, text: GeoViewer.human_attribute_name(k))
