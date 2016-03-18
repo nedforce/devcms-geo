@@ -2,7 +2,7 @@ class AddSubContentTypeToNodes < ActiveRecord::Migration
   
   class Node < ActiveRecord::Base; end
   
-  def self.up
+  def up
     add_column :nodes, :sub_content_type, :string
     
     add_index :nodes, :sub_content_type
@@ -24,7 +24,7 @@ class AddSubContentTypeToNodes < ActiveRecord::Migration
     change_column_null :nodes, :sub_content_type, false
   end
 
-  def self.down
+  def down
     remove_column :nodes, :sub_content_type
   end
 end

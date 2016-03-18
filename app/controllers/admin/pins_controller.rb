@@ -7,7 +7,7 @@ class Admin::PinsController < Admin::AdminController
   end
 
   def create
-    @pin = Pin.new(params[:pin])
+    @pin = Pin.new(permitted_attributes)
 
     respond_to do |format|
       format.js do
@@ -37,4 +37,11 @@ class Admin::PinsController < Admin::AdminController
       end
     end
   end
+
+  protected
+
+  def permitted_attributes
+    params.fetch(:pin, {}).permit!
+  end
+
 end

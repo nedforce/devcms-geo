@@ -32,7 +32,7 @@ class Admin::GeoViewersController < Admin::AdminController
 
   # * GET /admin/geo_viewers/new
   def new
-    @geo_viewer = GeoViewer.new(params[:geo_viewer])
+    @geo_viewer = GeoViewer.new(permitted_attributes)
     @geo_viewer.filter_settings = @geo_viewer.filter_settings.class == Hash ? @geo_viewer.filter_settings : {}
     @geo_viewer.filter_settings[:permit_product_type] ||= []
     @geo_viewer.filter_settings[:permit_phase] ||= []
@@ -45,7 +45,7 @@ class Admin::GeoViewersController < Admin::AdminController
 
   # * GET /admin/geo_viewers/:id/edit
   def edit
-    @geo_viewer.attributes = params[:geo_viewer]
+    @geo_viewer.attributes = permitted_attributes
     find_available_geo_viewer_placeables if @geo_viewer.combined_viewer?
 
     respond_to do |format|
@@ -56,7 +56,7 @@ class Admin::GeoViewersController < Admin::AdminController
   # * POST /admin/geo_viewers
   # * POST /admin/geo_viewers.xml
   def create
-    @geo_viewer        = GeoViewer.new(params[:geo_viewer])
+    @geo_viewer        = GeoViewer.new(permitted_attributes)
     @geo_viewer.parent = @parent_node
 
     respond_to do |format|
@@ -77,7 +77,7 @@ class Admin::GeoViewersController < Admin::AdminController
   # * PUT /admin/geo_viewers/:id
   # * PUT /admin/geo_viewers/:id.xml
   def update
-    @geo_viewer.attributes = params[:geo_viewer]
+    @geo_viewer.attributes = permitted_attributes
 
     respond_to do |format|
       if @commit_type == 'preview' && @geo_viewer.valid?
@@ -98,6 +98,10 @@ class Admin::GeoViewersController < Admin::AdminController
   end
 
   protected
+
+  def permitted_attributes
+    params.fetch(:geo_viewer, {}).permit!
+  end
 
   # Finds the +GeoViewer+ object corresponding to the passed in +id+ parameter.
   def find_geo_viewer

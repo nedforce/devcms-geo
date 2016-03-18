@@ -19,17 +19,17 @@ class Admin::PinsControllerTest < ActionController::TestCase
   test 'should create pin' do
     login_as :admin
 
-    post :create, pin: { title: 'Pin 2', file: fixture_file_upload('files/pin.png', 'image/png', true) }, format: 'js'
+    xhr :post, :create, pin: { title: 'Pin 2', file: fixture_file_upload('files/pin.png', 'image/png', true) }, format: :js
     assert_response :success
 
-    get :index
-    assert @response.body.include?('Pin 2')
+    xhr :get, :index
+    assert response.body.include?('Pin 2')
   end
 
   test 'should not create invalid pin' do
     login_as :admin
 
-    post :create, pin: { file: fixture_file_upload('files/pin.png', 'image/png', true) }, format: 'js'
+    xhr :post, :create, pin: { file: fixture_file_upload('files/pin.png', 'image/png', true) }, format: :js
     assert assigns(:pin)
     assert !assigns(:pin).valid?
   end
@@ -37,7 +37,7 @@ class Admin::PinsControllerTest < ActionController::TestCase
   test 'should destroy pin' do
     login_as :admin
 
-    delete :destroy, id: @pin.id, format: 'js'
+    xhr :delete, :destroy, id: @pin.id, format: :js
     assert_response :success
 
     assert_nil Pin.find_by_id(@pin.id)

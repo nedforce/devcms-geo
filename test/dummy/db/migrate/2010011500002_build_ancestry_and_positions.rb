@@ -1,7 +1,7 @@
 class BuildAncestryAndPositions < ActiveRecord::Migration
 
 
-  def self.up
+  def up
     puts "Building ancestry, this will take a while"
     Node.build_ancestry_from_parent_ids!
     puts "Checking..."
@@ -10,7 +10,7 @@ class BuildAncestryAndPositions < ActiveRecord::Migration
     Node.build_list_by_order if Node.respond_to?(:build_list_by_order)
   end
 
-  def self.down
+  def down
     
   end
 end

@@ -1,5 +1,5 @@
 class CreateGeoViewers < ActiveRecord::Migration
-  def self.up
+  def up
     create_table :geo_viewers do |t|
       t.string :title, :null => false
       t.text   :description
@@ -9,7 +9,7 @@ class CreateGeoViewers < ActiveRecord::Migration
     end
   end
 
-  def self.down
+  def down
     drop_table :geo_viewers
   end
 end

@@ -5,14 +5,14 @@ class RemoveCombinedMeetingsJoinTable < ActiveRecord::Migration
     belongs_to :meeting
   end
   
-  def self.up
+  def up
     CombinedMeetingsMeeting.all.each do |cmm|
       cmm.meeting.node.update_attributes :parent => cmm.combined_meeting.node
     end
     drop_table :combined_meetings_meetings
   end
 
-  def self.down
+  def down
     create_table :combined_meetings_meetings do |t|
       t.integer :combined_meeting_id, :null => false, :references => :events
       t.integer :meeting_id, :null => false, :references => :events

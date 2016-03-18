@@ -13,15 +13,9 @@ module NodeExtensions::GeoLocation
     validates_presence_of :lng, :lat, if: :location_present_and_valid?
     validate :valid_location
 
-    scope :geo_coded, { conditions: 'nodes.lat IS NOT NULL AND nodes.lng IS NOT NULL' }
-
-    scope :published_after, lambda { |date| {
-      conditions: ['publication_start_date >= DATE(:date)', { date: date }] }
-    }
-
-    scope :published_before, lambda { |date| {
-      conditions: ['publication_start_date <= DATE(:date)', { date: date }] }
-    }
+    scope :geo_coded, ->{ where('nodes.lat IS NOT NULL AND nodes.lng IS NOT NULL') }
+    scope :published_after, ->(date){ where('publication_start_date >= DATE(:date)', date: date) }
+    scope :published_before, ->(date){ where('publication_start_date <= DATE(:date)', date: date) }
 
     attr_accessor :location_coordinates, :defer_geocoding
   end
@@ -44,7 +38,7 @@ module NodeExtensions::GeoLocation
   end
 
   def own_or_inherited_pin
-    @own_or_inherited_pin ||= pin.present? ? pin : ancestors.all(select: :pin_id, include: :pin, order: ['nodes.ancestry_depth desc'], conditions: 'nodes.pin_id is not null').first.try(:pin)
+    @own_or_inherited_pin ||= pin.present? ? pin : ancestors.includes(:pin).where('nodes.pin_id is not null').select(:pin_id).order('nodes.ancestry_depth desc').first.try(:pin)
   end
 
   def location_present?

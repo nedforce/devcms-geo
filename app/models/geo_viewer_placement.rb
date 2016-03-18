@@ -13,12 +13,13 @@ class GeoViewerPlacement < ActiveRecord::Base
   belongs_to :combined_geo_viewer, class_name: 'GeoViewer'
   belongs_to :geo_viewer
 
-  scope :toggled,  conditions: { is_toggled:  true }
-  scope :toggable, conditions: { is_toggable: true }
+  scope :toggled,  ->{ where(is_toggled:  true) }
+  scope :toggable, ->{ where(is_toggable: true) }
 
   delegate :title, to: :geo_viewer
 
   def _destroy
     !new_record?
   end
+
 end

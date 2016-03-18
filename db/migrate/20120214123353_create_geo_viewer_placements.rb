@@ -1,5 +1,5 @@
 class CreateGeoViewerPlacements < ActiveRecord::Migration
-  def self.up
+  def up
     create_table :geo_viewer_placements do |t|
       t.integer :combined_geo_viewer_id, :references => :geo_viewers
       t.integer :geo_viewer_id
@@ -12,7 +12,7 @@ class CreateGeoViewerPlacements < ActiveRecord::Migration
     add_index :geo_viewer_placements, :geo_viewer_id
   end
 
-  def self.down
+  def down
     drop_table :geo_viewer_placements
   end
 end

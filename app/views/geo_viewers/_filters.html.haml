@@ -51,7 +51,7 @@
           - if @geo_viewer.filter_settings[:legislation_subject_available] && @geo_viewer.filter_settings[:search_scope] == 'content_type_legislation'
             .filter
               = label_tag  'legislation_subject_available', t('legislations.subject') + ':'
-              = select_tag('legislation_subject_available', options_for_select([[t('geo_viewers.all'), '']] + Legislation.all(select: 'DISTINCT subject', conditions: 'subject IS NOT null').map(&:subject), @geo_viewer.filter_settings[:legislation_subject]))
+              = select_tag('legislation_subject_available', options_for_select([[t('geo_viewers.all'), '']] + Legislation.where('subject IS NOT null').select('DISTINCT subject').map(&:subject), @geo_viewer.filter_settings[:legislation_subject]))
 
         - # Submit tag
         %div

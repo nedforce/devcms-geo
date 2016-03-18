@@ -81,7 +81,7 @@
         %th= t 'geo_viewers.available_in_frontend'
       %tbody.content_specific_setting.legislation
         %tr
-          %td= wrap_with_label(select_tag('geo_viewer[filter_settings][legislation_subject]', options_for_select(Legislation.all(select: 'distinct subject', conditions: 'subject is not null').map { |l| [l.id, l.subject] }, record.filter_settings[:legislation_subject]), multiple: true),
+          %td= wrap_with_label(select_tag('geo_viewer[filter_settings][legislation_subject]', options_for_select(Legislation.where('subject is not null').select('distinct subject').map { |l| [l.id, l.subject] }, record.filter_settings[:legislation_subject]), multiple: true),
                 { text: I18n.t('legislations.subject'), for: 'geo_viewer[filter_settings][legislation_subject]' })
           %td= check_box_tag 'geo_viewer[filter_settings][legislation_subject_available]', 1, record.filter_settings[:legislation_subject_available]
 

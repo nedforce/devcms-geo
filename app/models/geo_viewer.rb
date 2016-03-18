@@ -40,8 +40,8 @@ class GeoViewer < ActiveRecord::Base
   has_many :geo_viewer_placements, foreign_key: :geo_viewer_id, dependent: :destroy
   has_many :combined_geo_viewers, through: :geo_viewer_placements
 
-  scope :combined,         conditions: { combined_viewer: true }
-  scope :without_combined, conditions: ['combined_viewer is null or combined_viewer = ?', false]
+  scope :combined, ->{ where(combined_viewer: true) }
+  scope :without_combined, ->{ where('combined_viewer is null or combined_viewer = ?', false) }
 
   accepts_nested_attributes_for :geo_viewer_placeables, allow_destroy: true
 
@@ -67,9 +67,9 @@ class GeoViewer < ActiveRecord::Base
   end
 
   def image_for(node)
-    scope = Image.accessible.scoped(include: :node, conditions: { is_for_header: [nil, false] }, order: :position)
-    image = scope.first(conditions: { 'nodes.ancestry' => node.child_ancestry })
-    image = scope.first(conditions: { 'nodes.ancestry' => node.parent.child_ancestry }) if inherit_images? && !image && node.parent.present?
+    scope = Image.accessible.includes(:node).references(:nodes).where(is_for_header: [nil, false]).order(:position)
+    image = scope.where('nodes.ancestry' => node.child_ancestry).first
+    image = scope.where('nodes.ancestry' => node.parent.child_ancestry).first if inherit_images? && !image && node.parent.present?
 
     image
   end
@@ -100,7 +100,7 @@ class GeoViewer < ActiveRecord::Base
 
     filtered_node_scope = if combined_viewer?
       conditions = placeable_conditions({ selection: filters[:layers], toggled_only_for_empty_selection: true }, user_filters) || { id: -1 }
-      nodes.scoped(conditions: conditions)
+      nodes.where(conditions)
     else
       if filters[:search_scope] =~ /node_(\d+)/
         (node.id == $1.to_i ? parent : Node.find($1)).self_and_descendants
@@ -130,17 +130,19 @@ class GeoViewer < ActiveRecord::Base
     if !(combined_viewer? || for_combined_viewer)
       if filters[:search_scope] == 'content_type_permit'
         # Permit filters
-        filtered_node_scope = filtered_node_scope.scoped(joins: 'LEFT JOIN permits on permits.id = nodes.content_id AND nodes.content_type = \'Permit\'')
-        filtered_node_scope = filtered_node_scope.scoped(conditions: { permits: { phase_id:        filters[:permit_phase]        } }) if filters[:permit_phase].present?
-        filtered_node_scope = filtered_node_scope.scoped(conditions: { permits: { product_type_id: filters[:permit_product_type] } }) if filters[:permit_product_type].present?
+        filtered_node_scope = filtered_node_scope.joins('LEFT JOIN permits on permits.id = nodes.content_id AND nodes.content_type = \'Permit\'')
+        filtered_node_scope = filtered_node_scope.where(permits: { phase_id:        filters[:permit_phase]        }) if filters[:permit_phase].present?
+        filtered_node_scope = filtered_node_scope.where(permits: { product_type_id: filters[:permit_product_type] }) if filters[:permit_product_type].present?
       elsif filters[:search_scope] == 'content_type_legislation'
         # Permit filters
-        filtered_node_scope = filtered_node_scope.scoped(joins: 'LEFT JOIN legislations on legislations.id = nodes.content_id AND nodes.content_type = \'Legislation\'')
-        filtered_node_scope = filtered_node_scope.scoped(conditions: { legislations: { subject: filters[:legislation_subject] } }) if filters[:legislation_subject].present?
+        filtered_node_scope = filtered_node_scope.joins('LEFT JOIN legislations on legislations.id = nodes.content_id AND nodes.content_type = \'Legislation\'')
+        filtered_node_scope = filtered_node_scope.where(legislations: { subject: filters[:legislation_subject] }) if filters[:legislation_subject].present?
       end
     end
 
-    filtered_node_scope.scoped(options)
+    filtered_node_scope = filtered_node_scope.limit(options[:limit]) if options[:limit]
+
+    filtered_node_scope
   end
 
   def filtered_nodes(filters = {}, options = {})
@@ -148,7 +150,7 @@ class GeoViewer < ActiveRecord::Base
   end
 
   def nodes
-    Node.scoped({})
+    Node.all
   end
 
   # Combined viewer methods
@@ -158,7 +160,7 @@ class GeoViewer < ActiveRecord::Base
 
   def placeable_conditions(options = {}, filters = {})
     placeables = if options[:selection].present? && (selection = (options[:selection].to_a.map(&:to_i) & geo_viewer_placeables.toggable.map(&:id))).present?
-      geo_viewer_placeables.where(['geo_viewer_placements.id IN (?) or (geo_viewer_placements.is_toggled = ? and (geo_viewer_placements.is_toggable is null or geo_viewer_placements.is_toggable = ?))', selection, true, false])
+      geo_viewer_placeables.where('geo_viewer_placements.id IN (?) or (geo_viewer_placements.is_toggled = ? and (geo_viewer_placements.is_toggable is null or geo_viewer_placements.is_toggable = ?))', selection, true, false)
     elsif options[:toggled_only_for_empty_selection]
       geo_viewer_placeables.toggled
     else
@@ -167,7 +169,7 @@ class GeoViewer < ActiveRecord::Base
 
     conditions = []
     placeables.includes(:geo_viewer).each do |placeable|
-      where_clauses = placeable.geo_viewer.filtered_nodes_scope(filters, {}, true).where_clauses
+      where_clauses = placeable.geo_viewer.filtered_nodes_scope(filters, {}, true).where_values.map{|value| value.respond_to?(:to_sql) ? value.to_sql : value }
       conditions << "(#{where_clauses.join(' AND ')})" if where_clauses.present?
     end
 

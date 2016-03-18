@@ -23,7 +23,7 @@ class GeoViewerTest < ActiveSupport::TestCase
 
   test 'should return node scope' do
     geo_viewer = create_geo_viewer
-    assert_equal Node.scoped({}), geo_viewer.nodes
+    assert_equal Node.all, geo_viewer.nodes
   end
 
   test 'should return placeable conditions' do
@@ -47,7 +47,7 @@ class GeoViewerTest < ActiveSupport::TestCase
     geo_viewer = create_geo_viewer(combined_viewer: true, geo_viewer_ids: [placeable_viewer.id, placeable_viewer2.id])
 
     assert geo_viewer.filtered_nodes_scope.to_sql.include?(from_date.to_formatted_s(:db))
-    assert !geo_viewer.filtered_nodes_scope(from_date: from_date + 2.week).to_sql.include?(from_date.to_formatted_s(:db))
+    assert !geo_viewer.filtered_nodes_scope(from_date: from_date + 2.weeks).to_sql.include?(from_date.to_formatted_s(:db))
   end
 
   protected

@@ -1,5 +1,5 @@
 class AddDeletedAtToGeoContentNodes < ActiveRecord::Migration
-  def self.up
+  def up
     conn = ActiveRecord::Base.connection
 
     unless conn.columns(:geo_viewers).any? { |c| c.name == 'deleted_at' }
@@ -11,6 +11,6 @@ class AddDeletedAtToGeoContentNodes < ActiveRecord::Migration
     end
   end
 
-  def self.down
+  def down
   end
 end

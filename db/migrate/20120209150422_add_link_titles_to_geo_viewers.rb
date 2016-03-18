@@ -1,9 +1,9 @@
 class AddLinkTitlesToGeoViewers < ActiveRecord::Migration
-  def self.up
+  def up
     add_column :geo_viewers, :link_titles, :boolean
   end
 
-  def self.down
+  def down
     remove_column :geo_viewers, :link_titles
   end
 end

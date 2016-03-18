@@ -1,9 +1,9 @@
 class AddInheritPinsToGeoViewers < ActiveRecord::Migration
-  def self.up
+  def up
     add_column :geo_viewers, :inherit_pins, :boolean
   end
 
-  def self.down
+  def down
     remove_column :geo_viewers, :inherit_pins
   end
 end

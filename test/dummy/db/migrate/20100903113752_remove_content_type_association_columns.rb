@@ -1,5 +1,5 @@
 class RemoveContentTypeAssociationColumns < ActiveRecord::Migration
-  def self.up
+  def up
     remove_column :news_items, :news_archive_id
     remove_column :newsletter_editions, :newsletter_archive_id
     remove_column :weblogs, :weblog_archive_id  
@@ -11,7 +11,7 @@ class RemoveContentTypeAssociationColumns < ActiveRecord::Migration
   
   end
 
-  def self.down
+  def down
     add_column :agenda_items, :event_id, :integer, :references => :events
     add_index  :agenda_items, :event_id 
         

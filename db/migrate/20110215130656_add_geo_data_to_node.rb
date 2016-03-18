@@ -1,5 +1,5 @@
 class AddGeoDataToNode < ActiveRecord::Migration
-  def self.up
+  def up
     add_column :nodes, :lat, :float
     add_column :nodes, :lng, :float
     add_column :nodes, :location, :string, :length => 1024
@@ -17,7 +17,7 @@ class AddGeoDataToNode < ActiveRecord::Migration
     end
   end
 
-  def self.down
+  def down
     remove_column :nodes, :lat
     remove_column :nodes, :lng
     remove_column :nodes, :location
