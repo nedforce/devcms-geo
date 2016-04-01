@@ -8,7 +8,7 @@ module ApplicationHelper
     parameters << "search_scope=#{options[:search_scope]}" if options[:search_scope].present?
     parameters << "domein=#{current_site.content.domain}"  unless current_site.root?
     parameters = parameters.map { |param| ERB::Util.url_encode(param) }
-    "http://zoeken.deventer.nl/search.php?#{parameters.join('&')}"
+    "https://zoeken.deventer.nl/search.php?#{parameters.join('&')}"
   end
 
   def search_path(*args)
@@ -60,6 +60,6 @@ module ApplicationHelper
   end
 
   def report_button(alt = nil, &block)
-    concat(content_tag(:div, :class => 'article') { image_tag('icons/news_item.png', :class => 'icon', :alt => alt) + capture(&block) })
+    concat(content_tag(:div, class: 'article') { image_tag('icons/news_item.png', class: 'icon', alt: alt.to_s) + capture(&block) })
   end
 end
