@@ -43,5 +43,4 @@ class Admin::PinsController < Admin::AdminController
   def permitted_attributes
     params.fetch(:pin, {}).permit!
   end
-
 end

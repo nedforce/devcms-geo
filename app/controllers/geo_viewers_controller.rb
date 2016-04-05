@@ -3,12 +3,12 @@ require 'open-uri'
 # This +RESTful+ controller is used to orchestrate and control the flow of
 # the application relating to GeoViewer objects.
 class GeoViewersController < ApplicationController
-  before_filter :find_geo_viewer
+  before_action :find_geo_viewer
 
-  before_filter :set_filters,         except: :info_window
-  before_filter :set_location_filter, except: [:info_window, :screenreader]
-  before_filter :find_nodes,          except: :info_window
-  before_filter :find_bounds,         only: :map
+  before_action :set_filters,         except: :info_window
+  before_action :set_location_filter, except: [:info_window, :screenreader]
+  before_action :find_nodes,          except: :info_window
+  before_action :find_bounds,         only: :map
 
   # * GET /geo_viewers/:id
   def show

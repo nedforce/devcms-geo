@@ -3,17 +3,17 @@
 class Admin::GeoViewersController < Admin::AdminController
   # The +create+ action needs the parent +Node+ object to link the new
   # +GeoViewer+ content node to.
-  prepend_before_filter :find_parent_node, only: [:new, :create]
+  prepend_before_action :find_parent_node, only: [:new, :create]
 
   # The +show+, +edit+ and +update+ actions need a +GeoViewer+ object to act
   # upon.
-  before_filter :find_geo_viewer, only: [:show, :edit, :update, :previous]
+  before_action :find_geo_viewer, only: [:show, :edit, :update, :previous]
 
-  before_filter :set_commit_type, only: [:create, :update]
+  before_action :set_commit_type, only: [:create, :update]
 
-  before_filter :filter_parameters_for_viewer_type, only: :create
+  before_action :filter_parameters_for_viewer_type, only: :create
 
-  before_filter :set_search_scopes
+  before_action :set_search_scopes
 
   layout false
 
