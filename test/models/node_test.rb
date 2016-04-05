@@ -63,7 +63,7 @@ class NodeTest < ActiveSupport::TestCase
       @node.update_attributes location: 'Dit adres bestaat dus echt niet, 1235XX, De stad'
       assert_nil @node.lat
       assert_nil @node.lng
-      assert !@node.valid?
+      refute @node.valid?
     end
   end
 

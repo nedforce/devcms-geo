@@ -31,7 +31,7 @@ class Admin::PinsControllerTest < ActionController::TestCase
 
     xhr :post, :create, pin: { file: fixture_file_upload('files/pin.png', 'image/png', true) }, format: :js
     assert assigns(:pin)
-    assert !assigns(:pin).valid?
+    refute assigns(:pin).valid?
   end
 
   test 'should destroy pin' do

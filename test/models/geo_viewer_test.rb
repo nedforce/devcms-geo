@@ -47,7 +47,7 @@ class GeoViewerTest < ActiveSupport::TestCase
     geo_viewer = create_geo_viewer(combined_viewer: true, geo_viewer_ids: [placeable_viewer.id, placeable_viewer2.id])
 
     assert geo_viewer.filtered_nodes_scope.to_sql.include?(from_date.to_formatted_s(:db))
-    assert !geo_viewer.filtered_nodes_scope(from_date: from_date + 2.weeks).to_sql.include?(from_date.to_formatted_s(:db))
+    refute geo_viewer.filtered_nodes_scope(from_date: from_date + 2.weeks).to_sql.include?(from_date.to_formatted_s(:db))
   end
 
   protected

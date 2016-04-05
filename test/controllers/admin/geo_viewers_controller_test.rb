@@ -29,7 +29,7 @@ class Admin::GeoViewersControllerTest < ActionController::TestCase
     assert_difference('GeoViewer.count') do
       create_geo_viewer
       assert_response :success
-      assert !assigns(:geo_viewer).new_record?, assigns(:geo_viewer).errors.full_messages.join('; ')
+      refute assigns(:geo_viewer).new_record?, assigns(:geo_viewer).errors.full_messages.join('; ')
     end
   end
 
@@ -40,7 +40,7 @@ class Admin::GeoViewersControllerTest < ActionController::TestCase
       assert_difference('GeoViewer.count') do
         create_combined_geo_viewer
         assert_response :success
-        assert !assigns(:geo_viewer).new_record?, assigns(:geo_viewer).errors.full_messages.join('; ')
+        refute assigns(:geo_viewer).new_record?, assigns(:geo_viewer).errors.full_messages.join('; ')
       end
     end
   end

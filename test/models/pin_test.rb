@@ -7,7 +7,7 @@ class PinTest < ActiveSupport::TestCase
 
   test 'should create pin' do
     assert @pin.valid?
-    assert !@pin.new_record?
+    refute @pin.new_record?
   end
 
   test 'should return image geometry' do
