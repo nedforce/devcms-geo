@@ -1,18 +1,9 @@
 GIT
-  remote: git@git.nedforce.nl:data_checker.git
-  revision: e5f91813781dea72109047a393cfd403166f6c39
+  remote: git://github.com/nedforce/devcms-core.git
+  revision: 9d8471acc7867aafaa5783cb1ea7a2e6315f4d61
   branch: rails4
   specs:
-    data_checker (0.0.2)
-      nokogiri
-      rails (>= 4.0, < 5.0)
-
-GIT
-  remote: git@github.com:nedforce/devcms-core.git
-  revision: 6b14e73c05a4aafbebc85ee69d4871d8725aaf6a
-  branch: rails4
-  specs:
-    devcms_core (3.0.0)
+    devcms_core (3.0.3)
       actionpack-page_caching
       acts-as-taggable-on (~> 3.4.4)
       acts_as_list
@@ -50,7 +41,7 @@ GIT
       whenever (>= 0.4)
 
 GIT
-  remote: git@github.com:netactive/acts_as_ferret.git
+  remote: git://github.com/netactive/acts_as_ferret.git
   revision: cafc3b6942e14295ef98ab6491617d60a1fd6bc9
   branch: rails-4
   specs:
@@ -59,12 +50,21 @@ GIT
       rails (>= 3.0)
 
 GIT
-  remote: git@github.com:rails/prototype-rails.git
+  remote: git://github.com/rails/prototype-rails.git
   revision: 0fed929ff48c10c3b978edd3baa983a81f404dbf
   branch: 4.2
   specs:
     prototype-rails (4.0.0)
       rails (~> 4.0)
+
+GIT
+  remote: git@git.nedforce.nl:data_checker.git
+  revision: e5f91813781dea72109047a393cfd403166f6c39
+  branch: rails4
+  specs:
+    data_checker (0.0.2)
+      nokogiri
+      rails (>= 4.0, < 5.0)
 
 PATH
   remote: .
@@ -127,7 +127,7 @@ GEM
     arel (6.0.3)
     builder (3.2.2)
     byebug (8.2.2)
-    carrierwave (0.10.0)
+    carrierwave (0.11.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
       json (>= 1.7)
@@ -179,10 +179,12 @@ GEM
     libxml-ruby (2.7.0)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
-    mail (2.6.3)
-      mime-types (>= 1.16, < 3)
+    mail (2.6.4)
+      mime-types (>= 1.16, < 4)
     metaclass (0.0.4)
-    mime-types (2.99.1)
+    mime-types (3.0)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2016.0221)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     mocha (1.1.0)
@@ -226,7 +228,7 @@ GEM
       activesupport (= 4.2.6)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (11.1.1)
+    rake (11.1.2)
     rmagick (2.15.4)
     roo (1.10.3)
       nokogiri (>= 1.5.6)
@@ -240,7 +242,7 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
       nokogumbo (~> 1.4.1)
-    sass (3.4.21)
+    sass (3.4.22)
     sass-rails (5.0.4)
       railties (>= 4.0.0, < 5.0)
       sass (~> 3.1)
@@ -254,12 +256,12 @@ GEM
       activerecord (~> 4.2)
       its-it
       modware (~> 0.1)
-    schema_plus (2.0.0)
+    schema_plus (2.0.1)
       activerecord (~> 4.2)
       schema_auto_foreign_keys (~> 0.1)
       schema_monkey (~> 2.1)
       schema_plus_columns (~> 0.1)
-      schema_plus_core (~> 0.4)
+      schema_plus_core (~> 1.0)
       schema_plus_db_default (~> 0.1)
       schema_plus_default_expr (~> 0.1)
       schema_plus_enums (~> 0.1)
@@ -271,41 +273,42 @@ GEM
     schema_plus_columns (0.1.0)
       activerecord (~> 4.2)
       schema_plus_indexes (~> 0.1)
-    schema_plus_core (0.6.2)
+    schema_plus_core (1.0.0)
       activerecord (~> 4.2)
       schema_monkey (~> 2.1)
-    schema_plus_db_default (0.1.0)
+    schema_plus_db_default (0.1.1)
       activerecord (~> 4.2)
-      schema_plus_core (~> 0.2, >= 0.2.1)
-    schema_plus_default_expr (0.1.0)
+      schema_plus_core (~> 1.0)
+    schema_plus_default_expr (0.1.1)
       activerecord (~> 4.2)
-      schema_plus_core (~> 0.2, >= 0.2.1)
-    schema_plus_enums (0.1.1)
+      schema_plus_core (~> 1.0)
+    schema_plus_enums (0.1.2)
       activerecord (~> 4.2)
-      schema_plus_core (~> 0.2, >= 0.2.1)
-    schema_plus_foreign_keys (0.1.3)
+      schema_plus_core (~> 1.0)
+    schema_plus_foreign_keys (0.1.4)
       activerecord (~> 4.2)
-      schema_plus_core (~> 0.5)
+      schema_plus_core (~> 1.0)
       valuable
-    schema_plus_indexes (0.2.0)
+    schema_plus_indexes (0.2.1)
       activerecord (~> 4.2)
-      schema_plus_core (~> 0.1)
-    schema_plus_pg_indexes (0.1.9)
+      schema_plus_core (~> 1.0)
+    schema_plus_pg_indexes (0.1.10)
       activerecord (~> 4.2)
+      schema_plus_core (~> 1.0)
       schema_plus_indexes (~> 0.1, >= 0.1.3)
-    schema_plus_tables (0.1.0)
+    schema_plus_tables (0.1.1)
       activerecord (~> 4.2)
-      schema_plus_core (~> 0.2)
-    schema_plus_views (0.3.0)
+      schema_plus_core (~> 1.0)
+    schema_plus_views (0.3.1)
       activerecord (~> 4.2)
-      schema_plus_core (~> 0.1)
+      schema_plus_core (~> 1.0)
     secure_headers (2.5.2)
       user_agent_parser
     settler (2.0.1)
       activerecord (>= 3.1)
       activesupport (>= 3.1)
     simple-rss (1.3.1)
-    spreadsheet (1.1.1)
+    spreadsheet (1.1.2)
       ruby-ole (>= 1.0)
     sprockets (3.5.2)
       concurrent-ruby (~> 1.0)
@@ -322,9 +325,8 @@ GEM
     truncate_html (0.5.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uglifier (2.7.2)
-      execjs (>= 0.3.0)
-      json (>= 1.8.0)
+    uglifier (3.0.0)
+      execjs (>= 0.3.0, < 3)
     user_agent_parser (2.3.0)
     valuable (0.9.10)
     whenever (0.9.4)
