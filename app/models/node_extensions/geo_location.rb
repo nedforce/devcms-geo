@@ -17,7 +17,7 @@ module NodeExtensions::GeoLocation
     scope :published_after, ->(date){ where('publication_start_date >= DATE(:date)', date: date) }
     scope :published_before, ->(date){ where('publication_start_date <= DATE(:date)', date: date) }
 
-    attr_accessor :location_coordinates, :defer_geocoding
+    attr_accessor :location_coordinates, :defer_geocoding, :geocode
   end
 
   module ClassMethods
@@ -50,22 +50,18 @@ module NodeExtensions::GeoLocation
   # Geocode location into lat and lng.
   # Also set location field to full address for future reference.
   def geocode_if_location_changed
-    geocode! if (location_changed? && !(lat_changed? || lng_changed?)) || location_coordinates.present?
+    geocode! if (location_changed? && !(lat_changed? || lng_changed?)) || location_coordinates.present? || geocode.present?
   end
 
   def geocode!
-    if location.present?
-      if location.is_a?(Geokit::GeoLoc)
-        @geocode = location
-      else
-        @geocode = Node.try_geocode(location, bias: Node.geocoding_bias)
-      end
+    if location.present? || geocode.present?
+      self.geocode = Node.try_geocode(location, bias: Node.geocoding_bias) if geocode.blank? && location.present?
 
-      if @geocode && @geocode.success
-        self.lat = @geocode.lat
-        self.lng = @geocode.lng
-        self.location = @geocode.full_address
-        self.location_code = "#{@geocode.zip} #{@geocode.street_number}".gsub(/\s+/, '')
+      if geocode && geocode.success
+        self.lat = geocode.lat
+        self.lng = geocode.lng
+        self.location = geocode.full_address
+        self.location_code = "#{geocode.zip} #{geocode.street_number}".gsub(/\s+/, '')
       end
     elsif location_coordinates.present?
       ll = Geokit::LatLng.normalize(location_coordinates)
@@ -82,10 +78,10 @@ module NodeExtensions::GeoLocation
   end
 
   def location_invalid?
-    @geocode.present? && !@geocode.success
+    geocode.present? && !geocode.success
   end
 
   def location_present_and_valid?
-    location_present? && @geocode.present? && !location_invalid?
+    location_present? && geocode.present? && !location_invalid?
   end
 end
