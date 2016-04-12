@@ -67,7 +67,7 @@ class GeoViewer < ActiveRecord::Base
   end
 
   def image_for(node)
-    scope = Image.accessible.includes(:node).references(:nodes).where(is_for_header: [nil, false]).order(:position)
+    scope = Image.accessible.includes(:node).references(:nodes).where(is_for_header: [nil, false]).order('nodes.position')
     image = scope.where('nodes.ancestry' => node.child_ancestry).first
     image = scope.where('nodes.ancestry' => node.parent.child_ancestry).first if inherit_images? && !image && node.parent.present?
 
@@ -112,8 +112,8 @@ class GeoViewer < ActiveRecord::Base
     end
 
     if filters[:bounds].present?
-      sw = GeoKit::LatLng.new *filters[:bounds]['sw']
-      ne = GeoKit::LatLng.new *filters[:bounds]['ne']
+      sw = GeoKit::LatLng.new(*filters[:bounds]['sw'])
+      ne = GeoKit::LatLng.new(*filters[:bounds]['ne'])
       filtered_node_scope = filtered_node_scope.in_bounds [sw, ne]
     end
 
@@ -130,12 +130,12 @@ class GeoViewer < ActiveRecord::Base
     if !(combined_viewer? || for_combined_viewer)
       if filters[:search_scope] == 'content_type_permit'
         # Permit filters
-        filtered_node_scope = filtered_node_scope.joins('LEFT JOIN permits on permits.id = nodes.content_id AND nodes.content_type = \'Permit\'')
+        filtered_node_scope = filtered_node_scope.joins("LEFT JOIN permits on permits.id = nodes.content_id AND nodes.content_type = 'Permit'")
         filtered_node_scope = filtered_node_scope.where(permits: { phase_id:        filters[:permit_phase]        }) if filters[:permit_phase].present?
         filtered_node_scope = filtered_node_scope.where(permits: { product_type_id: filters[:permit_product_type] }) if filters[:permit_product_type].present?
       elsif filters[:search_scope] == 'content_type_legislation'
         # Permit filters
-        filtered_node_scope = filtered_node_scope.joins('LEFT JOIN legislations on legislations.id = nodes.content_id AND nodes.content_type = \'Legislation\'')
+        filtered_node_scope = filtered_node_scope.joins("LEFT JOIN legislations on legislations.id = nodes.content_id AND nodes.content_type = 'Legislation'")
         filtered_node_scope = filtered_node_scope.where(legislations: { subject: filters[:legislation_subject] }) if filters[:legislation_subject].present?
       end
     end
@@ -169,7 +169,7 @@ class GeoViewer < ActiveRecord::Base
 
     conditions = []
     placeables.includes(:geo_viewer).each do |placeable|
-      where_clauses = placeable.geo_viewer.filtered_nodes_scope(filters, {}, true).where_values.map{|value| value.respond_to?(:to_sql) ? value.to_sql : value }
+      where_clauses = placeable.geo_viewer.filtered_nodes_scope(filters, {}, true).where_values.map { |value| value.respond_to?(:to_sql) ? value.to_sql : value }
       conditions << "(#{where_clauses.join(' AND ')})" if where_clauses.present?
     end
 
