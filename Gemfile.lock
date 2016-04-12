@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/nedforce/devcms-core.git
-  revision: 9d8471acc7867aafaa5783cb1ea7a2e6315f4d61
+  revision: b5b2d06cb85610a8d4586455b786298c89d79210
   branch: rails4
   specs:
-    devcms_core (3.0.3)
+    devcms_core (3.0.7)
       actionpack-page_caching
       acts-as-taggable-on (~> 3.4.4)
       acts_as_list
@@ -69,7 +69,7 @@ GIT
 PATH
   remote: .
   specs:
-    devcms_geo (3.0.0)
+    devcms_geo (3.0.1)
       devcms_core (~> 3.0)
       geokit (~> 1.6.7)
       geokit-rails
@@ -126,7 +126,7 @@ GEM
       activerecord (>= 3.0.0)
     arel (6.0.3)
     builder (3.2.2)
-    byebug (8.2.2)
+    byebug (8.2.4)
     carrierwave (0.11.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
