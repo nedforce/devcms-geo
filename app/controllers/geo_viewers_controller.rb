@@ -32,14 +32,30 @@ class GeoViewersController < ApplicationController
 
         if @filters[:bounds]
           if @nodes.present?
-            @nodes.each do |node|
-              marker_id = "marker-#{node.id}"
-              markers[marker_id] = { title: node.content.title, lat: node.lat, lng: node.lng }
+            if @filters[:search_scope] == 'content_type_permits'
+              # Use permit addresses as markers, instead of nodes.
+              @nodes.each do |node|
+                node.content.addresses.geocoded.each do |address|
+                  marker_id = "marker-#{node.id}-#{address.id}"
+                  markers[marker_id] = { title: node.content.title, lat: address.lat, lng: address.lng }
 
-              if @geo_viewer.inherit_pins?
-                markers[marker_id][:pin_id] = node.own_or_inherited_pin.id if node.own_or_inherited_pin.present?
-              elsif node.pin.present?
-                markers[marker_id][:pin_id] = node.pin.id
+                  if @geo_viewer.inherit_pins?
+                    markers[marker_id][:pin_id] = node.own_or_inherited_pin.id if node.own_or_inherited_pin.present?
+                  elsif node.pin.present?
+                    markers[marker_id][:pin_id] = node.pin.id
+                  end
+                end
+              end
+            else
+              @nodes.each do |node|
+                marker_id = "marker-#{node.id}"
+                markers[marker_id] = { title: node.content.title, lat: node.lat, lng: node.lng }
+
+                if @geo_viewer.inherit_pins?
+                  markers[marker_id][:pin_id] = node.own_or_inherited_pin.id if node.own_or_inherited_pin.present?
+                elsif node.pin.present?
+                  markers[marker_id][:pin_id] = node.pin.id
+                end
               end
             end
           end
