@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/nedforce/devcms-core.git
-  revision: bedaad36a4827efd8acfcc79cf9c362a60ceb45b
+  revision: 6d1a122f13b34166efc56d1282022e54f6ed0c22
   branch: rails4
   specs:
-    devcms_core (3.0.16)
+    devcms_core (3.0.18)
       actionpack-page_caching
       acts-as-taggable-on (~> 3.4.4)
       acts_as_list
@@ -69,7 +69,7 @@ GIT
 PATH
   remote: .
   specs:
-    devcms_geo (3.0.2)
+    devcms_geo (3.0.3)
       devcms_core (~> 3.0)
       geokit (~> 1.6.7)
       geokit-rails
@@ -140,7 +140,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.10.0)
-    concurrent-ruby (1.0.1)
+    concurrent-ruby (1.0.2)
     crass (1.0.2)
     dsl_accessor (0.3.3)
     dynamic_attributes (1.2.0)
@@ -192,7 +192,7 @@ GEM
     modware (0.1.2)
       its-it
       key_struct (~> 0.4)
-    multi_json (1.11.3)
+    multi_json (1.12.0)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     nokogumbo (1.4.7)
