@@ -62,12 +62,20 @@ module NodeExtensions::GeoLocation
         # have the same accuracy. If this accuracy is the "best" accuracy, we
         # want the result with the longest address, because it is probably the
         # most accurate.
-        res = geocode.all.select { |g| g.accuracy == geocode.accuracy }.max { |g| g.full_address.size }
+        geocode_results = geocode.all.select { |g| g.accuracy == geocode.accuracy }
 
-        self.lat = res.lat
-        self.lng = res.lng
-        self.location = res.full_address
-        self.location_code = "#{res.zip} #{res.street_number}".gsub(/\s+/, '')
+        # Unfortunately geokit works in mysterious ways. We have to convert to a
+        # hash to ensure we get the right results. :(
+        if geocode_results.size > 1
+          res = geocode_results.map(&:hash).max_by { |gr| gr[:full_address].size }
+        else
+          res = geocode.hash
+        end
+
+        self.lat = res[:lat]
+        self.lng = res[:lng]
+        self.location = res[:full_address]
+        self.location_code = "#{res[:zip]} #{res[:street_number]}".gsub(/\s+/, '')
       end
     elsif location_coordinates.present?
       ll = Geokit::LatLng.normalize(location_coordinates)
