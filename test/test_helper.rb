@@ -45,19 +45,26 @@ class ActiveSupport::TestCase
 
   setup do
     Node.stubs(:try_geocode).returns(
-      stub(provider: 'google',
+      stub(street_address: nil,
+           sub_premise: nil,
+           street_number: nil,
+           street_name: nil,
            city: 'Deventer',
            state: 'Gelderland',
+           zip: '',
+           country_code: 'NL',
+           province: 'Gelderland',
+           success: true,
+           precision: 'city',
+           full_address: 'Deventer',
            lat: 52.25446,
            lng: 6.160247,
-           country: 'NL',
-           zip: '',
-           street: '',
-           street_number: '',
-           full_address: 'Deventer',
-           distance_to: 0,
-           success: true,
-           suggested_bounds: [52.25446, 6.160247])
+           provider: 'google3',
+           district: 'Deventer',
+           country: 'Netherlands',
+           accuracy: 4,
+           suggested_bounds: [52.25446, 6.160247]
+      )
     )
   end
 
