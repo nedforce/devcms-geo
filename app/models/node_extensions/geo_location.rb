@@ -13,15 +13,15 @@ module NodeExtensions::GeoLocation
     validates_presence_of :lng, :lat, if: :location_present_and_valid?
     validate :valid_location
 
-    scope :geo_coded, ->{ where('nodes.lat IS NOT NULL AND nodes.lng IS NOT NULL') }
-    scope :published_after, ->(date){ where('publication_start_date >= DATE(:date)', date: date) }
-    scope :published_before, ->(date){ where('publication_start_date <= DATE(:date)', date: date) }
+    scope :geo_coded,        -> { where('nodes.lat IS NOT NULL AND nodes.lng IS NOT NULL') }
+    scope :published_after,  ->(date) { where('publication_start_date >= DATE(:date)', date: date) }
+    scope :published_before, ->(date) { where('publication_start_date <= DATE(:date)', date: date) }
 
     attr_accessor :location_coordinates, :defer_geocoding, :geocode
   end
 
   module ClassMethods
-    # Get the geocoding bias from settings, or default to NL
+    # Get the geocoding bias from settings, or default to NL.
     def geocoding_bias
       if SETTLER_LOADED
         bias = Settler[:geocode_bias]
@@ -58,10 +58,16 @@ module NodeExtensions::GeoLocation
       self.geocode = Node.try_geocode(location, bias: Node.geocoding_bias) if geocode.blank? && location.present?
 
       if geocode && geocode.success
-        self.lat = geocode.lat
-        self.lng = geocode.lng
-        self.location = geocode.full_address
-        self.location_code = "#{geocode.zip} #{geocode.street_number}".gsub(/\s+/, '')
+        # The Google Geocoder may return more than one result. Sometimes results
+        # have the same accuracy. If this accuracy is the "best" accuracy, we
+        # want the result with the longest address, because it is probably the
+        # most accurate.
+        res = geocode.all.select { |g| g.accuracy == geocode.accuracy }.max { |g| g.full_address.size }
+
+        self.lat = res.lat
+        self.lng = res.lng
+        self.location = res.full_address
+        self.location_code = "#{res.zip} #{res.street_number}".gsub(/\s+/, '')
       end
     elsif location_coordinates.present?
       ll = Geokit::LatLng.normalize(location_coordinates)
