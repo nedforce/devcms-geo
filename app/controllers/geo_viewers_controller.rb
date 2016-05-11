@@ -129,7 +129,11 @@ class GeoViewersController < ApplicationController
       res = Node.try_geocode(@filters[:location].to_s, bias: Node.geocoding_bias)
       @bounds = res.try(:suggested_bounds) || Node.geocoding_bias
     else
-      coordinates = @nodes.map { |node| [node.lat, node.lng] }.transpose
+      if @filters[:search_scope] == 'content_type_permits'
+        coordinates = @nodes.map { |node| node.content.addresses.geocoded.map { |address| [address.lat, address.lng] } }.flatten(1).transpose
+      else
+        coordinates = @nodes.map { |node| [node.lat, node.lng] }.transpose
+      end
 
       north = coordinates.first.max
       south = coordinates.first.min
