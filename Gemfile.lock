@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/nedforce/devcms-core.git
-  revision: 325e6e0a134ed3a721c10b79e4110dbed2e7e11c
+  revision: 5ac9dc4294ea892a49a394004a426f9b1d02a926
   branch: rails4
   specs:
-    devcms_core (3.0.26)
+    devcms_core (3.1.0)
       actionpack-page_caching
       acts-as-taggable-on (~> 3.4.4)
       acts_as_list
@@ -116,7 +116,7 @@ GEM
       tzinfo (~> 1.1)
     acts-as-taggable-on (3.4.4)
       activerecord (>= 3.2, < 5)
-    acts_as_list (0.7.5)
+    acts_as_list (0.7.6)
       activerecord (>= 3.0)
     addressable (2.4.0)
     airbrake (4.3.8)
@@ -159,7 +159,7 @@ GEM
     geokit-rails (2.2.0)
       geokit (~> 1.5)
       rails (>= 3.0)
-    globalid (0.3.6)
+    globalid (0.3.7)
       activesupport (>= 4.1.0)
     haml (4.0.7)
       tilt
@@ -186,7 +186,7 @@ GEM
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
-    mimemagic (0.3.1)
+    mimemagic (0.3.2)
     mini_portile2 (2.1.0)
     minitest (5.9.0)
     mocha (1.1.0)
@@ -197,7 +197,7 @@ GEM
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
-    nokogumbo (1.4.7)
+    nokogumbo (1.4.9)
       nokogiri
     pg (0.18.4)
     pkg-config (1.1.7)
@@ -241,12 +241,12 @@ GEM
       builder (>= 2.1.2)
     ruby-ole (1.2.12)
     rubyzip (0.9.9)
-    sanitize (4.0.1)
+    sanitize (4.1.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
       nokogumbo (~> 1.4.1)
     sass (3.4.22)
-    sass-rails (5.0.5)
+    sass-rails (5.0.6)
       railties (>= 4.0.0, < 6)
       sass (~> 3.1)
       sprockets (>= 2.8, < 4.0)
@@ -318,9 +318,9 @@ GEM
       activerecord (>= 3.1)
       activesupport (>= 3.1)
     simple-rss (1.3.1)
-    spreadsheet (1.1.2)
+    spreadsheet (1.1.3)
       ruby-ole (>= 1.0)
-    sprockets (3.6.3)
+    sprockets (3.7.0)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
     sprockets-rails (3.1.1)
@@ -335,7 +335,7 @@ GEM
     truncate_html (0.5.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uglifier (3.0.0)
+    uglifier (3.0.1)
       execjs (>= 0.3.0, < 3)
     user_agent_parser (2.3.0)
     valuable (0.9.12)
