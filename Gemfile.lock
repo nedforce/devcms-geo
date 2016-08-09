@@ -70,7 +70,7 @@ PATH
   remote: .
   specs:
     devcms_geo (3.0.7)
-      devcms_core (~> 3.0.19)
+      devcms_core (~> 3.0)
       geokit (~> 1.6.7)
       geokit-rails
 
