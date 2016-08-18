@@ -30,8 +30,6 @@
 # * Timeframe - Filter on last update timestamp
 # * Permit & Legislation specific filters
 class GeoViewer < ActiveRecord::Base
-  has_many :pins, dependent: :destroy
-
   # Can have many geo viewers (= combined geo viewer)
   has_many :geo_viewer_placeables, foreign_key: :combined_geo_viewer_id, class_name: 'GeoViewerPlacement', dependent: :destroy
   has_many :geo_viewers, through: :geo_viewer_placeables
